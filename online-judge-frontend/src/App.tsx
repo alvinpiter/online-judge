@@ -1,11 +1,10 @@
 import React from "react";
 import AppBar from "@mui/material/AppBar";
-import { Box, Button, Toolbar, Typography } from "@mui/material";
-import { useBackendHealthCheckContextValue } from "./modules/BackendHealthCheck/contexts/context";
+import { Box, Toolbar, Typography } from "@mui/material";
+import { Link, Outlet } from "react-router-dom";
+import { ROUTES } from "./constants/Routes";
 
 function App() {
-  const { result, recheck } = useBackendHealthCheckContextValue();
-
   return (
     <Box>
       <AppBar position="static">
@@ -15,12 +14,20 @@ function App() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Typography variant="body1" component="p">
-        {result}
-      </Typography>
-      <Button variant="contained" onClick={() => recheck()}>
-        Recheck
-      </Button>
+      <p>
+        <Link to={ROUTES.EXAMPLE_SIMPLE_ROUTE.generatePath()}>Simple page</Link>
+      </p>
+      <p>
+        <Link
+          to={ROUTES.EXAMPLE_PARAMETERIZED_ROUTE.generatePath(
+            { firstParameter: "p1", secondParameter: 2 },
+            { firstQuery: "q1", secondQuery: 3 }
+          )}
+        >
+          Parameterized page
+        </Link>
+      </p>
+      <Outlet />
     </Box>
   );
 }
