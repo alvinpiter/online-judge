@@ -1,22 +1,27 @@
 import React from "react";
 import AppBar from "@mui/material/AppBar";
-import { Toolbar, Typography } from "@mui/material";
+import { Box, Button, Toolbar, Typography } from "@mui/material";
 import { useBackendHealthCheckContextValue } from "./modules/BackendHealthCheck/contexts/context";
 
 function App() {
-  const { isBackendHealthy } = useBackendHealthCheckContextValue();
+  const { result, recheck } = useBackendHealthCheckContextValue();
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Online Judge
-        </Typography>
-        <Typography variant="body1" component="span">
-          {isBackendHealthy ? "OK" : ""}
-        </Typography>
-      </Toolbar>
-    </AppBar>
+    <Box>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Online Judge
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Typography variant="body1" component="p">
+        {result}
+      </Typography>
+      <Button variant="contained" onClick={() => recheck()}>
+        Recheck
+      </Button>
+    </Box>
   );
 }
 

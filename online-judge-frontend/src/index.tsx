@@ -1,15 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { BackendHealthCheckContext } from "./modules/BackendHealthCheck/contexts/context";
+import { BackendHealthCheckContextProvider } from "./modules/BackendHealthCheck/contexts/BackendHealthCheckContextProvider";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <BackendHealthCheckContext.Provider value={{ isBackendHealthy: false }}>
+    <BackendHealthCheckContextProvider>
       <App />
-    </BackendHealthCheckContext.Provider>
+    </BackendHealthCheckContextProvider>
   </React.StrictMode>
 );

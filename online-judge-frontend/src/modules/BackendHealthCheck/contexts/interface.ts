@@ -1,3 +1,4 @@
 export interface BackendHealthCheckContextValue {
-  isBackendHealthy: boolean;
+  result: string;
+  recheck: () => Promise<void>;
 }
