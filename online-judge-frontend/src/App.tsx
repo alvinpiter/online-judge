@@ -1,4 +1,3 @@
-import React from "react";
 import AppBar from "@mui/material/AppBar";
 import { Box, Toolbar, Typography } from "@mui/material";
 import { Link, Outlet } from "react-router-dom";
