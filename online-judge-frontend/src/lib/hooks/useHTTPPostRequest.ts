@@ -1,8 +1,8 @@
 import { ClientError } from "../ClientError";
-import { createHTTPGetRequestFunction } from "../http/createHTTPGetRequestFunction";
+import { createHTTPPostRequestFunction } from "../http/createHTTPPostRequestFunction";
 import { useHTTPRequestVariables } from "./useHTTPRequestVariables";
 
-export function useHTTPGetRequest<Result>(url: string) {
+export function useHTTPPostRequest<Body, Result>(url: string) {
   const {
     isLoading,
     startLoading,
@@ -13,14 +13,14 @@ export function useHTTPGetRequest<Result>(url: string) {
     setError,
   } = useHTTPRequestVariables<Result>();
 
-  const doRequest = async () => {
+  const doRequest = async (body: Body) => {
     startLoading();
     setResult(undefined);
     setError(undefined);
 
     try {
-      const requestFunction = createHTTPGetRequestFunction<Result>(url);
-      setResult(await requestFunction());
+      const requestFunction = createHTTPPostRequestFunction<Body, Result>(url);
+      setResult(await requestFunction(body));
     } catch (e) {
       setError(e as ClientError);
     } finally {
