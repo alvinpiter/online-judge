@@ -1,6 +1,5 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import { Controller, Get, Inject } from '@nestjs/common';
 import { ConfigKey } from 'src/config';
-import { PingDto } from './ping.dto';
 
 @Controller('api')
 export class HealthCheckController {
@@ -11,12 +10,6 @@ export class HealthCheckController {
   @Get('health-check')
   healthCheck() {
     return { health: 'OK' };
-  }
-
-  @Post('ping')
-  async ping(@Body() pingDto: PingDto) {
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    return { message: `Hi, ${pingDto.message}!` };
   }
 
   @Get('app-info')
