@@ -1,26 +1,17 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { UsernameAndPasswordDoNotMatchError } from 'src/errors/UsernameAndPasswordDoNotMatchError';
-import { SignInDto } from './sign-in.dto';
+import { Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { AuthenticationService } from './authentication.service';
+import { LocalGuard } from './guards/local.guard';
 
 @Controller('api')
 export class AuthenticationController {
+  constructor(private readonly authenticationService: AuthenticationService) {}
+
   @Post('sign-in')
-  async signIn(@Body() signInDto: SignInDto) {
-    const users: Array<SignInDto> = [
-      {
-        username: 'alvin',
-        password: 'password',
-      },
-    ];
-
-    const user = users.find((user) => user.username === signInDto.username);
-
-    if (!user || user.password !== signInDto.password) {
-      throw new UsernameAndPasswordDoNotMatchError();
-    }
-
-    return {
-      jwt: 'this_is_supposed_to_be_a_jwt',
-    };
+  @UseGuards(LocalGuard)
+  async signIn(@Request() request) {
+    const jwt = await this.authenticationService.generateAccessToken(
+      request.user,
+    );
+    return { jwt };
   }
 }
