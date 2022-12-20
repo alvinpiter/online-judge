@@ -1,19 +1,37 @@
-import { Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Readable } from 'stream';
 import { ObjectStorageService } from './object-storage.service';
+
+class UploadFileDto {
+  fileName: string;
+  file: File;
+}
 
 @Controller('api')
 export class ObjectStorageController {
   constructor(private readonly objectStorageService: ObjectStorageService) {}
 
   @Post('upload-file')
-  async uploadFile() {
-    const stream = new Readable();
-    stream.push('Hello, world!');
-    stream.push(null);
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(
+    @Body() body: UploadFileDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const fileUrl = await this.objectStorageService.putObject(
+      body.fileName,
+      Readable.from(file.buffer),
+    );
 
-    await this.objectStorageService.putObject('test-ajah', stream);
-
-    return 'ok';
+    return {
+      fileName: body.fileName,
+      fileUrl,
+    };
   }
 }
