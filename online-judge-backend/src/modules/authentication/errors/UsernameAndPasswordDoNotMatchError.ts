@@ -1,4 +1,4 @@
-import { ServerError } from './ServerError';
+import { ServerError } from '../../../errors/ServerError';
 
 export class UsernameAndPasswordDoNotMatchError extends ServerError {
   static code = 'USERNAME_AND_PASSWORD_DO_NOT_MATCH_ERROR';

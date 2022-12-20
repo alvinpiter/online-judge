@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
-import { UsernameAndPasswordDoNotMatchError } from 'src/errors/UsernameAndPasswordDoNotMatchError';
+import { UsernameAndPasswordDoNotMatchError } from 'src/modules/authentication/errors/UsernameAndPasswordDoNotMatchError';
 import { UserEntity } from 'src/modules/users/user.entity';
 import { UsersService } from 'src/modules/users/users.service';
 

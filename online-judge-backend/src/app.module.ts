@@ -5,6 +5,7 @@ import { ConfigSchema } from './config';
 import { ServerErrorFilter } from './errors/ServerErrorFilter';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
+import { ObjectStorageModule } from './modules/object-storage/object-storage.module';
 
 @Module({
   providers: [
@@ -21,6 +22,7 @@ import { HealthCheckModule } from './modules/health-check/health-check.module';
     }),
     HealthCheckModule,
     AuthenticationModule,
+    ObjectStorageModule,
   ],
 })
 export class AppModule {}

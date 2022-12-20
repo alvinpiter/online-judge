@@ -6,6 +6,8 @@ export enum ConfigKey {
   ACCESS_TOKEN_EXPIRES_IN = 'ACCESS_TOKEN_EXPIRES_IN',
   AWS_S3_ACCESS_KEY_ID = 'AWS_S3_ACCESS_KEY_ID',
   AWS_S3_SECRET_ACCESS_KEY = 'AWS_S3_SECRET_ACCESS_KEY',
+  AWS_S3_BUCKET_NAME = 'AWS_S3_BUCKET_NAME',
+  AWS_S3_BUCKET_REGION = 'AWS_S3_BUCKET_REGION',
 }
 
 export const ConfigSchemaMap: Record<ConfigKey, Joi.Schema> = {
@@ -14,6 +16,8 @@ export const ConfigSchemaMap: Record<ConfigKey, Joi.Schema> = {
   ACCESS_TOKEN_EXPIRES_IN: Joi.string().required(),
   AWS_S3_ACCESS_KEY_ID: Joi.string().required(),
   AWS_S3_SECRET_ACCESS_KEY: Joi.string().required(),
+  AWS_S3_BUCKET_NAME: Joi.string().required(),
+  AWS_S3_BUCKET_REGION: Joi.string().required(),
 };
 
 export const ConfigSchema = Joi.object(ConfigSchemaMap);

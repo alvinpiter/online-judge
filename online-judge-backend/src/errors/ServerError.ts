@@ -1,5 +1,5 @@
 export class ServerError extends Error {
-  constructor(public code: string, public message: string) {
+  constructor(public readonly code: string, public readonly message: string) {
     super(message);
   }
 }
