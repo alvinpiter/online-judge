@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
-import { ConfigSchema } from './config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigKey, ConfigSchema } from './config';
 import { ServerErrorFilter } from './errors/ServerErrorFilter';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
@@ -19,6 +20,20 @@ import { ObjectStorageModule } from './modules/object-storage/object-storage.mod
       isGlobal: true,
       validationSchema: ConfigSchema,
       validationOptions: { abortEarly: true },
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get<string>(ConfigKey.DATABASE_HOST),
+        port: configService.get<number>(ConfigKey.DATABASE_PORT),
+        database: configService.get<string>(ConfigKey.DATABASE_NAME),
+        username: configService.get<string>(ConfigKey.DATABASE_USERNAME),
+        password: configService.get<string>(ConfigKey.DATABASE_PASSWORD),
+        synchronize: false,
+        autoLoadEntities: true,
+      }),
+      inject: [ConfigService],
     }),
     HealthCheckModule,
     AuthenticationModule,

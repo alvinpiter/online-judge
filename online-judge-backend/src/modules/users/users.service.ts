@@ -1,18 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { UserEntity, UserRole } from './user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {
-  private readonly users: Array<UserEntity>;
+  constructor(
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+  ) {}
 
-  constructor() {
-    this.users = [
-      new UserEntity('admin', 'password', UserRole.ADMIN),
-      new UserEntity('user', 'password', UserRole.USER),
-    ];
-  }
-
-  async findByUsername(username: string): Promise<UserEntity | undefined> {
-    return this.users.find((user) => user.username === username);
+  async findByUsername(username: string): Promise<User> {
+    return this.usersRepository.findOneByOrFail({ username });
   }
 }

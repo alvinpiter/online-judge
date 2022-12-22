@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { UsernameAndPasswordDoNotMatchError } from 'src/modules/authentication/errors/UsernameAndPasswordDoNotMatchError';
-import { UserEntity } from 'src/modules/users/user.entity';
+import { User } from 'src/modules/users/user.entity';
 import { UsersService } from 'src/modules/users/users.service';
 
 @Injectable()
@@ -19,9 +19,9 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   we can specify it in the parent's constructor call above.
   For example: super({ usernameField: 'email' })
    */
-  async validate(username: string, password: string): Promise<UserEntity> {
+  async validate(username: string, password: string): Promise<User> {
     const user = await this.usersService.findByUsername(username);
-    if (!user || user.password !== password) {
+    if (!user || user.hashedPassword !== password) {
       throw new UsernameAndPasswordDoNotMatchError();
     }
 

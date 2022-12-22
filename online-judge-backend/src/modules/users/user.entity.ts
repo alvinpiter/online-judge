@@ -1,12 +1,21 @@
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
 export enum UserRole {
   USER = 'USER',
   ADMIN = 'ADMIN',
 }
 
-export class UserEntity {
-  constructor(
-    public username: string,
-    public password: string,
-    public role = UserRole.USER,
-  ) {}
+@Entity('users')
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  username: string;
+
+  @Column()
+  hashedPassword: string;
+
+  @Column()
+  role: UserRole;
 }

@@ -4,7 +4,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigKey } from 'src/config';
-import { UserEntity } from 'src/modules/users/user.entity';
+import { User } from 'src/modules/users/user.entity';
 import { UsersService } from 'src/modules/users/users.service';
 import { ACCESS_TOKEN_KEY } from '../constants';
 import { JWTPayload } from '../interfaces';
@@ -28,7 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   /*
   Passport will call this method with the decoded JWT as its parameter.
    */
-  async validate(payload: JWTPayload): Promise<UserEntity> {
+  async validate(payload: JWTPayload): Promise<User> {
     return this.usersService.findByUsername(payload.username);
   }
 }
