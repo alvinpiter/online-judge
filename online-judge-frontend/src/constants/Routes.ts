@@ -4,9 +4,11 @@ export const ROUTES = {
   ROOT: new Route<{}, {}>("/"),
   SIGN_IN_ROUTE: new Route<{}, {}>("/sign-in"),
 
-  EXAMPLE_SIMPLE_ROUTE: new Route<{}, {}>("/simple"),
-  EXAMPLE_PARAMETERIZED_ROUTE: new Route<
-    { firstParameter: string; secondParameter: number },
-    { firstQuery: string; secondQuery: number }
-  >("/firstParam/:firstParameter/secondParam/:secondParameter"),
+  USER_PROBLEMS_ROUTE: new Route<{}, {}>("/problems"),
+  ADMIN_PROBLEMS_ROUTE: new Route<{}, {}>("/admin/problems"),
+
+  NEW_PROBLEM_ROUTE: new Route<{}, {}>("/admin/problems/new"),
+  EDIT_PROBLEM_ROUTE: new Route<{ problemId: string }, {}>(
+    "/admin/problems/:problemId/edit"
+  ),
 };

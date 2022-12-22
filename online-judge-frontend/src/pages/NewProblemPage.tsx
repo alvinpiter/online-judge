@@ -1,10 +1,10 @@
 import { Typography, Button, Box, Container } from "@mui/material";
 import { Form, Formik } from "formik";
 import { FC, useEffect } from "react";
-import { config } from "./config";
-import { FileField } from "./forms/fields/FileField";
-import { TextField } from "./forms/fields/TextField";
-import { useHTTPPostRequest } from "../src/lib/hooks/useHTTPPostRequest";
+import { config } from "../config";
+import { FileField } from "../forms/fields/FileField";
+import { TextField } from "../forms/fields/TextField";
+import { useHTTPPostRequest } from "../lib/hooks/useHTTPPostRequest";
 
 interface UploadFileRequestResponse {
   fileName: string;
@@ -21,7 +21,7 @@ interface UploadFormData {
   file: File | null;
 }
 
-export const PageWithSimplePath: FC = () => {
+export const NewProblemPage: FC = () => {
   const { result, error, requestFunction: uploadFile } = useUploadFileRequest();
 
   const handleSubmit = async (values: UploadFormData) => {
@@ -53,7 +53,7 @@ export const PageWithSimplePath: FC = () => {
           alignItems: "center",
         }}
       >
-        <Typography variant="h5"> File Upload </Typography>
+        <Typography variant="h5"> New Problem </Typography>
         <Box>
           <Formik<UploadFormData>
             initialValues={{ fileName: "", file: null }}

@@ -1,34 +1,51 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
 import App from "./App";
 import { ROUTES } from "./constants/Routes";
-import { BackendHealthCheckContextProvider } from "./modules/BackendHealthCheck/contexts/BackendHealthCheckContextProvider";
+import { NewProblemPage } from "./pages/NewProblemPage";
+import { EditProblemPage } from "./pages/EditProblemPage";
 import { SignInPage } from "./pages/SignInPage";
-import { PageWithParameterizedPath } from "./PageWithParameterizedPath";
-import { PageWithSimplePath } from "./PageWithSimplePath";
+import { CurrentUserContextProvider } from "./modules/User/contexts/CurrentUserContext";
+import { AuthenticatedAdminPages } from "./pages/AuthenticatedAdminPages";
+import { UserProblemsPage } from "./pages/UserProblemsPage";
+import { AdminProblemsPage } from "./pages/AdminProblemsPage";
 
-const router = createBrowserRouter([
-  {
-    path: ROUTES.ROOT.path,
-    element: <App />,
-    errorElement: <h1> 404! </h1>,
-    children: [
-      {
-        path: ROUTES.SIGN_IN_ROUTE.path,
-        element: <SignInPage />,
-      },
-      {
-        path: ROUTES.EXAMPLE_SIMPLE_ROUTE.path,
-        element: <PageWithSimplePath />,
-      },
-      {
-        path: ROUTES.EXAMPLE_PARAMETERIZED_ROUTE.path,
-        element: <PageWithParameterizedPath />,
-      },
-    ],
-  },
-]);
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route
+      path={ROUTES.ROOT.path}
+      element={<App />}
+      errorElement={<h1> 404! </h1>}
+    >
+      <Route path={ROUTES.SIGN_IN_ROUTE.path} element={<SignInPage />} />
+      <Route
+        path={ROUTES.USER_PROBLEMS_ROUTE.path}
+        element={<UserProblemsPage />}
+      />
+
+      <Route element={<AuthenticatedAdminPages />}>
+        <Route
+          path={ROUTES.ADMIN_PROBLEMS_ROUTE.path}
+          element={<AdminProblemsPage />}
+        />
+        <Route
+          path={ROUTES.NEW_PROBLEM_ROUTE.path}
+          element={<NewProblemPage />}
+        />
+        <Route
+          path={ROUTES.EDIT_PROBLEM_ROUTE.path}
+          element={<EditProblemPage />}
+        />
+      </Route>
+    </Route>
+  )
+);
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -36,8 +53,8 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <BackendHealthCheckContextProvider>
+    <CurrentUserContextProvider>
       <RouterProvider router={router} />
-    </BackendHealthCheckContextProvider>
+    </CurrentUserContextProvider>
   </React.StrictMode>
 );

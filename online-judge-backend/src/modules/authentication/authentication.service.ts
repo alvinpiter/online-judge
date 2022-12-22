@@ -13,7 +13,7 @@ export class AuthenticationService {
   ) {}
 
   async generateAccessToken(user: UserEntity) {
-    const payload: JWTPayload = { username: user.username };
+    const payload: JWTPayload = { username: user.username, role: user.role };
 
     return this.jwtService.sign(payload, {
       expiresIn: this.configService.get<string>(

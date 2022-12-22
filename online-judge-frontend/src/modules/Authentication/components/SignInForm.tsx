@@ -5,12 +5,16 @@ import { FC, useEffect } from "react";
 import { TextField } from "../../../forms/fields/TextField";
 import { useSignInRequest } from "../hooks/useSignInRequest";
 
+interface SignInFormProps {
+  onSuccessfulSignIn?: () => void;
+}
+
 interface SignInFormData {
   username: string;
   password: string;
 }
 
-export const SignInForm: FC = () => {
+export const SignInForm: FC<SignInFormProps> = ({ onSuccessfulSignIn }) => {
   const {
     result: signInResult,
     error: signInError,
@@ -23,9 +27,9 @@ export const SignInForm: FC = () => {
 
   useEffect(() => {
     if (signInResult) {
-      console.log(`Sign in success! JWT: ${signInResult.jwt}`);
+      onSuccessfulSignIn && onSuccessfulSignIn();
     }
-  }, [signInResult]);
+  }, [signInResult, onSuccessfulSignIn]);
 
   return (
     <Formik<SignInFormData>

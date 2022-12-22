@@ -1,3 +1,4 @@
+import { useCallback, useEffect } from "react";
 import { ClientError } from "../ClientError";
 import { createHTTPGetRequestFunction } from "../http/createHTTPGetRequestFunction";
 import { useHTTPRequestVariables } from "./useHTTPRequestVariables";
@@ -11,9 +12,9 @@ export function useHTTPGetRequest<Result>(url: string) {
     setResult,
     error,
     setError,
-  } = useHTTPRequestVariables<Result>();
+  } = useHTTPRequestVariables<Result>(true);
 
-  const doRequest = async () => {
+  const doRequest = useCallback(async () => {
     startLoading();
     setResult(undefined);
     setError(undefined);
@@ -26,7 +27,11 @@ export function useHTTPGetRequest<Result>(url: string) {
     } finally {
       stopLoading();
     }
-  };
+  }, [startLoading, stopLoading, setResult, setError, url]);
+
+  useEffect(() => {
+    doRequest();
+  }, [doRequest]);
 
   return {
     isLoading,

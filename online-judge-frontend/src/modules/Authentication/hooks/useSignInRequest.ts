@@ -7,7 +7,7 @@ interface SignInRequestBody {
 }
 
 interface SignInRequestResponse {
-  jwt: string;
+  access_token: string;
 }
 
 export function useSignInRequest() {

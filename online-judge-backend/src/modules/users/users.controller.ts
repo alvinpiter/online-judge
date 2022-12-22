@@ -5,9 +5,13 @@ import { UserEntity } from './user.entity';
 @Controller('api')
 export class UsersController {
   @UseGuards(JwtGuard)
-  @Get('me')
-  me(@Request() request) {
+  @Get('current-user')
+  async currentUser(@Request() request) {
     const user: UserEntity = request.user;
-    return { username: user.username };
+
+    return {
+      username: user.username,
+      role: user.role,
+    };
   }
 }
