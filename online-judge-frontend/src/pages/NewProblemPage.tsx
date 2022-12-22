@@ -1,4 +1,4 @@
-import { Typography, Button, Box, Container } from "@mui/material";
+import { Typography, Button, Box } from "@mui/material";
 import { Form, Formik } from "formik";
 import { FC, useEffect } from "react";
 import { config } from "../config";
@@ -45,48 +45,46 @@ export const NewProblemPage: FC = () => {
   }, [error]);
 
   return (
-    <Container maxWidth="xs">
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h5"> New Problem </Typography>
-        <Box>
-          <Formik<UploadFormData>
-            initialValues={{ fileName: "", file: null }}
-            onSubmit={async (values, { setSubmitting }) => {
-              await handleSubmit(values);
-              setSubmitting(false);
-            }}
-          >
-            {({ isSubmitting }) => (
-              <Form>
-                <TextField
-                  type="text"
-                  name="fileName"
-                  label="File name"
-                  required
-                  fullWidth
-                  margin="normal"
-                />
-                <FileField name="file" />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  fullWidth
-                  disabled={isSubmitting}
-                  sx={{ mt: 2 }}
-                >
-                  Upload
-                </Button>
-              </Form>
-            )}
-          </Formik>
-        </Box>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Typography variant="h5"> New Problem </Typography>
+      <Box>
+        <Formik<UploadFormData>
+          initialValues={{ fileName: "", file: null }}
+          onSubmit={async (values, { setSubmitting }) => {
+            await handleSubmit(values);
+            setSubmitting(false);
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <TextField
+                type="text"
+                name="fileName"
+                label="File name"
+                required
+                fullWidth
+                margin="normal"
+              />
+              <FileField name="file" />
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                disabled={isSubmitting}
+                sx={{ mt: 2 }}
+              >
+                Upload
+              </Button>
+            </Form>
+          )}
+        </Formik>
       </Box>
-    </Container>
+    </Box>
   );
 };

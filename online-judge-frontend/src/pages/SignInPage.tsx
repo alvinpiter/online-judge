@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../constants/Routes";
@@ -15,19 +15,17 @@ export const SignInPage: FC = () => {
   };
 
   return (
-    <Container maxWidth="xs">
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h5">Sign In</Typography>
-        <Box>
-          <SignInForm onSuccessfulSignIn={handleSuccessfulSignIn} />
-        </Box>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Typography variant="h5">Sign In</Typography>
+      <Box>
+        <SignInForm onSuccessfulSignIn={handleSuccessfulSignIn} />
       </Box>
-    </Container>
+    </Box>
   );
 };

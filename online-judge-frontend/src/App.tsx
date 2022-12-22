@@ -1,5 +1,5 @@
 import AppBar from "@mui/material/AppBar";
-import { Box, Button, Toolbar, Typography } from "@mui/material";
+import { Box, Button, Container, Toolbar, Typography } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { ROUTES } from "./constants/Routes";
 import { useCurrentUserContext } from "./modules/User/contexts/CurrentUserContext";
@@ -58,7 +58,9 @@ function App() {
         </Toolbar>
       </AppBar>
 
-      <Outlet />
+      <Container>
+        <Outlet />
+      </Container>
     </Box>
   );
 }
