@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
-import { UsernameAndPasswordDoNotMatchError } from 'src/modules/authentication/errors/UsernameAndPasswordDoNotMatchError';
 import { User } from 'src/modules/users/user.entity';
 import { UsersService } from 'src/modules/users/users.service';
 
@@ -20,11 +19,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   For example: super({ usernameField: 'email' })
    */
   async validate(username: string, password: string): Promise<User> {
-    const user = await this.usersService.findByUsername(username);
-    if (!user || user.hashedPassword !== password) {
-      throw new UsernameAndPasswordDoNotMatchError();
-    }
-
-    return user;
+    return this.usersService.validateUserCredential(username, password);
   }
 }

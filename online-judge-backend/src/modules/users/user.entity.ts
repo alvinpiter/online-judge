@@ -18,4 +18,8 @@ export class User {
 
   @Column()
   role: UserRole;
+
+  isCorrectHashedPassword(hashedPassword: string) {
+    return this.hashedPassword === hashedPassword;
+  }
 }

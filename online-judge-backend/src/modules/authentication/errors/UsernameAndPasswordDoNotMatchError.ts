@@ -6,7 +6,7 @@ export class UsernameAndPasswordDoNotMatchError extends ServerError {
   constructor() {
     super(
       UsernameAndPasswordDoNotMatchError.code,
-      'Username and Password do not match!',
+      'The username and the password do not match',
     );
   }
 }
