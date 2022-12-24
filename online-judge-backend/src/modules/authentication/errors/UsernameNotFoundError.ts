@@ -1,9 +1,7 @@
-import { ServerError } from '../../../errors/ServerError';
+import { AppError } from '../../../errors/AppError';
 
-export class UsernameNotFoundError extends ServerError {
-  static code = 'USERNAME_NOT_FOUND_ERROR';
-
+export class UsernameNotFoundError extends AppError {
   constructor() {
-    super(UsernameNotFoundError.code, 'The username is not registered yet');
+    super(UsernameNotFoundError.name, 'The username is not registered yet');
   }
 }

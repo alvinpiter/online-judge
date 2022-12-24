@@ -1,9 +1,7 @@
-import { ServerError } from 'src/errors/ServerError';
+import { AppError } from 'src/errors/AppError';
 
-export class PutObjectError extends ServerError {
-  static code = 'PUT_OBJECT_ERROR';
-
+export class PutObjectError extends AppError {
   constructor(message: string) {
-    super(PutObjectError.code, message);
+    super(PutObjectError.name, message);
   }
 }

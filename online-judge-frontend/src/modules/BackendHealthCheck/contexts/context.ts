@@ -1,4 +1,4 @@
-import { createContextAndUseContextHook } from "../../../lib/createContextAndUseContextHook";
+import { createContextAndUseContextHook } from "../../../lib/general/createContextAndUseContextHook";
 import { BackendHealthCheckContextValue } from "./interface";
 
 export const [BackendHealthCheckContext, useBackendHealthCheckContextValue] =

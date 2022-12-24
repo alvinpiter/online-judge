@@ -1,5 +1,5 @@
 import { config } from "../../../config";
-import { useHTTPGetRequest } from "../../../lib/hooks/useHTTPGetRequest";
+import { useHTTPGetRequest } from "../../../lib/http/useHTTPGetRequest";
 import { UserRole } from "../interface";
 
 interface CurrentUserResponse {

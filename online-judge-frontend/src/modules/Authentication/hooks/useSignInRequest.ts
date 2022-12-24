@@ -1,5 +1,5 @@
 import { config } from "../../../config";
-import { useHTTPPostRequest } from "../../../lib/hooks/useHTTPPostRequest";
+import { useHTTPPostRequest } from "../../../lib/http/useHTTPPostRequest";
 
 interface SignInRequestBody {
   username: string;
@@ -7,7 +7,7 @@ interface SignInRequestBody {
 }
 
 interface SignInRequestResponse {
-  access_token: string;
+  accessToken: string;
 }
 
 export function useSignInRequest() {

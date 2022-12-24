@@ -58,7 +58,7 @@ function App() {
         </Toolbar>
       </AppBar>
 
-      <Container>
+      <Container sx={{ paddingTop: 4 }}>
         <Outlet />
       </Container>
     </Box>

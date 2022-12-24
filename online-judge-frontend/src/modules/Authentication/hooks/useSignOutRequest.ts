@@ -1,5 +1,5 @@
 import { config } from "../../../config";
-import { useHTTPPostRequest } from "../../../lib/hooks/useHTTPPostRequest";
+import { useHTTPPostRequest } from "../../../lib/http/useHTTPPostRequest";
 
 export function useSignOutRequest() {
   const apiUrl = `${config.backendAPIURL}/sign-out`;

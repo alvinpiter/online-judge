@@ -36,7 +36,7 @@ export const CurrentUserAvatar: FC = () => {
   useEffect(() => {
     if (signOutResult) {
       refreshCurrentUser();
-      navigate(ROUTES.ROOT.generatePath());
+      navigate(ROUTES.HOME.generatePath());
     }
   }, [signOutResult, refreshCurrentUser, navigate]);
 
@@ -62,7 +62,7 @@ export const CurrentUserAvatar: FC = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem component={Link} href={ROUTES.ROOT.generatePath()}>
+        <MenuItem component={Link} href={ROUTES.HOME.generatePath()}>
           My Profile
         </MenuItem>
         <Divider />

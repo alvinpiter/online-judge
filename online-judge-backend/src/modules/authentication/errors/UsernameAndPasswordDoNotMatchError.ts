@@ -1,11 +1,9 @@
-import { ServerError } from '../../../errors/ServerError';
+import { AppError } from '../../../errors/AppError';
 
-export class UsernameAndPasswordDoNotMatchError extends ServerError {
-  static code = 'USERNAME_AND_PASSWORD_DO_NOT_MATCH_ERROR';
-
+export class UsernameAndPasswordDoNotMatchError extends AppError {
   constructor() {
     super(
-      UsernameAndPasswordDoNotMatchError.code,
+      UsernameAndPasswordDoNotMatchError.name,
       'The username and the password do not match',
     );
   }

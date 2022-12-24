@@ -1,4 +1,4 @@
-import { useHTTPGetRequest } from "../../../lib/hooks/useHTTPGetRequest";
+import { useHTTPGetRequest } from "../../../lib/http/useHTTPGetRequest";
 
 interface BackendHealthResponse {
   health: string;

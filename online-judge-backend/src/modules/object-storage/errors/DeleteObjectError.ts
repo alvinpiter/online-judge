@@ -1,9 +1,7 @@
-import { ServerError } from 'src/errors/ServerError';
+import { AppError } from 'src/errors/AppError';
 
-export class DeleteObjectError extends ServerError {
-  static code = 'DELETE_OBJECT_ERROR';
-
+export class DeleteObjectError extends AppError {
   constructor(message: string) {
-    super(DeleteObjectError.code, message);
+    super(DeleteObjectError.name, message);
   }
 }

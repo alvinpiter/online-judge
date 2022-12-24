@@ -19,7 +19,7 @@ import { AdminProblemsPage } from "./pages/AdminProblemsPage";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route
-      path={ROUTES.ROOT.path}
+      path={ROUTES.HOME.path}
       element={<App />}
       errorElement={<h1> 404! </h1>}
     >

@@ -27,7 +27,7 @@ export const ProtectedPage: FC<ProtectedPageProps> = ({
     }
 
     if (!allowedRoles || !allowedRoles.includes(currentUser.role)) {
-      navigate(ROUTES.ROOT.generatePath());
+      navigate(ROUTES.HOME.generatePath());
     }
   }, [isLoadingCurrentUser, currentUser, allowedRoles, navigate]);
 

@@ -1,7 +1,7 @@
 import { Route } from "../lib/route/Route";
 
 export const ROUTES = {
-  ROOT: new Route<{}, {}>("/"),
+  HOME: new Route<{}, {}>("/"),
   SIGN_IN_ROUTE: new Route<{}, {}>("/sign-in"),
 
   USER_PROBLEMS_ROUTE: new Route<{}, {}>("/problems"),

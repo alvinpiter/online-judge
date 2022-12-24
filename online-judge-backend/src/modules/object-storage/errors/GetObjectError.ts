@@ -1,9 +1,7 @@
-import { ServerError } from 'src/errors/ServerError';
+import { AppError } from 'src/errors/AppError';
 
-export class GetObjectError extends ServerError {
-  static code = 'GET_OBJECT_ERROR';
-
+export class GetObjectError extends AppError {
   constructor(message: string) {
-    super(GetObjectError.code, message);
+    super(GetObjectError.name, message);
   }
 }

@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigKey, ConfigSchema } from './config';
-import { ServerErrorFilter } from './errors/ServerErrorFilter';
+import { GlobalErrorFilter } from './errors/GlobalErrorFilter';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
 import { ObjectStorageModule } from './modules/object-storage/object-storage.module';
@@ -12,7 +12,7 @@ import { ObjectStorageModule } from './modules/object-storage/object-storage.mod
   providers: [
     {
       provide: APP_FILTER,
-      useClass: ServerErrorFilter,
+      useClass: GlobalErrorFilter,
     },
   ],
   imports: [

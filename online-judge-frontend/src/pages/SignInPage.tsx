@@ -11,7 +11,7 @@ export const SignInPage: FC = () => {
 
   const handleSuccessfulSignIn = () => {
     refreshCurrentUser();
-    navigate(ROUTES.ROOT.generatePath());
+    navigate(ROUTES.HOME.generatePath());
   };
 
   return (

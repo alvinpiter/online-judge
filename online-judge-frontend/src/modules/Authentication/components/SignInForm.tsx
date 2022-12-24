@@ -21,10 +21,6 @@ export const SignInForm: FC<SignInFormProps> = ({ onSuccessfulSignIn }) => {
     requestFunction: signInRequest,
   } = useSignInRequest();
 
-  const handleSubmit = async (formData: SignInFormData) => {
-    await signInRequest(formData);
-  };
-
   useEffect(() => {
     if (signInResult) {
       onSuccessfulSignIn && onSuccessfulSignIn();
@@ -35,7 +31,7 @@ export const SignInForm: FC<SignInFormProps> = ({ onSuccessfulSignIn }) => {
     <Formik<SignInFormData>
       initialValues={{ username: "", password: "" }}
       onSubmit={async (values, { setSubmitting }) => {
-        handleSubmit(values);
+        await signInRequest(values);
         setSubmitting(false);
       }}
     >

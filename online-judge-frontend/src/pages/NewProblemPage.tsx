@@ -4,7 +4,7 @@ import { FC, useEffect } from "react";
 import { config } from "../config";
 import { FileField } from "../forms/fields/FileField";
 import { TextField } from "../forms/fields/TextField";
-import { useHTTPPostRequest } from "../lib/hooks/useHTTPPostRequest";
+import { useHTTPPostRequest } from "../lib/http/useHTTPPostRequest";
 
 interface UploadFileRequestResponse {
   fileName: string;
