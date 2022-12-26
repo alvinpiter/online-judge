@@ -50,4 +50,8 @@ export class ProblemTestCasesService {
 
     return this.problemTestCasesRepository.save(problemTestCase);
   }
+
+  async getTestCases(problemId: number) {
+    return this.problemTestCasesRepository.findBy({ problemId });
+  }
 }

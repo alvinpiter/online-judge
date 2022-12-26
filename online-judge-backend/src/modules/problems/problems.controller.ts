@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   Post,
   UploadedFiles,
@@ -8,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ObjectStorageService } from '../object-storage/object-storage.service';
+import { ProblemTestCase } from './problem-test-case.entity';
 import { ProblemTestCasesService } from './problem-test-cases.service';
 import { CreateProblemDto } from './problems.dto';
 import { ProblemsService } from './problems.service';
@@ -49,6 +51,21 @@ export class ProblemsController {
       files.outputFile[0],
     );
 
+    return this.formatProblemTestCase(problemTestCase);
+  }
+
+  @Get('problems/:problemId/test-cases')
+  async getTestCases(@Param() params: { problemId: number }) {
+    const problemTestCases = await this.problemTestCasesService.getTestCases(
+      params.problemId,
+    );
+
+    return Promise.all(
+      problemTestCases.map((tc) => this.formatProblemTestCase(tc)),
+    );
+  }
+
+  private async formatProblemTestCase(problemTestCase: ProblemTestCase) {
     return {
       id: problemTestCase.id,
       inputFile: {
