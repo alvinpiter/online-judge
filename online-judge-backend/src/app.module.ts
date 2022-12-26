@@ -7,6 +7,7 @@ import { GlobalErrorFilter } from './errors/GlobalErrorFilter';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
 import { ObjectStorageModule } from './modules/object-storage/object-storage.module';
+import { ProblemsModule } from './modules/problems/problems.module';
 
 @Module({
   providers: [
@@ -38,6 +39,7 @@ import { ObjectStorageModule } from './modules/object-storage/object-storage.mod
     HealthCheckModule,
     AuthenticationModule,
     ObjectStorageModule,
+    ProblemsModule,
   ],
 })
 export class AppModule {}
