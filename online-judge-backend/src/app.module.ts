@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigKey, ConfigSchema } from './config';
 import { GlobalErrorFilter } from './errors/GlobalErrorFilter';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
+import { GeneralModule } from './modules/general/general.module';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
 import { ObjectStorageModule } from './modules/object-storage/object-storage.module';
 import { ProblemsModule } from './modules/problems/problems.module';
@@ -36,6 +37,7 @@ import { ProblemsModule } from './modules/problems/problems.module';
       }),
       inject: [ConfigService],
     }),
+    GeneralModule,
     HealthCheckModule,
     AuthenticationModule,
     ObjectStorageModule,
