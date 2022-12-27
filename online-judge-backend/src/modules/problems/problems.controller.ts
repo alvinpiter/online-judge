@@ -90,9 +90,14 @@ export class ProblemsController {
   ) {
     return this.problemSolutionTemplatesService.upsertTemplate(
       params.problemId,
-      body.language,
+      body.programmingLanguage,
       body.template,
     );
+  }
+
+  @Get('problems/:problemId/solution-templates')
+  async getSolutionTemplates(@Param() params: { problemId: number }) {
+    return this.problemSolutionTemplatesService.getTemplates(params.problemId);
   }
 
   private async formatProblemTestCase(problemTestCase: ProblemTestCase) {

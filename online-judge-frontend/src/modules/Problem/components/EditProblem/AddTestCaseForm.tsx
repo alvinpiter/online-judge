@@ -34,8 +34,8 @@ export const AddTestCaseForm: FC<AddTestCaseFormProps> = ({
   };
 
   useEffect(() => {
-    if (addTestCaseResult && onSuccess) {
-      onSuccess(addTestCaseResult);
+    if (addTestCaseResult) {
+      onSuccess && onSuccess(addTestCaseResult);
     }
   }, [addTestCaseResult, onSuccess]);
 

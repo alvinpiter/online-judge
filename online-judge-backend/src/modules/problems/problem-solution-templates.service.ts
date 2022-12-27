@@ -35,4 +35,8 @@ export class ProblemSolutionTemplatesService {
       return this.problemSolutionTemplatesRepository.save(existingTemplate);
     }
   }
+
+  async getTemplates(problemId: number) {
+    return this.problemSolutionTemplatesRepository.findBy({ problemId });
+  }
 }

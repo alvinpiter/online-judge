@@ -6,6 +6,6 @@ export class CreateProblemDto {
 }
 
 export class UpsertProblemSolutionTemplateDto {
-  language: ProgrammingLanguage;
+  programmingLanguage: ProgrammingLanguage;
   template: string;
 }
