@@ -10,9 +10,13 @@ import {
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ObjectStorageService } from '../object-storage/object-storage.service';
+import { ProblemSolutionTemplatesService } from './problem-solution-templates.service';
 import { ProblemTestCase } from './problem-test-case.entity';
 import { ProblemTestCasesService } from './problem-test-cases.service';
-import { CreateProblemDto } from './problems.dto';
+import {
+  CreateProblemDto,
+  UpsertProblemSolutionTemplateDto,
+} from './problems.dto';
 import { ProblemsService } from './problems.service';
 
 @Controller('api')
@@ -20,6 +24,7 @@ export class ProblemsController {
   constructor(
     private readonly problemsService: ProblemsService,
     private readonly problemTestCasesService: ProblemTestCasesService,
+    private readonly problemSolutionTemplatesService: ProblemSolutionTemplatesService,
     private readonly objectStorageService: ObjectStorageService,
   ) {}
 
@@ -76,6 +81,18 @@ export class ProblemsController {
     );
 
     return 'ok';
+  }
+
+  @Post('problems/:problemId/solution-templates')
+  async upsertSolutionTemplate(
+    @Param() params: { problemId: number },
+    @Body() body: UpsertProblemSolutionTemplateDto,
+  ) {
+    return this.problemSolutionTemplatesService.upsertTemplate(
+      params.problemId,
+      body.language,
+      body.template,
+    );
   }
 
   private async formatProblemTestCase(problemTestCase: ProblemTestCase) {

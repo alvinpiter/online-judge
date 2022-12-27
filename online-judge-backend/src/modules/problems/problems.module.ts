@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ObjectStorageModule } from '../object-storage/object-storage.module';
+import { ProblemSolutionTemplate } from './problem-solution-template.entity';
+import { ProblemSolutionTemplatesService } from './problem-solution-templates.service';
 import { ProblemTestCase } from './problem-test-case.entity';
 import { ProblemTestCasesService } from './problem-test-cases.service';
 import { Problem } from './problem.entity';
@@ -9,10 +11,18 @@ import { ProblemsService } from './problems.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Problem, ProblemTestCase]),
+    TypeOrmModule.forFeature([
+      Problem,
+      ProblemTestCase,
+      ProblemSolutionTemplate,
+    ]),
     ObjectStorageModule,
   ],
-  providers: [ProblemsService, ProblemTestCasesService],
+  providers: [
+    ProblemsService,
+    ProblemTestCasesService,
+    ProblemSolutionTemplatesService,
+  ],
   controllers: [ProblemsController],
 })
 export class ProblemsModule {}
