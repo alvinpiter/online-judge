@@ -51,6 +51,10 @@ export class ProblemTestCasesService {
     return this.problemTestCasesRepository.save(problemTestCase);
   }
 
+  async deleteTestCase(problemId: number, testCaseId: number) {
+    this.problemTestCasesRepository.delete({ id: testCaseId, problemId });
+  }
+
   async getTestCases(problemId: number) {
     return this.problemTestCasesRepository.findBy({ problemId });
   }

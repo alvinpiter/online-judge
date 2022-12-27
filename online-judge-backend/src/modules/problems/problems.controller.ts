@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -63,6 +64,18 @@ export class ProblemsController {
     return Promise.all(
       problemTestCases.map((tc) => this.formatProblemTestCase(tc)),
     );
+  }
+
+  @Delete('problems/:problemId/test-cases/:testCaseId')
+  async deleteTestCase(
+    @Param() params: { problemId: number; testCaseId: number },
+  ) {
+    await this.problemTestCasesService.deleteTestCase(
+      params.problemId,
+      params.testCaseId,
+    );
+
+    return 'ok';
   }
 
   private async formatProblemTestCase(problemTestCase: ProblemTestCase) {
