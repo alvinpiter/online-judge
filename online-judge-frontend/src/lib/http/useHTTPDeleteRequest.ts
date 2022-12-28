@@ -36,6 +36,6 @@ export function useHTTPDeleteRequest<UrlParameters, Result>(
     isLoading,
     result,
     error,
-    requestFuncion: doRequest,
+    requestFunction: doRequest,
   };
 }

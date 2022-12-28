@@ -1,13 +1,10 @@
 import { Box, Button, Typography } from "@mui/material";
 import { Form, Formik } from "formik";
-import { FC, useEffect } from "react";
-import { FileField } from "../../../../forms/fields/FileField";
-import { useAddTestCaseRequest } from "../../hooks/useAddTestCaseRequest";
-import { ProblemTestCase } from "../../hooks/useGetTestCasesRequest";
+import { FC } from "react";
+import { FileField } from "../../../../../forms/fields/FileField";
 
 interface AddTestCaseFormProps {
-  problemId: string;
-  onSuccess?: (problemTestCase: ProblemTestCase) => void;
+  onSubmit: (formData: FormData) => void;
 }
 
 interface AddTestCaseFormData {
@@ -15,35 +12,14 @@ interface AddTestCaseFormData {
   outputFile: File | null;
 }
 
-export const AddTestCaseForm: FC<AddTestCaseFormProps> = ({
-  problemId,
-  onSuccess,
-}) => {
-  const {
-    result: addTestCaseResult,
-    error: addTestCaseError,
-    requestFunction: addTestCaseRequest,
-  } = useAddTestCaseRequest(problemId);
-
-  const handleSubmit = async (values: AddTestCaseFormData) => {
+export const AddTestCaseForm: FC<AddTestCaseFormProps> = ({ onSubmit }) => {
+  const handleSubmit = (values: AddTestCaseFormData) => {
     const formData = new FormData();
     formData.append("inputFile", values.inputFile!);
     formData.append("outputFile", values.outputFile!);
 
-    await addTestCaseRequest(formData);
+    onSubmit(formData);
   };
-
-  useEffect(() => {
-    if (addTestCaseResult) {
-      onSuccess && onSuccess(addTestCaseResult);
-    }
-  }, [addTestCaseResult, onSuccess]);
-
-  useEffect(() => {
-    if (addTestCaseError) {
-      console.log(addTestCaseError);
-    }
-  }, [addTestCaseError]);
 
   return (
     <>
@@ -53,7 +29,7 @@ export const AddTestCaseForm: FC<AddTestCaseFormProps> = ({
           outputFile: null,
         }}
         onSubmit={async (values, { setSubmitting }) => {
-          await handleSubmit(values);
+          handleSubmit(values);
           setSubmitting(false);
         }}
       >

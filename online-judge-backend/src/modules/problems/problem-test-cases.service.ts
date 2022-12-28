@@ -52,7 +52,18 @@ export class ProblemTestCasesService {
   }
 
   async deleteTestCase(problemId: number, testCaseId: number) {
-    this.problemTestCasesRepository.delete({ id: testCaseId, problemId });
+    const problemTestCase =
+      await this.problemTestCasesRepository.findOneByOrFail({
+        id: testCaseId,
+        problemId,
+      });
+
+    await this.problemTestCasesRepository.delete({
+      id: testCaseId,
+      problemId,
+    });
+
+    return problemTestCase;
   }
 
   async getTestCases(problemId: number) {

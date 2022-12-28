@@ -75,12 +75,10 @@ export class ProblemsController {
   async deleteTestCase(
     @Param() params: { problemId: number; testCaseId: number },
   ) {
-    await this.problemTestCasesService.deleteTestCase(
+    return this.problemTestCasesService.deleteTestCase(
       params.problemId,
       params.testCaseId,
     );
-
-    return 'ok';
   }
 
   @Post('problems/:problemId/solution-templates')

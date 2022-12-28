@@ -3,7 +3,7 @@ import { FC, useState } from "react";
 import { useParams } from "react-router";
 import { EditProblemDescriptionTab } from "../modules/Problem/components/EditProblem/EditProblemDescriptionTab";
 import { EditProblemSolutionTemplateTab } from "../modules/Problem/components/EditProblem/EditProblemSolutionTemplateTab";
-import { EditProblemTestCasesTab } from "../modules/Problem/components/EditProblem/EditProblemTestCasesTab";
+import { EditTestCasesTab } from "../modules/Problem/Edit/TestCases/components/EditTestCasesTab";
 
 export const EditProblemPage: FC = () => {
   const params = useParams<{ problemId: string }>();
@@ -30,10 +30,9 @@ export const EditProblemPage: FC = () => {
         problemId={problemId}
         isActive={tabIndex === 0}
       />
-      <EditProblemTestCasesTab
-        problemId={problemId}
-        isActive={tabIndex === 1}
-      />
+
+      {tabIndex === 1 && <EditTestCasesTab problemId={problemId} />}
+
       <EditProblemSolutionTemplateTab
         problemId={problemId}
         isActive={tabIndex === 2}
