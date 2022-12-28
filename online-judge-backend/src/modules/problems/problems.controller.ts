@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -15,6 +16,7 @@ import { ProblemTestCase } from './problem-test-case.entity';
 import { ProblemTestCasesService } from './problem-test-cases.service';
 import {
   CreateProblemDto,
+  UpdateProblemDto,
   UpsertProblemSolutionTemplateDto,
 } from './problems.dto';
 import { ProblemsService } from './problems.service';
@@ -33,6 +35,23 @@ export class ProblemsController {
     return this.problemsService.createProblem(
       createProblemDto.name,
       createProblemDto.description,
+    );
+  }
+
+  @Get('problems/:problemId')
+  async getProblem(@Param() params: { problemId: number }) {
+    return this.problemsService.getProblem(params.problemId);
+  }
+
+  @Put('problems/:problemId')
+  async updateProblem(
+    @Param() params: { problemId: number },
+    @Body() updateProblemDto: UpdateProblemDto,
+  ) {
+    return this.problemsService.updateProblem(
+      params.problemId,
+      updateProblemDto.name,
+      updateProblemDto.description,
     );
   }
 

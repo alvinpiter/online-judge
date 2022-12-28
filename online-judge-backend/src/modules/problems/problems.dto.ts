@@ -5,6 +5,8 @@ export class CreateProblemDto {
   description: string;
 }
 
+export class UpdateProblemDto extends CreateProblemDto {}
+
 export class UpsertProblemSolutionTemplateDto {
   programmingLanguage: ProgrammingLanguage;
   template: string;

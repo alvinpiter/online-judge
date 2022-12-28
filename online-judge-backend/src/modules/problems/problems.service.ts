@@ -17,4 +17,16 @@ export class ProblemsService {
 
     return this.problemsRepository.save(problem);
   }
+
+  async getProblem(problemId: number) {
+    return this.problemsRepository.findOneBy({ id: problemId });
+  }
+
+  async updateProblem(problemId: number, name: string, description: string) {
+    const problem = await this.problemsRepository.findOneBy({ id: problemId });
+    problem.name = name;
+    problem.description = description;
+
+    return this.problemsRepository.save(problem);
+  }
 }

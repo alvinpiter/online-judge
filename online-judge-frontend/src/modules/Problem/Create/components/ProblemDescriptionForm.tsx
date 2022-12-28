@@ -4,6 +4,9 @@ import { FC } from "react";
 import { TextField } from "../../../../forms/fields/TextField";
 
 interface ProblemDescriptionFormProps {
+  initialName?: string;
+  initialDescription?: string;
+
   onSubmit: (name: string, description: string) => void;
 }
 
@@ -13,12 +16,17 @@ interface ProblemDescriptionFormData {
 }
 
 export const ProblemDescriptionForm: FC<ProblemDescriptionFormProps> = ({
+  initialName,
+  initialDescription,
   onSubmit,
 }) => {
+  const resolvedName = initialName || "";
+  const resolvedDescription = initialDescription || "";
+
   return (
     <Formik<ProblemDescriptionFormData>
       enableReinitialize
-      initialValues={{ name: "", description: "" }}
+      initialValues={{ name: resolvedName, description: resolvedDescription }}
       onSubmit={async (values, { setSubmitting }) => {
         onSubmit(values.name, values.description);
         setSubmitting(false);
