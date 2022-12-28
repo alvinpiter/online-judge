@@ -1,5 +1,5 @@
-import { config } from "../../../config";
-import { useHTTPPostRequest } from "../../../lib/http/useHTTPPostRequest";
+import { config } from "../../../../config";
+import { useHTTPPostRequest } from "../../../../lib/http/useHTTPPostRequest";
 
 interface CreateProblemRequestBody {
   name: string;

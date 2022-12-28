@@ -4,7 +4,7 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../../constants/Routes";
 import { TextField } from "../../../forms/fields/TextField";
-import { useCreateProblemRequest } from "../hooks/useCreateProblemRequest";
+import { useCreateProblemRequest } from "../Create/hooks/useCreateProblemRequest";
 
 interface CreateProblemFormData {
   name: string;
