@@ -4,12 +4,21 @@ import { AppError } from "../../AppError";
 import { useToggle } from "../general/useToggle";
 import { axiosErrorToAppError } from "../http/axiosErrorToAppError";
 
-export function useHTTPDeleteRequest<Result>(url: string) {
+/*
+TODO:
+The implementation is a little bit different than useHTTPGetRequest and
+useHTTPPostRequest. Please revisit this.
+*/
+export function useHTTPDeleteRequest<UrlParameters, Result>(
+  urlConstructor: (urlParameters: UrlParameters) => string
+) {
   const [isLoading, startLoading, stopLoading] = useToggle(false);
   const [result, setResult] = useState<Result | undefined>(undefined);
   const [error, setError] = useState<AppError | undefined>(undefined);
 
-  const doRequest = async () => {
+  const doRequest = async (urlParameters: UrlParameters) => {
+    const url = urlConstructor(urlParameters);
+
     startLoading();
     setResult(undefined);
     setError(undefined);
@@ -27,6 +36,6 @@ export function useHTTPDeleteRequest<Result>(url: string) {
     isLoading,
     result,
     error,
-    requestFunction: doRequest,
+    requestFuncion: doRequest,
   };
 }

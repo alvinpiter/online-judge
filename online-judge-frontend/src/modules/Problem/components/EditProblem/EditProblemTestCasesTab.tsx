@@ -27,6 +27,9 @@ export const EditProblemTestCasesTab: FC<EditProblemTabBaseProps> = ({
     result: initialProblemTestCases,
   } = useGetTestCaseRequest(problemId);
 
+  const { requestFuncion: deleteProblemTestCaseRequest } =
+    useDeleteTestCaseRequest();
+
   const [problemTestCases, setProblemTestCases] = useState<ProblemTestCase[]>(
     []
   );
@@ -39,6 +42,11 @@ export const EditProblemTestCasesTab: FC<EditProblemTabBaseProps> = ({
   }, []);
 
   const deleteProblemTestCase = useCallback((testCaseId: number) => {
+    deleteProblemTestCaseRequest({
+      problemId: parseInt(problemId),
+      testCaseId,
+    });
+
     setProblemTestCases((prevProblemTestCases) =>
       prevProblemTestCases.filter((testCase) => testCase.id !== testCaseId)
     );
@@ -97,7 +105,7 @@ export const ProblemTestCaseTable: FC<ProblemTestCaseTableProps> = ({
               idx={idx + 1}
               problemId={problemId}
               problemTestCase={problemTestCase}
-              onDelete={onDeleteProblemTestCase}
+              onDelete={() => onDeleteProblemTestCase(problemTestCase.id)}
             />
           ))}
         </TableBody>
@@ -110,7 +118,7 @@ export interface ProblemTestCaseTableItemProps {
   idx: number;
   problemId: string;
   problemTestCase: ProblemTestCase;
-  onDelete: (testCaseId: number) => void;
+  onDelete: () => void;
 }
 
 export const ProblemTestCaseTableItem: FC<ProblemTestCaseTableItemProps> = ({
@@ -119,16 +127,6 @@ export const ProblemTestCaseTableItem: FC<ProblemTestCaseTableItemProps> = ({
   problemTestCase,
   onDelete,
 }) => {
-  const { requestFunction: deleteTestCaseRequest } = useDeleteTestCaseRequest(
-    parseInt(problemId),
-    problemTestCase.id
-  );
-
-  const handleDelete = async () => {
-    await deleteTestCaseRequest();
-    onDelete(problemTestCase.id);
-  };
-
   return (
     <TableRow key={problemTestCase.id}>
       <TableCell> {idx} </TableCell>
@@ -143,7 +141,7 @@ export const ProblemTestCaseTableItem: FC<ProblemTestCaseTableItemProps> = ({
         </Link>
       </TableCell>
       <TableCell>
-        <Button variant="contained" color="error" onClick={handleDelete}>
+        <Button variant="contained" color="error" onClick={onDelete}>
           Delete
         </Button>
       </TableCell>
