@@ -15,6 +15,8 @@ import { CurrentUserContextProvider } from "./modules/User/contexts/CurrentUserC
 import { AuthenticatedAdminPages } from "./pages/AuthenticatedAdminPages";
 import { UserProblemsPage } from "./pages/UserProblemsPage";
 import { AdminProblemsPage } from "./pages/AdminProblemsPage";
+import { PlaygroundPage } from "./pages/PlaygroundPage";
+import { SnackbarContextProvider } from "./core/Snackbar";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -43,6 +45,8 @@ const router = createBrowserRouter(
           element={<EditProblemPage />}
         />
       </Route>
+
+      <Route path={ROUTES.HOME.path} element={<PlaygroundPage />} />
     </Route>
   )
 );
@@ -53,8 +57,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <CurrentUserContextProvider>
-      <RouterProvider router={router} />
-    </CurrentUserContextProvider>
+    <SnackbarContextProvider>
+      <CurrentUserContextProvider>
+        <RouterProvider router={router} />
+      </CurrentUserContextProvider>
+    </SnackbarContextProvider>
   </React.StrictMode>
 );
