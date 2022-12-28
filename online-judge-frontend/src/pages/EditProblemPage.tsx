@@ -2,7 +2,7 @@ import { Tab, Tabs } from "@mui/material";
 import { FC, useState } from "react";
 import { useParams } from "react-router";
 import { EditProblemDescriptionTab } from "../modules/Problem/components/EditProblem/EditProblemDescriptionTab";
-import { EditProblemSolutionTemplateTab } from "../modules/Problem/components/EditProblem/EditProblemSolutionTemplateTab";
+import { EditSolutionTemplatesTab } from "../modules/Problem/Edit/SolutionTemplates/components/EditSolutionTemplatesTab";
 import { EditTestCasesTab } from "../modules/Problem/Edit/TestCases/components/EditTestCasesTab";
 
 export const EditProblemPage: FC = () => {
@@ -32,11 +32,7 @@ export const EditProblemPage: FC = () => {
       />
 
       {tabIndex === 1 && <EditTestCasesTab problemId={problemId} />}
-
-      <EditProblemSolutionTemplateTab
-        problemId={problemId}
-        isActive={tabIndex === 2}
-      />
+      {tabIndex === 2 && <EditSolutionTemplatesTab problemId={problemId} />}
     </>
   );
 };

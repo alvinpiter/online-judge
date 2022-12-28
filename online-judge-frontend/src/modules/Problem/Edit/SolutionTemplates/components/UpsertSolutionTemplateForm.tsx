@@ -1,17 +1,18 @@
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
 import { Form, Formik } from "formik";
-import { FC, useEffect } from "react";
-import { TextField } from "../../../../forms/fields/TextField";
-import { useUpsertSolutionTemplateRequest } from "../../hooks/useUpsertSolutionTemplateRequest";
-import { ProblemSolutionTemplate, ProgrammingLanguage } from "../../interfaces";
+import { FC } from "react";
+import { TextField } from "../../../../../forms/fields/TextField";
+import { ProgrammingLanguage } from "../../../interfaces";
 
 interface UpsertSolutionTemplateFormProps {
-  problemId: string;
   programmingLanguage: ProgrammingLanguage;
   initialTemplate: string;
 
-  onSuccess?: (problemSolutionTemplate: ProblemSolutionTemplate) => void;
+  onSubmit: (
+    programmingLanguage: ProgrammingLanguage,
+    template: string
+  ) => void;
 }
 
 interface UpsertSolutionTemplateFormData {
@@ -20,18 +21,7 @@ interface UpsertSolutionTemplateFormData {
 
 export const UpsertSolutionTemplateForm: FC<
   UpsertSolutionTemplateFormProps
-> = ({ problemId, programmingLanguage, initialTemplate, onSuccess }) => {
-  const {
-    result: problemSolutionTemplate,
-    requestFunction: upsertSolutionTemplateRequest,
-  } = useUpsertSolutionTemplateRequest(problemId);
-
-  useEffect(() => {
-    if (problemSolutionTemplate) {
-      onSuccess && onSuccess(problemSolutionTemplate);
-    }
-  }, [problemSolutionTemplate, onSuccess]);
-
+> = ({ programmingLanguage, initialTemplate, onSubmit }) => {
   return (
     <>
       <Formik<UpsertSolutionTemplateFormData>
@@ -39,11 +29,8 @@ export const UpsertSolutionTemplateForm: FC<
         initialValues={{
           template: initialTemplate,
         }}
-        onSubmit={async (values, { setSubmitting }) => {
-          await upsertSolutionTemplateRequest({
-            programmingLanguage,
-            template: values.template,
-          });
+        onSubmit={(values, { setSubmitting }) => {
+          onSubmit(programmingLanguage, values.template);
           setSubmitting(false);
         }}
       >
