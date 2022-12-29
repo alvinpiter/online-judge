@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { ProblemTestCase } from './problem-test-case.entity';
 import { ProblemTestCasesService } from './problem-test-cases.service';
 import {
   CreateProblemDto,
+  GetProblemsQueryParameter,
   UpdateProblemDto,
   UpsertProblemSolutionTemplateDto,
 } from './problems.dto';
@@ -29,6 +31,15 @@ export class ProblemsController {
     private readonly problemSolutionTemplatesService: ProblemSolutionTemplatesService,
     private readonly objectStorageService: ObjectStorageService,
   ) {}
+
+  @Get('problems')
+  async getProblems(@Query() queryParameter: GetProblemsQueryParameter) {
+    return this.problemsService.getProblems(
+      queryParameter,
+      queryParameter.offset,
+      queryParameter.limit,
+    );
+  }
 
   @Post('problems')
   async createProblem(@Body() createProblemDto: CreateProblemDto) {

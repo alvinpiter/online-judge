@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ObjectStorageModule } from '../object-storage/object-storage.module';
+import { PaginationModule } from '../pagination/pagination.module';
 import { ProblemSolutionTemplate } from './problem-solution-template.entity';
 import { ProblemSolutionTemplatesService } from './problem-solution-templates.service';
 import { ProblemTestCase } from './problem-test-case.entity';
@@ -17,6 +18,7 @@ import { ProblemsService } from './problems.service';
       ProblemSolutionTemplate,
     ]),
     ObjectStorageModule,
+    PaginationModule,
   ],
   providers: [
     ProblemsService,

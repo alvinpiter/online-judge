@@ -1,14 +1,55 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { TypeORMPaginatedQueryBuilderAdapter } from '../pagination/adapters/TypeORMPaginatedQueryBuilderAdapter';
+import { OffsetPaginationService } from '../pagination/offset-pagination.service';
+import { ProblemsFilterParameter } from './interfaces';
 import { Problem } from './problem.entity';
+
+const DEFAULT_OFFSET = 0;
+const DEFAULT_LIMIT = 10;
 
 @Injectable()
 export class ProblemsService {
   constructor(
     @InjectRepository(Problem)
     private readonly problemsRepository: Repository<Problem>,
+    private readonly offsetPaginationService: OffsetPaginationService,
   ) {}
+
+  async getProblems(
+    filter: ProblemsFilterParameter,
+    offset?: number,
+    limit?: number,
+  ) {
+    const qb = this.problemsRepository.createQueryBuilder('problems').select();
+
+    if (filter.state) {
+      qb.andWhere('problems.state = :problemState', {
+        problemState: filter.state,
+      });
+    }
+
+    return this.offsetPaginationService.paginate<Problem>(
+      new TypeORMPaginatedQueryBuilderAdapter(qb),
+      {
+        offset: offset || DEFAULT_OFFSET,
+        limit: limit || DEFAULT_LIMIT,
+      },
+    );
+  }
+
+  async constructGetProblemsQueryBuilder(filter: ProblemsFilterParameter) {
+    const qb = this.problemsRepository.createQueryBuilder('problems').select();
+
+    if (filter.state) {
+      qb.andWhere('problems.state = :problemState', {
+        problemState: filter.state,
+      });
+    }
+
+    return new TypeORMPaginatedQueryBuilderAdapter(qb);
+  }
 
   async createProblem(name: string, description: string) {
     const problem = new Problem();
