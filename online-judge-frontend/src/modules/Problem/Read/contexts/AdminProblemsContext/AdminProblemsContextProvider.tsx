@@ -1,4 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from "react";
+import { getNumberOfPages } from "../../../../Pagination/helpers";
 import { Problem } from "../../../interfaces";
 import { useGetAdminProblemsRequest } from "../../hooks/useGetAdminProblemsRequest";
 import { AdminProblemsFilter } from "../../interfaces";
@@ -28,9 +29,7 @@ export const AdminProblemsContextProvider: FC<
   useEffect(() => {
     if (getAdminProblemsResult) {
       setProblems(getAdminProblemsResult.problems);
-
-      const { total, limit } = getAdminProblemsResult.meta;
-      setNumberOfPages(Math.ceil(total / limit));
+      setNumberOfPages(getNumberOfPages(getAdminProblemsResult.meta));
     }
   }, [getAdminProblemsResult]);
 
