@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TypeORMPaginatedQueryBuilderAdapter } from '../pagination/adapters/TypeORMPaginatedQueryBuilderAdapter';
 import { OffsetPaginationService } from '../pagination/offset-pagination.service';
-import { ProblemsFilterParameter } from './interfaces';
+import { ProblemsFilterParameter, ProblemsOrderOption } from './interfaces';
 import { Problem, ProblemState } from './problem.entity';
 
 const DEFAULT_OFFSET = 0;
@@ -19,6 +19,7 @@ export class ProblemsService {
 
   async getProblems(
     filter: ProblemsFilterParameter,
+    order?: ProblemsOrderOption,
     offset?: number,
     limit?: number,
   ) {
@@ -28,6 +29,20 @@ export class ProblemsService {
       qb.andWhere('problems.state = :problemState', {
         problemState: filter.state,
       });
+    }
+
+    switch (order) {
+      case ProblemsOrderOption.BY_ID_DESC:
+        qb.orderBy('id', 'DESC');
+        break;
+      case ProblemsOrderOption.BY_RATING_ASC:
+        qb.orderBy('rating', 'ASC');
+        break;
+      case ProblemsOrderOption.BY_RATING_DESC:
+        qb.orderBy('rating', 'DESC');
+        break;
+      default:
+        qb.orderBy('id', 'ASC');
     }
 
     const paginationResult =

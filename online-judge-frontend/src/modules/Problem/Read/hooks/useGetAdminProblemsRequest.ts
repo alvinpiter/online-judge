@@ -3,7 +3,7 @@ import { config } from "../../../../config";
 import { useHTTPGetRequest } from "../../../../lib/http/useHTTPGetRequest";
 import { OffsetPaginationMeta } from "../../../Pagination/interfaces";
 import { Problem } from "../../interfaces";
-import { AdminProblemsFilter } from "../interfaces";
+import { AdminProblemsFilter, AdminProblemsOrderOption } from "../interfaces";
 
 interface AdminProblemsRequestResponse {
   problems: Problem[];
@@ -13,13 +13,14 @@ interface AdminProblemsRequestResponse {
 export function useGetAdminProblemsRequest(
   numberOfProblemsPerPage: number,
   page: number,
-  filter?: AdminProblemsFilter
+  filter?: AdminProblemsFilter,
+  order?: AdminProblemsOrderOption
 ) {
   const offset = (page - 1) * numberOfProblemsPerPage;
   const limit = numberOfProblemsPerPage;
 
   const queryString = stringify(
-    { offset, limit, ...filter },
+    { offset, limit, ...filter, order },
     { addQueryPrefix: true }
   );
 

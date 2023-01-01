@@ -23,6 +23,7 @@ export const AdminProblemsTable: FC<AdminProblemsTableProps> = ({
       <Table>
         <TableHead>
           <TableRow>
+            <TableCell> ID </TableCell>
             <TableCell> Name </TableCell>
             <TableCell> Rating </TableCell>
             <TableCell> State </TableCell>

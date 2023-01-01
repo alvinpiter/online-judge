@@ -6,7 +6,10 @@ import { ROUTES } from "../constants/Routes";
 import { ProblemState } from "../modules/Problem/interfaces";
 import { AdminProblemsPageContent } from "../modules/Problem/Read/components/AdminProblemsPageContent";
 import { AdminProblemsContextProvider } from "../modules/Problem/Read/contexts/AdminProblemsContext";
-import { AdminProblemsFilter } from "../modules/Problem/Read/interfaces";
+import {
+  AdminProblemsFilter,
+  AdminProblemsOrderOption,
+} from "../modules/Problem/Read/interfaces";
 
 export const AdminProblemsPage: FC = () => {
   const navigate = useNavigate();
@@ -18,6 +21,9 @@ export const AdminProblemsPage: FC = () => {
   const filter = {
     state: currentQueryStringAsObj["state"] as ProblemState,
   };
+  const order = currentQueryStringAsObj["order"]
+    ? (currentQueryStringAsObj["order"] as AdminProblemsOrderOption)
+    : undefined;
 
   const handlePageChange = (newPage: number) => {
     const newQueryStringAsObj = { ...currentQueryStringAsObj, page: newPage };
@@ -26,6 +32,16 @@ export const AdminProblemsPage: FC = () => {
 
   const handleFilterChange = (newFilter: AdminProblemsFilter) => {
     const newQueryStringAsObj = { ...newFilter, page: 1 };
+    navigate(ROUTES.ADMIN_PROBLEMS_ROUTE.generatePath({}, newQueryStringAsObj));
+  };
+
+  const handleOrderChange = (newOrder: AdminProblemsOrderOption) => {
+    const newQueryStringAsObj = {
+      ...currentQueryStringAsObj,
+      page: 1,
+      order: newOrder,
+    };
+    console.log(newQueryStringAsObj);
     navigate(ROUTES.ADMIN_PROBLEMS_ROUTE.generatePath({}, newQueryStringAsObj));
   };
 
@@ -41,8 +57,10 @@ export const AdminProblemsPage: FC = () => {
       <AdminProblemsContextProvider
         page={page}
         filter={filter}
+        order={order}
         handlePageChange={handlePageChange}
         handleFilterChange={handleFilterChange}
+        handleOrderChange={handleOrderChange}
       >
         <AdminProblemsPageContent />
       </AdminProblemsContextProvider>

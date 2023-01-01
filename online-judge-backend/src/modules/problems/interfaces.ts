@@ -1,9 +1,12 @@
 import { ProblemState } from './problem.entity';
-import { OffsetPaginationParameter } from '../pagination/offset-pagination.interface';
 
 export interface ProblemsFilterParameter {
   state?: ProblemState;
 }
 
-export type ProblemsQueryParameter = ProblemsFilterParameter &
-  OffsetPaginationParameter;
+export enum ProblemsOrderOption {
+  BY_ID_ASC = 'BY_ID_ASC',
+  BY_ID_DESC = 'BY_ID_DESC',
+  BY_RATING_ASC = 'BY_RATING_ASC',
+  BY_RATING_DESC = 'BY_RATING_DESC',
+}

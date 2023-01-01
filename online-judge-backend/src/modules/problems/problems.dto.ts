@@ -1,4 +1,5 @@
 import { ProgrammingLanguage } from '../general/constants';
+import { ProblemsOrderOption } from './interfaces';
 import { ProblemState } from './problem.entity';
 
 export class CreateProblemDto {
@@ -16,6 +17,7 @@ export class UpsertProblemSolutionTemplateDto {
 
 export interface GetProblemsQueryParameter {
   state?: ProblemState;
+  order?: ProblemsOrderOption;
 
   offset?: number;
   limit?: number;

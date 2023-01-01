@@ -36,7 +36,8 @@ export class ProblemsController {
   @Get('problems')
   async getProblems(@Query() queryParameter: GetProblemsQueryParameter) {
     return this.problemsService.getProblems(
-      queryParameter,
+      queryParameter, // TODO: this is not type-safe. might contain other fields like offset, limit, etc.
+      queryParameter.order,
       queryParameter.offset,
       queryParameter.limit,
     );
