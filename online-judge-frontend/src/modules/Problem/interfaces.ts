@@ -8,9 +8,14 @@ export const SupportedProgrammingLanguages = [
   ProgrammingLanguage.PYTHON_3,
 ];
 
+export enum ProblemState {
+  DRAFT = "DRAFT",
+  PUBLISHED = "PUBLISHED",
+}
+
 export interface Problem {
   id: number;
   name: string;
   description: string;
-  state: string;
+  state: ProblemState;
 }

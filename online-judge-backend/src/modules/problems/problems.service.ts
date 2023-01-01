@@ -7,7 +7,7 @@ import { ProblemsFilterParameter } from './interfaces';
 import { Problem } from './problem.entity';
 
 const DEFAULT_OFFSET = 0;
-const DEFAULT_LIMIT = 10;
+const DEFAULT_LIMIT = 2;
 
 @Injectable()
 export class ProblemsService {
@@ -30,13 +30,19 @@ export class ProblemsService {
       });
     }
 
-    return this.offsetPaginationService.paginate<Problem>(
-      new TypeORMPaginatedQueryBuilderAdapter(qb),
-      {
-        offset: offset || DEFAULT_OFFSET,
-        limit: limit || DEFAULT_LIMIT,
-      },
-    );
+    const paginationResult =
+      await this.offsetPaginationService.paginate<Problem>(
+        new TypeORMPaginatedQueryBuilderAdapter(qb),
+        {
+          offset: offset || DEFAULT_OFFSET,
+          limit: limit || DEFAULT_LIMIT,
+        },
+      );
+
+    return {
+      problems: paginationResult.result,
+      meta: paginationResult.meta,
+    };
   }
 
   async constructGetProblemsQueryBuilder(filter: ProblemsFilterParameter) {
