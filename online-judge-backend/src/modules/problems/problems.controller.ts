@@ -47,6 +47,7 @@ export class ProblemsController {
     return this.problemsService.createProblem(
       createProblemDto.name,
       createProblemDto.description,
+      createProblemDto.rating,
     );
   }
 
@@ -80,6 +81,7 @@ export class ProblemsController {
       params.problemId,
       updateProblemDto.name,
       updateProblemDto.description,
+      updateProblemDto.rating,
     );
   }
 

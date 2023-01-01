@@ -31,8 +31,8 @@ export const EditDescriptionTab: FC<{ problemId: string }> = ({
     requestFunction: updateProblemRequest,
   } = useUpdateProblemRequest(problemId);
 
-  const updateProblem = (name: string, description: string) => {
-    updateProblemRequest({ name, description });
+  const updateProblem = (name: string, description: string, rating: number) => {
+    updateProblemRequest({ name, description, rating });
   };
 
   useEffect(() => {

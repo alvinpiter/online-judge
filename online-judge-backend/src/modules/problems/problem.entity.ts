@@ -18,4 +18,7 @@ export class Problem {
 
   @Column()
   state: ProblemState = ProblemState.DRAFT;
+
+  @Column({ default: 0 })
+  rating: number;
 }

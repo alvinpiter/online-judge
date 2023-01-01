@@ -18,4 +18,5 @@ export interface Problem {
   name: string;
   description: string;
   state: ProblemState;
+  rating: number;
 }

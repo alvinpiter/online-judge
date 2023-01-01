@@ -13,8 +13,8 @@ export const NewProblemPage: FC = () => {
     requestFunction: createProblemRequest,
   } = useCreateProblemRequest();
 
-  const handleSubmit = (name: string, description: string) => {
-    createProblemRequest({ name, description });
+  const handleSubmit = (name: string, description: string, rating: number) => {
+    createProblemRequest({ name, description, rating });
   };
 
   useEffect(() => {

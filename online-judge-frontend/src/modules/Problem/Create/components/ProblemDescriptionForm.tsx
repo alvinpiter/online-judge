@@ -6,29 +6,37 @@ import { TextField } from "../../../../forms/fields/TextField";
 interface ProblemDescriptionFormProps {
   initialName?: string;
   initialDescription?: string;
+  initialRating?: number;
 
-  onSubmit: (name: string, description: string) => void;
+  onSubmit: (name: string, description: string, rating: number) => void;
 }
 
 interface ProblemDescriptionFormData {
   name: string;
   description: string;
+  rating: number;
 }
 
 export const ProblemDescriptionForm: FC<ProblemDescriptionFormProps> = ({
   initialName,
   initialDescription,
+  initialRating,
   onSubmit,
 }) => {
   const resolvedName = initialName || "";
   const resolvedDescription = initialDescription || "";
+  const resolvedRating = initialRating || 0;
 
   return (
     <Formik<ProblemDescriptionFormData>
       enableReinitialize
-      initialValues={{ name: resolvedName, description: resolvedDescription }}
+      initialValues={{
+        name: resolvedName,
+        description: resolvedDescription,
+        rating: resolvedRating,
+      }}
       onSubmit={async (values, { setSubmitting }) => {
-        onSubmit(values.name, values.description);
+        onSubmit(values.name, values.description, values.rating);
         setSubmitting(false);
       }}
     >
@@ -44,6 +52,13 @@ export const ProblemDescriptionForm: FC<ProblemDescriptionFormProps> = ({
           <TextField
             name="description"
             label="Description"
+            required
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            name="rating"
+            label="Rating"
             required
             fullWidth
             margin="normal"

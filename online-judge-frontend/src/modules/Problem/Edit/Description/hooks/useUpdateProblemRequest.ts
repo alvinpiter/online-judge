@@ -5,6 +5,7 @@ import { Problem } from "../../../interfaces";
 interface UpdateProblemRequestBody {
   name: string;
   description: string;
+  rating: number;
 }
 
 export function useUpdateProblemRequest(problemId: string) {

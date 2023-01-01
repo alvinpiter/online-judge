@@ -4,6 +4,7 @@ import { ProblemState } from './problem.entity';
 export class CreateProblemDto {
   name: string;
   description: string;
+  rating: number;
 }
 
 export class UpdateProblemDto extends CreateProblemDto {}

@@ -13,6 +13,7 @@ export const AdminProblemsTableItem: FC<AdminProblemsTableItemProps> = ({
   return (
     <TableRow>
       <TableCell> {problem.name} </TableCell>
+      <TableCell> {problem.rating} </TableCell>
       <TableCell> {problem.state} </TableCell>
       <TableCell>
         <Button

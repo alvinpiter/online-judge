@@ -57,10 +57,11 @@ export class ProblemsService {
     return new TypeORMPaginatedQueryBuilderAdapter(qb);
   }
 
-  async createProblem(name: string, description: string) {
+  async createProblem(name: string, description: string, rating: number) {
     const problem = new Problem();
     problem.name = name;
     problem.description = description;
+    problem.rating = rating;
 
     return this.problemsRepository.save(problem);
   }
@@ -69,10 +70,16 @@ export class ProblemsService {
     return this.problemsRepository.findOneBy({ id: problemId });
   }
 
-  async updateProblem(problemId: number, name: string, description: string) {
+  async updateProblem(
+    problemId: number,
+    name: string,
+    description: string,
+    rating: number,
+  ) {
     const problem = await this.problemsRepository.findOneBy({ id: problemId });
     problem.name = name;
     problem.description = description;
+    problem.rating = rating;
 
     return this.problemsRepository.save(problem);
   }
