@@ -1,11 +1,18 @@
 import { Pagination } from "@mui/material";
 import { ChangeEvent, FC } from "react";
 import { useAdminProblemsContext } from "../contexts/AdminProblemsContext";
+import { AdminProblemsFilterForm } from "./AdminProblemsFilterForm";
 import { AdminProblemsTable } from "./AdminProblemsTable";
 
 export const AdminProblemsPageContent: FC = () => {
-  const { problems, currentPage, numberOfPages, handlePageChange } =
-    useAdminProblemsContext();
+  const {
+    problems,
+    currentPage,
+    filter,
+    numberOfPages,
+    handlePageChange,
+    handleFilterChange,
+  } = useAdminProblemsContext();
 
   const handlePaginationChange = (
     event: ChangeEvent<unknown>,
@@ -16,6 +23,10 @@ export const AdminProblemsPageContent: FC = () => {
 
   return (
     <>
+      <AdminProblemsFilterForm
+        initialFilter={filter}
+        onSubmit={handleFilterChange}
+      />
       <AdminProblemsTable problems={problems} />
       <Pagination
         page={currentPage}

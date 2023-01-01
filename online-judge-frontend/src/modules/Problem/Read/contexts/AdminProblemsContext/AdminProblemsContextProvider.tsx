@@ -42,6 +42,7 @@ export const AdminProblemsContextProvider: FC<
       value={{
         currentPage,
         numberOfPages,
+        filter: filter || {},
         problems,
         handleFilterChange,
         handlePageChange,
