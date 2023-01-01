@@ -15,6 +15,7 @@ import { ObjectStorageService } from '../object-storage/object-storage.service';
 import { ProblemSolutionTemplatesService } from './problem-solution-templates.service';
 import { ProblemTestCase } from './problem-test-case.entity';
 import { ProblemTestCasesService } from './problem-test-cases.service';
+import { ProblemState } from './problem.entity';
 import {
   CreateProblemDto,
   GetProblemsQueryParameter,
@@ -52,6 +53,22 @@ export class ProblemsController {
   @Get('problems/:problemId')
   async getProblem(@Param() params: { problemId: number }) {
     return this.problemsService.getProblem(params.problemId);
+  }
+
+  @Post('problems/:problemId/publish')
+  async publishProblem(@Param() params: { problemId: number }) {
+    return this.problemsService.changeProblemState(
+      params.problemId,
+      ProblemState.PUBLISHED,
+    );
+  }
+
+  @Post('problems/:problemId/draft')
+  async draftProblem(@Param() params: { problemId: number }) {
+    return this.problemsService.changeProblemState(
+      params.problemId,
+      ProblemState.DRAFT,
+    );
   }
 
   @Put('problems/:problemId')

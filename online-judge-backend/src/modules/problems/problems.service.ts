@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { TypeORMPaginatedQueryBuilderAdapter } from '../pagination/adapters/TypeORMPaginatedQueryBuilderAdapter';
 import { OffsetPaginationService } from '../pagination/offset-pagination.service';
 import { ProblemsFilterParameter } from './interfaces';
-import { Problem } from './problem.entity';
+import { Problem, ProblemState } from './problem.entity';
 
 const DEFAULT_OFFSET = 0;
 const DEFAULT_LIMIT = 2;
@@ -73,6 +73,13 @@ export class ProblemsService {
     const problem = await this.problemsRepository.findOneBy({ id: problemId });
     problem.name = name;
     problem.description = description;
+
+    return this.problemsRepository.save(problem);
+  }
+
+  async changeProblemState(problemId: number, state: ProblemState) {
+    const problem = await this.problemsRepository.findOneBy({ id: problemId });
+    problem.state = state;
 
     return this.problemsRepository.save(problem);
   }
