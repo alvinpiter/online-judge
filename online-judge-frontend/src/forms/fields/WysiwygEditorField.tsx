@@ -12,6 +12,7 @@ interface WysiwygEditorFieldProps {
 
 export const WysiwygEditorField: FC<WysiwygEditorFieldProps> = ({ name }) => {
   const [field, , helper] = useField<string>(name);
+
   const [editorState, setEditorState] = useState<EditorState>(
     EditorState.createWithContent(
       ContentState.createFromBlockArray(htmlToDraft(field.value).contentBlocks)
