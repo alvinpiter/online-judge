@@ -57,6 +57,7 @@ export const ProblemDescriptionForm: FC<ProblemDescriptionFormProps> = ({
             margin="normal"
           />
           <TextField
+            type="number"
             name="rating"
             label="Rating"
             required

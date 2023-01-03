@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ProgrammingLanguage } from '../general/constants';
-import { ProblemSolutionTemplate } from './problem-solution-template.entity';
+import { ProblemSolutionTemplateUpsertDto } from '../data-transfer-objects/problem-solution-template-upsert.dto';
+import { ProblemSolutionTemplate } from '../entities/problem-solution-template.entity';
 
 @Injectable()
 export class ProblemSolutionTemplatesService {
@@ -13,9 +13,10 @@ export class ProblemSolutionTemplatesService {
 
   async upsertTemplate(
     problemId: number,
-    programmingLanguage: ProgrammingLanguage,
-    template: string,
+    problemSolutionTemplateUpsertDto: ProblemSolutionTemplateUpsertDto,
   ) {
+    const { programmingLanguage, template } = problemSolutionTemplateUpsertDto;
+
     const existingTemplate =
       await this.problemSolutionTemplatesRepository.findOneBy({
         problemId,

@@ -1,5 +1,5 @@
+import { ProgrammingLanguage } from 'src/constants/programming-languages';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { ProgrammingLanguage } from '../general/constants';
 
 @Entity('problem_solution_templates')
 export class ProblemSolutionTemplate {

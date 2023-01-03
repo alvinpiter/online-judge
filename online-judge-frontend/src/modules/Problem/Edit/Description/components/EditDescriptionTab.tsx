@@ -87,6 +87,7 @@ export const EditDescriptionTab: FC<{ problemId: string }> = ({
         <ProblemDescriptionForm
           initialName={currentProblem.name}
           initialDescription={currentProblem.description}
+          initialRating={currentProblem.rating}
           onSubmit={updateProblem}
         />
       )}

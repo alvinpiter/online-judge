@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Readable } from 'stream';
 import { Repository } from 'typeorm';
-import { ObjectStorageService } from '../object-storage/object-storage.service';
-import { ProblemTestCase } from './problem-test-case.entity';
+import { ObjectStorageService } from '../../object-storage/object-storage.service';
+import { ProblemTestCase } from '../entities/problem-test-case.entity';
 
 @Injectable()
 export class ProblemTestCasesService {
