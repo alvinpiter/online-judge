@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -17,6 +16,7 @@ import { UserProblemsPage } from "./pages/UserProblemsPage";
 import { AdminProblemsPage } from "./pages/AdminProblemsPage";
 import { PlaygroundPage } from "./pages/PlaygroundPage";
 import { SnackbarContextProvider } from "./core/Snackbar";
+import { render } from "react-dom";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -51,16 +51,19 @@ const router = createBrowserRouter(
   )
 );
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+/*
+Change the way of rendering the root because somehow the WYSIWYG component
+doesn't work when using the previous implementation.
 
-root.render(
+Source: https://stackoverflow.com/a/71893128
+*/
+render(
   <React.StrictMode>
     <SnackbarContextProvider>
       <CurrentUserContextProvider>
         <RouterProvider router={router} />
       </CurrentUserContextProvider>
     </SnackbarContextProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
+  document.getElementById("root") as HTMLElement
 );
