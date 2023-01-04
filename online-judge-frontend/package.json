@@ -20,14 +20,12 @@
     "draftjs-to-html": "^0.9.1",
     "formik": "^2.2.9",
     "html-to-draftjs": "^1.5.0",
-    "prismjs": "^1.29.0",
     "qs": "^6.11.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-draft-wysiwyg": "^1.15.0",
     "react-router-dom": "^6.4.5",
     "react-scripts": "5.0.1",
-    "react-simple-code-editor": "^0.13.1",
     "typescript": "^4.9.4",
     "web-vitals": "^2.1.4"
   },
@@ -58,7 +56,6 @@
   "devDependencies": {
     "@types/draftjs-to-html": "^0.8.1",
     "@types/html-to-draftjs": "^1.4.0",
-    "@types/prismjs": "^1.26.0",
     "@types/react-draft-wysiwyg": "^1.13.4"
   }
 }
