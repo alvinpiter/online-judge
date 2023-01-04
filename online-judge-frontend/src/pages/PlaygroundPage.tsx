@@ -1,17 +1,70 @@
 import { Box, Button, Typography } from "@mui/material";
 import { Form, Formik } from "formik";
 import { FC, useState } from "react";
+import { CodeEditorField } from "../forms/fields/CodeEditorField";
 import { WysiwygEditorField } from "../forms/fields/WysiwygEditorField";
-interface FormData {
+import Editor from "@monaco-editor/react";
+
+export const PlaygroundPage: FC = () => {
+  return <CodeEditorDemo />;
+};
+
+interface CodeEditorFormData {
+  code: string;
+}
+
+export const CodeEditorDemo = () => {
+  const [code, setCode] = useState("");
+
+  return (
+    <>
+      <Formik<CodeEditorFormData>
+        initialValues={{ code }}
+        onSubmit={(values) => setCode(values.code)}
+      >
+        {() => (
+          <Form>
+            <CodeEditorField name="code" />
+            <Button type="submit" variant="contained" sx={{ mt: 2 }} fullWidth>
+              Submit
+            </Button>
+          </Form>
+        )}
+      </Formik>
+
+      <Box sx={{ mt: 2 }}>
+        <Typography variant="h5"> Result </Typography>
+        <Editor
+          height="20vh"
+          theme="vs-dark"
+          defaultLanguage="javascript"
+          value={code}
+          options={{
+            minimap: {
+              enabled: false,
+            },
+          }}
+        />
+      </Box>
+
+      <Box sx={{ mt: 2 }}>
+        <Typography variant="h5"> Raw result </Typography>
+        <textarea value={code} readOnly style={{ width: "100%" }} />
+      </Box>
+    </>
+  );
+};
+
+interface WysiwygDemoFormData {
   text: string;
 }
 
-export const PlaygroundPage: FC = () => {
+export const WysiwygEditorDemo = () => {
   const [textAreaText, setTextAreaText] = useState("");
 
   return (
     <>
-      <Formik<FormData>
+      <Formik<WysiwygDemoFormData>
         initialValues={{
           text: "",
         }}
