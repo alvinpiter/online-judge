@@ -3,12 +3,7 @@ import { Form, Formik } from "formik";
 import { FC, useState } from "react";
 import { CodeEditorField } from "../forms/fields/CodeEditorField";
 import { WysiwygEditorField } from "../forms/fields/WysiwygEditorField";
-
-import * as Prism from "prismjs"; // https://stackoverflow.com/a/72559024
-import "prismjs/components/prism-clike";
-import "prismjs/components/prism-javascript";
-import "prismjs/themes/prism.css";
-import Editor from "react-simple-code-editor";
+import Editor from "@monaco-editor/react";
 
 export const PlaygroundPage: FC = () => {
   return <CodeEditorDemo />;
@@ -40,18 +35,21 @@ export const CodeEditorDemo = () => {
       <Box sx={{ mt: 2 }}>
         <Typography variant="h5"> Result </Typography>
         <Editor
+          height="20vh"
+          theme="vs-dark"
+          defaultLanguage="javascript"
           value={code}
-          onValueChange={() => 0}
-          highlight={(code) =>
-            Prism.highlight(code, Prism.languages["js"], "js")
-          }
-          padding={10}
-          style={{
-            fontFamily: '"Fira code", "Fira Mono", monospace',
-            fontSize: 16,
-            border: "1px solid #F1F1F1",
+          options={{
+            minimap: {
+              enabled: false,
+            },
           }}
         />
+      </Box>
+
+      <Box sx={{ mt: 2 }}>
+        <Typography variant="h5"> Raw result </Typography>
+        <textarea value={code} readOnly style={{ width: "100%" }} />
       </Box>
     </>
   );
