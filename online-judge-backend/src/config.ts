@@ -13,6 +13,10 @@ export enum ConfigKey {
   AWS_S3_SECRET_ACCESS_KEY = 'AWS_S3_SECRET_ACCESS_KEY',
   AWS_S3_BUCKET_NAME = 'AWS_S3_BUCKET_NAME',
   AWS_S3_BUCKET_REGION = 'AWS_S3_BUCKET_REGION',
+
+  RABBITMQ_HOST = 'RABBITMQ_HOST',
+  RABBITMQ_USERNAME = 'RABBITMQ_USERNAME',
+  RABBITMQ_PASSWORD = 'RABBITMQ_PASSWORD',
 }
 
 export const ConfigSchemaMap: Record<ConfigKey, Joi.Schema> = {
@@ -28,6 +32,10 @@ export const ConfigSchemaMap: Record<ConfigKey, Joi.Schema> = {
   AWS_S3_SECRET_ACCESS_KEY: Joi.string().required(),
   AWS_S3_BUCKET_NAME: Joi.string().required(),
   AWS_S3_BUCKET_REGION: Joi.string().required(),
+
+  RABBITMQ_HOST: Joi.string().required(),
+  RABBITMQ_USERNAME: Joi.string().required(),
+  RABBITMQ_PASSWORD: Joi.string().required(),
 };
 
 export const ConfigSchema = Joi.object(ConfigSchemaMap);

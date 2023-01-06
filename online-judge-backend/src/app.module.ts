@@ -7,6 +7,9 @@ import { GlobalErrorFilter } from './errors/GlobalErrorFilter';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
 import { ObjectStorageModule } from './modules/object-storage/object-storage.module';
+import { QueueModule } from './modules/queue/queue.module';
+import { StatisticsModule } from './modules/statistics/statistics.module';
+import { SubmissionsModule } from './modules/submissions/submissions.module';
 
 @Module({
   providers: [
@@ -35,9 +38,12 @@ import { ObjectStorageModule } from './modules/object-storage/object-storage.mod
       }),
       inject: [ConfigService],
     }),
+    QueueModule,
     HealthCheckModule,
     AuthenticationModule,
     ObjectStorageModule,
+    SubmissionsModule,
+    StatisticsModule,
   ],
 })
 export class AppModule {}
