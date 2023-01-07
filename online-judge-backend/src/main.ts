@@ -32,7 +32,7 @@ async function bootstrap() {
       queue: PRIMARY_JOB_QUEUE,
       noAck: false,
       queueOptions: { durable: true },
-      prefetchCount: 5,
+      prefetchCount: 1,
     },
   });
 

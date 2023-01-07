@@ -28,7 +28,7 @@ export const PRIMARY_JOB_QUEUE = 'PRIMARY_JOB_QUEUE';
             queue: PRIMARY_JOB_QUEUE,
             noAck: false,
             queueOptions: { durable: true },
-            prefetchCount: 5,
+            prefetchCount: 1,
           },
         });
       },
