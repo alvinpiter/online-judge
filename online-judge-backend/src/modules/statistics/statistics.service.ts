@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { JobQueueItem } from '../job/interfaces';
 import {
   GlobalSubmissionsStatisticsUpdateQueue,
   GlobalSubmissionsStatisticsUpdateQueueItem,
@@ -24,18 +25,18 @@ export class StatisticsService {
   }
 
   async updateUserSubmissonsStatistics(
-    item: UserSubmissionsStatisticsUpdateQueueItem,
+    item: JobQueueItem<UserSubmissionsStatisticsUpdateQueueItem>,
   ) {
     console.log(
-      `Updating user's submissions statistics after submission with ID ${item.submissionId}...`,
+      `Updating user's submissions statistics after submission with ID ${item.item.submissionId}...`,
     );
   }
 
   async updateGlobalSubmissionsStatistics(
-    item: GlobalSubmissionsStatisticsUpdateQueueItem,
+    item: JobQueueItem<GlobalSubmissionsStatisticsUpdateQueueItem>,
   ) {
     console.log(
-      `Updating global submissions statistics after submission with ID ${item.submissionId}...`,
+      `Updating global submissions statistics after submission with ID ${item.item.submissionId}...`,
     );
   }
 }

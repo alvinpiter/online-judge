@@ -1,5 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
+import { JobQueueItem } from '../job/interfaces';
 import {
   SubmissionsJudgementQueue,
   SubmissionsJudgementQueueItem,
@@ -13,7 +14,7 @@ export class SubmissionEventsController {
 
   @EventPattern(SubmissionsJudgementQueue.name)
   judgeSubmission(
-    @Payload() item: SubmissionsJudgementQueueItem,
+    @Payload() item: JobQueueItem<SubmissionsJudgementQueueItem>,
     @Ctx() context: RmqContext,
   ) {
     this.submissionsJudgementQueue.consume(item, context);

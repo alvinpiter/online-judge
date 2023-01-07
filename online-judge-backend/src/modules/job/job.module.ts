@@ -3,13 +3,16 @@ import { ConfigService } from '@nestjs/config';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 import * as amqplib from 'amqplib';
 import { ConfigKey } from 'src/config';
+import { JobController } from './job.controller';
+import { JobService } from './job.service';
 
-export const PRIMARY_QUEUE = 'PRIMARY_QUEUE';
+export const PRIMARY_JOB_QUEUE = 'PRIMARY_JOB_QUEUE';
 
 @Module({
+  controllers: [JobController],
   providers: [
     {
-      provide: PRIMARY_QUEUE,
+      provide: PRIMARY_JOB_QUEUE,
       useFactory: (configService: ConfigService) => {
         const host = configService.get<string>(ConfigKey.RABBITMQ_HOST);
         const username = configService.get<string>(ConfigKey.RABBITMQ_USERNAME);
@@ -22,7 +25,7 @@ export const PRIMARY_QUEUE = 'PRIMARY_QUEUE';
             socketOptions: {
               credentials: amqplib.credentials.plain(username, password),
             },
-            queue: PRIMARY_QUEUE,
+            queue: PRIMARY_JOB_QUEUE,
             noAck: false,
             queueOptions: { durable: true },
             prefetchCount: 5,
@@ -31,7 +34,8 @@ export const PRIMARY_QUEUE = 'PRIMARY_QUEUE';
       },
       inject: [ConfigService],
     },
+    JobService,
   ],
-  exports: [PRIMARY_QUEUE],
+  exports: [PRIMARY_JOB_QUEUE, JobService],
 })
-export class QueueModule {}
+export class JobModule {}

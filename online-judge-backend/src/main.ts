@@ -5,7 +5,7 @@ import * as cookieParser from 'cookie-parser';
 import * as amqplib from 'amqplib';
 import { AppModule } from './app.module';
 import { ConfigKey } from './config';
-import { PRIMARY_QUEUE } from './modules/queue/queue.module';
+import { PRIMARY_JOB_QUEUE } from './modules/job/job.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -29,7 +29,7 @@ async function bootstrap() {
           rabbitMqPassword,
         ),
       },
-      queue: PRIMARY_QUEUE,
+      queue: PRIMARY_JOB_QUEUE,
       noAck: false,
       queueOptions: { durable: true },
       prefetchCount: 5,

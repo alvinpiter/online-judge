@@ -1,5 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
+import { JobQueueItem } from '../job/interfaces';
 import {
   GlobalSubmissionsStatisticsUpdateQueue,
   GlobalSubmissionsStatisticsUpdateQueueItem,
@@ -18,7 +19,7 @@ export class StatisticsEventsController {
 
   @EventPattern(UserSubmissionsStatisticsUpdateQueue.name)
   updateUserSubmissionsStatistics(
-    @Payload() item: UserSubmissionsStatisticsUpdateQueueItem,
+    @Payload() item: JobQueueItem<UserSubmissionsStatisticsUpdateQueueItem>,
     @Ctx() context: RmqContext,
   ) {
     this.userSubmissionsStatisticsUpdateQueue.consume(item, context);
@@ -26,7 +27,7 @@ export class StatisticsEventsController {
 
   @EventPattern(GlobalSubmissionsStatisticsUpdateQueue.name)
   updateGlobalSubmissionsStatistics(
-    @Payload() item: GlobalSubmissionsStatisticsUpdateQueueItem,
+    @Payload() item: JobQueueItem<GlobalSubmissionsStatisticsUpdateQueueItem>,
     @Ctx() context: RmqContext,
   ) {
     this.globalSubmissionsStatisticsUpdateQueue.consume(item, context);

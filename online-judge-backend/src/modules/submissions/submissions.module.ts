@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { QueueModule } from '../queue/queue.module';
+import { JobModule } from '../job/job.module';
 import { GlobalSubmissionsStatisticsUpdateQueue } from './queues/global-submissions-statistics-update.queue';
 import { SubmissionsJudgementQueue } from './queues/submissions-judgement.queue';
 import { UserSubmissionsStatisticsUpdateQueue } from './queues/user-submissions-statistics-update.queue';
@@ -8,7 +8,7 @@ import { SubmissionsController } from './submissions.controller';
 import { SubmissionsService } from './submissions.service';
 
 @Module({
-  imports: [QueueModule],
+  imports: [JobModule],
   providers: [
     SubmissionsService,
     SubmissionsJudgementQueue,

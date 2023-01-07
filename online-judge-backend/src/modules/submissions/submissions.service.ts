@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { JobQueueItem } from '../job/interfaces';
+import { JobService } from '../job/job.service';
 import { GlobalSubmissionsStatisticsUpdateQueue } from './queues/global-submissions-statistics-update.queue';
 import {
   SubmissionsJudgementQueue,
@@ -12,24 +14,33 @@ export class SubmissionsService {
     private readonly submissionsJudgementQueue: SubmissionsJudgementQueue,
     private readonly userSubmissionsStatisticsUpdateQueue: UserSubmissionsStatisticsUpdateQueue,
     private readonly globalSubmissionsStatisticsUpdateQueue: GlobalSubmissionsStatisticsUpdateQueue,
+    private readonly jobService: JobService,
   ) {
     this.submissionsJudgementQueue.setConsumer((item) => this.judge(item));
   }
 
-  submit() {
+  async submit() {
     const submissionId = Math.floor(Math.random() * 100);
-
-    // TODO: apply observer pattern here
-    this.submissionsJudgementQueue.enqueue({ submissionId });
-
-    return 'ok';
+    return this.submissionsJudgementQueue.enqueue({ submissionId });
   }
 
-  async judge(item: SubmissionsJudgementQueueItem) {
-    const submissionId = item.submissionId;
+  async judge(
+    submissionQueueItem: JobQueueItem<SubmissionsJudgementQueueItem>,
+  ) {
+    const jobId = submissionQueueItem.jobId;
+    const submissionId = submissionQueueItem.item.submissionId;
 
     console.log(`Judging user's submission with ID ${submissionId}...`);
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    const numberOfTestCases = 10;
+    for (let tc = 1; tc <= numberOfTestCases; tc++) {
+      console.log(`Running testcase ${tc}...`);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await this.jobService.updateProgress(jobId, tc / numberOfTestCases);
+    }
+
+    await this.jobService.finishSuccessfully(jobId, 'All good!');
+
     console.log(`Done judging user's submission with ID ${submissionId}!`);
 
     // TODO: apply observer pattern here
