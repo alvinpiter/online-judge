@@ -4,7 +4,6 @@ import { Transport } from '@nestjs/microservices';
 import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { ConfigKey } from './config';
-import { PRIMARY_JOB_QUEUE } from './modules/job/job.module';
 import { getRmqOptions } from './modules/job/helpers';
 
 async function bootstrap() {
@@ -18,15 +17,20 @@ async function bootstrap() {
   const rabbitMqPassword = configService.get<string>(
     ConfigKey.RABBITMQ_PASSWORD,
   );
+  const rabbitMqQueues = configService
+    .get<string>(ConfigKey.CONSUMED_QUEUES)
+    .split(',');
 
-  app.connectMicroservice({
-    transport: Transport.RMQ,
-    options: getRmqOptions(
-      [rabbitMqHost],
-      rabbitMqUsername,
-      rabbitMqPassword,
-      PRIMARY_JOB_QUEUE,
-    ),
+  rabbitMqQueues.forEach((queue) => {
+    app.connectMicroservice({
+      transport: Transport.RMQ,
+      options: getRmqOptions(
+        [rabbitMqHost],
+        rabbitMqUsername,
+        rabbitMqPassword,
+        queue,
+      ),
+    });
   });
 
   app.use(cookieParser());

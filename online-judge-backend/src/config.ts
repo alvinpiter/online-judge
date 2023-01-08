@@ -17,6 +17,7 @@ export enum ConfigKey {
   RABBITMQ_HOST = 'RABBITMQ_HOST',
   RABBITMQ_USERNAME = 'RABBITMQ_USERNAME',
   RABBITMQ_PASSWORD = 'RABBITMQ_PASSWORD',
+  CONSUMED_QUEUES = 'CONSUMED_QUEUES',
 }
 
 export const ConfigSchemaMap: Record<ConfigKey, Joi.Schema> = {
@@ -36,6 +37,7 @@ export const ConfigSchemaMap: Record<ConfigKey, Joi.Schema> = {
   RABBITMQ_HOST: Joi.string().required(),
   RABBITMQ_USERNAME: Joi.string().required(),
   RABBITMQ_PASSWORD: Joi.string().required(),
+  CONSUMED_QUEUES: Joi.string().required(),
 };
 
 export const ConfigSchema = Joi.object(ConfigSchemaMap);
