@@ -43,7 +43,6 @@ export class SubmissionsService {
 
     console.log(`Done judging user's submission with ID ${submissionId}!`);
 
-    // TODO: apply observer pattern here
     this.userSubmissionsStatisticsUpdateQueue.enqueue({
       submissionId,
     });

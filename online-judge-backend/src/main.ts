@@ -2,10 +2,10 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import * as cookieParser from 'cookie-parser';
-import * as amqplib from 'amqplib';
 import { AppModule } from './app.module';
 import { ConfigKey } from './config';
 import { PRIMARY_JOB_QUEUE } from './modules/job/job.module';
+import { getRmqOptions } from './modules/job/helpers';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,19 +21,12 @@ async function bootstrap() {
 
   app.connectMicroservice({
     transport: Transport.RMQ,
-    options: {
-      urls: [rabbitMqHost],
-      socketOptions: {
-        credentials: amqplib.credentials.plain(
-          rabbitMqUsername,
-          rabbitMqPassword,
-        ),
-      },
-      queue: PRIMARY_JOB_QUEUE,
-      noAck: false,
-      queueOptions: { durable: true },
-      prefetchCount: 1,
-    },
+    options: getRmqOptions(
+      [rabbitMqHost],
+      rabbitMqUsername,
+      rabbitMqPassword,
+      PRIMARY_JOB_QUEUE,
+    ),
   });
 
   app.use(cookieParser());
