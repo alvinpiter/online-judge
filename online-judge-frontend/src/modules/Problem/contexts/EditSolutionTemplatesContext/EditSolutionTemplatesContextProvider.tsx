@@ -4,6 +4,7 @@ import { ProgrammingLanguage } from "../../interfaces";
 import { useGetSolutionTemplatesRequest } from "../../hooks/useGetSolutionTemplatesRequest";
 import { EditSolutionTemplatesContext } from "./context";
 import { useUpsertSolutionTemplateRequest } from "../../hooks/useUpsertSolutionTemplateRequest";
+import { useSolutionTemplatesMap } from "../../hooks/useSolutionTemplatesMap";
 
 interface EditSolutionTemplatesContextProviderProps {
   problemId: string;
@@ -15,10 +16,8 @@ export const EditSolutionTemplatesContextProvider: FC<
 > = ({ problemId, children }) => {
   const { openSnackbar } = useSnackbarContext();
 
-  const {
-    isLoading: isLoadingSolutionTemplates,
-    result: getSolutionTemplatesRequestResult,
-  } = useGetSolutionTemplatesRequest(problemId);
+  const { solutionTemplatesMap, setSolutionTemplatesMap } =
+    useSolutionTemplatesMap(problemId, useGetSolutionTemplatesRequest);
 
   const {
     isLoading: isUpsertingSolutionTemplate,
@@ -30,10 +29,6 @@ export const EditSolutionTemplatesContextProvider: FC<
   const [activeProgrammingLanguage, setActiveProgrammingLanguage] =
     useState<ProgrammingLanguage>(ProgrammingLanguage.JAVASCRIPT);
 
-  const [templateMap, setTemplateMap] = useState<
-    Map<ProgrammingLanguage, string>
-  >(new Map());
-
   const upsertTemplate = (
     programmingLanguage: ProgrammingLanguage,
     template: string
@@ -42,26 +37,16 @@ export const EditSolutionTemplatesContextProvider: FC<
   };
 
   useEffect(() => {
-    if (!isLoadingSolutionTemplates && getSolutionTemplatesRequestResult) {
-      const newTemplateMap = new Map<ProgrammingLanguage, string>();
-      getSolutionTemplatesRequestResult.map((template) =>
-        newTemplateMap.set(template.programmingLanguage, template.template)
-      );
-
-      setTemplateMap(newTemplateMap);
-    }
-  }, [isLoadingSolutionTemplates, getSolutionTemplatesRequestResult]);
-
-  useEffect(() => {
     if (!isUpsertingSolutionTemplate && upsertSolutionTemplateRequestResult) {
-      setTemplateMap((prevTemplateMap) => {
-        const newTemplateMap = new Map(prevTemplateMap);
-        newTemplateMap.set(
+      setSolutionTemplatesMap((prevSolutionTemplatesMap) => {
+        const newSolutionTemplatesMap = new Map(prevSolutionTemplatesMap);
+
+        newSolutionTemplatesMap.set(
           upsertSolutionTemplateRequestResult.programmingLanguage,
           upsertSolutionTemplateRequestResult.template
         );
 
-        return newTemplateMap;
+        return newSolutionTemplatesMap;
       });
 
       openSnackbar("success", "Solution template is updated!");
@@ -69,6 +54,7 @@ export const EditSolutionTemplatesContextProvider: FC<
   }, [
     isUpsertingSolutionTemplate,
     upsertSolutionTemplateRequestResult,
+    setSolutionTemplatesMap,
     openSnackbar,
   ]);
 
@@ -86,7 +72,8 @@ export const EditSolutionTemplatesContextProvider: FC<
     <EditSolutionTemplatesContext.Provider
       value={{
         activeProgrammingLanguage,
-        activeTemplate: templateMap.get(activeProgrammingLanguage) || "",
+        activeTemplate:
+          solutionTemplatesMap.get(activeProgrammingLanguage) || "",
         setActiveProgrammingLanguage,
         upsertTemplate,
       }}
