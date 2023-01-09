@@ -12,6 +12,7 @@ import { ProblemTestCasesFormatter } from './formatters/problem-test-cases.forma
 import { AdminProblemsController } from './controllers/admin-problems.controller';
 import { AdminProblemTestCasesController } from './controllers/admin-problem-test-cases.controller';
 import { AdminProblemSolutionTemplatesController } from './controllers/admin-problem-solution-templates.controller';
+import { ProblemsController } from './controllers/problems.controller';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { AdminProblemSolutionTemplatesController } from './controllers/admin-pro
     AdminProblemsController,
     AdminProblemTestCasesController,
     AdminProblemSolutionTemplatesController,
+    ProblemsController,
   ],
 })
 export class ProblemsModule {}

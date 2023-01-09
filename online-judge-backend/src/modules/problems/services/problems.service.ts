@@ -1,16 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { TypeORMPaginatedQueryBuilderAdapter } from '../../pagination/adapters/TypeORMPaginatedQueryBuilderAdapter';
 import { OffsetPaginationService } from '../../pagination/offset-pagination.service';
-import {
-  Problem,
-  ProblemsOrderOption,
-  ProblemState,
-} from '../entities/problem.entity';
+import { Problem, ProblemState } from '../entities/problem.entity';
 import { ProblemCreationDto } from '../data-transfer-objects/problem-creation.dto';
 import { ProblemUpdateDto } from '../data-transfer-objects/problem-update.dto';
 import { ProblemsGetDto } from '../data-transfer-objects/problems-get.dto';
+import { UserProblemsGetDto } from '../data-transfer-objects/user-problems-get.dto';
+import { ProblemsSelectQueryBuilder } from '../helpers/problems-select.query-builder';
 
 const DEFAULT_OFFSET = 0;
 const DEFAULT_LIMIT = 10;
@@ -24,41 +22,33 @@ export class ProblemsService {
   ) {}
 
   async getProblems(problemsGetDto: ProblemsGetDto) {
-    const qb = this.problemsRepository.createQueryBuilder('problems').select();
+    const qb = new ProblemsSelectQueryBuilder(this.problemsRepository);
 
     if (problemsGetDto.state) {
-      qb.andWhere('problems.state = :problemState', {
-        problemState: problemsGetDto.state,
-      });
+      problemsGetDto && qb.applyStateFilter(problemsGetDto.state);
     }
 
-    switch (problemsGetDto.order) {
-      case ProblemsOrderOption.BY_ID_DESC:
-        qb.orderBy('id', 'DESC');
-        break;
-      case ProblemsOrderOption.BY_RATING_ASC:
-        qb.orderBy('rating', 'ASC');
-        break;
-      case ProblemsOrderOption.BY_RATING_DESC:
-        qb.orderBy('rating', 'DESC');
-        break;
-      default:
-        qb.orderBy('id', 'ASC');
-    }
+    qb.applyOrder(problemsGetDto.order);
 
-    const paginationResult =
-      await this.offsetPaginationService.paginate<Problem>(
-        new TypeORMPaginatedQueryBuilderAdapter(qb),
-        {
-          offset: problemsGetDto.offset || DEFAULT_OFFSET,
-          limit: problemsGetDto.limit || DEFAULT_LIMIT,
-        },
-      );
+    return this.doGetProblems(
+      qb.getQueryBuilder(),
+      problemsGetDto.offset,
+      problemsGetDto.limit,
+    );
+  }
 
-    return {
-      problems: paginationResult.result,
-      meta: paginationResult.meta,
-    };
+  async getUserProblems(userProblemsGetDto: UserProblemsGetDto) {
+    const qb = new ProblemsSelectQueryBuilder(this.problemsRepository);
+
+    qb.applyStateFilter(ProblemState.PUBLISHED);
+
+    qb.applyOrder(userProblemsGetDto.order);
+
+    return this.doGetProblems(
+      qb.getQueryBuilder(),
+      userProblemsGetDto.offset,
+      userProblemsGetDto.limit,
+    );
   }
 
   async createProblem(problemCreationDto: ProblemCreationDto) {
@@ -88,5 +78,22 @@ export class ProblemsService {
     problem.state = state;
 
     return this.problemsRepository.save(problem);
+  }
+
+  private async doGetProblems(
+    qb: SelectQueryBuilder<Problem>,
+    offset = DEFAULT_OFFSET,
+    limit = DEFAULT_LIMIT,
+  ) {
+    const paginationResult =
+      await this.offsetPaginationService.paginate<Problem>(
+        new TypeORMPaginatedQueryBuilderAdapter(qb),
+        { offset, limit },
+      );
+
+    return {
+      problems: paginationResult.result,
+      meta: paginationResult.meta,
+    };
   }
 }
