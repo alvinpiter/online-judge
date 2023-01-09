@@ -1,8 +1,8 @@
 import { Typography } from "@mui/material";
 import { FC, useEffect } from "react";
 import { useSnackbarContext } from "../core/Snackbar";
-import { ProblemDescriptionForm } from "../modules/Problem/Create/components/ProblemDescriptionForm";
-import { useCreateProblemRequest } from "../modules/Problem/Create/hooks/useCreateProblemRequest";
+import { ProblemDescriptionForm } from "../modules/Problem/components/EditDescription/ProblemDescriptionForm";
+import { useCreateProblemRequest } from "../modules/Problem/hooks/useCreateProblemRequest";
 
 export const NewProblemPage: FC = () => {
   const { openSnackbar } = useSnackbarContext();

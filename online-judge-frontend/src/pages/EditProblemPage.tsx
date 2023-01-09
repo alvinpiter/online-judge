@@ -1,9 +1,9 @@
 import { Tab, Tabs } from "@mui/material";
 import { FC, useState } from "react";
 import { useParams } from "react-router";
-import { EditDescriptionTab } from "../modules/Problem/Edit/Description/components/EditDescriptionTab";
-import { EditSolutionTemplatesTab } from "../modules/Problem/Edit/SolutionTemplates/components/EditSolutionTemplatesTab";
-import { EditTestCasesTab } from "../modules/Problem/Edit/TestCases/components/EditTestCasesTab";
+import { EditDescriptionTab } from "../modules/Problem/components/EditDescription/EditDescriptionTab";
+import { EditSolutionTemplatesTab } from "../modules/Problem/components/EditSolutionTemplates/EditSolutionTemplatesTab";
+import { EditTestCasesTab } from "../modules/Problem/components/EditTestCases/EditTestCasesTab";
 
 export const EditProblemPage: FC = () => {
   const params = useParams<{ problemId: string }>();

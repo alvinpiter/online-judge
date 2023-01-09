@@ -20,3 +20,33 @@ export interface Problem {
   state: ProblemState;
   rating: number;
 }
+
+export interface AdminProblemsFilter {
+  state?: ProblemState;
+}
+
+export enum AdminProblemsOrderOption {
+  BY_ID_ASC = "BY_ID_ASC",
+  BY_ID_DESC = "BY_ID_DESC",
+  BY_RATING_ASC = "BY_RATING_ASC",
+  BY_RATING_DESC = "BY_RATING_DESC",
+}
+
+export interface SolutionTemplate {
+  id: number;
+  problemId: number;
+  programmingLanguage: ProgrammingLanguage;
+  template: string;
+}
+
+export interface TestCase {
+  id: number;
+  inputFile: {
+    name: string;
+    url: string;
+  };
+  outputFile: {
+    name: string;
+    url: string;
+  };
+}
