@@ -1,4 +1,9 @@
-import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpStatus,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { getAppErrorHttpStatus } from './helpers';
 import { AppError } from './AppError';
@@ -20,7 +25,7 @@ export class GlobalErrorFilter implements ExceptionFilter {
         message = error.message;
         break;
       default:
-        httpStatus = error.getStatus();
+        httpStatus = HttpStatus.BAD_REQUEST;
         code = error.name;
         message = error.message;
     }

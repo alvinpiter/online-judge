@@ -8,6 +8,7 @@ import { AuthenticationModule } from './modules/authentication/authentication.mo
 import { HealthCheckModule } from './modules/health-check/health-check.module';
 import { JobModule } from './modules/job/job.module';
 import { ObjectStorageModule } from './modules/object-storage/object-storage.module';
+import { ProblemsModule } from './modules/problems/problems.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
 import { SubmissionsModule } from './modules/submissions/submissions.module';
 
@@ -43,6 +44,7 @@ import { SubmissionsModule } from './modules/submissions/submissions.module';
     HealthCheckModule,
     AuthenticationModule,
     ObjectStorageModule,
+    ProblemsModule,
     SubmissionsModule,
     StatisticsModule,
   ],

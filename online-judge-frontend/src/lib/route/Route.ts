@@ -1,4 +1,4 @@
-import { stringify } from "qs";
+import { stringify, parse } from "qs";
 import { generatePath } from "react-router-dom";
 
 interface RouteParameters {
@@ -15,5 +15,9 @@ export class Route<P extends RouteParameters, Q extends QueryParameters> {
     const queryString = query ? stringify(query, { addQueryPrefix: true }) : "";
 
     return path + queryString;
+  }
+
+  parseQueryString(queryString: string): Q {
+    return parse(queryString) as Q;
   }
 }

@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
+import { TransformationAndValidationPipe } from './pipes/transformation-and-validation.pipe';
 import { ConfigKey } from './config';
 import { getRmqOptions } from './modules/job/helpers';
 
@@ -34,6 +35,7 @@ async function bootstrap() {
   });
 
   app.use(cookieParser());
+  app.useGlobalPipes(new TransformationAndValidationPipe());
 
   await app.startAllMicroservices();
   await app.listen(5000);
