@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { ProblemsGetDto } from '../data-transfer-objects/problems-get.dto';
 import { ProblemsService } from '../services/problems.service';
 
@@ -9,5 +9,10 @@ export class ProblemsController {
   @Get('problems')
   async getProblems(@Query() problemsGetDto: ProblemsGetDto) {
     return this.problemsService.getUserProblems(problemsGetDto);
+  }
+
+  @Get('problems/:problemId')
+  async getProblem(@Param('problemId', ParseIntPipe) problemId: number) {
+    return this.problemsService.getProblem(problemId);
   }
 }
