@@ -13,8 +13,8 @@ import { Readable } from 'stream';
 import { ProblemTestCasesFormatter } from '../formatters/problem-test-cases.formatter';
 import { ProblemTestCasesService } from '../services/problem-test-cases.service';
 
-@Controller('api')
-export class ProblemTestCasesController {
+@Controller('api/admin')
+export class AdminProblemTestCasesController {
   constructor(
     private readonly problemTestCasesService: ProblemTestCasesService,
     private readonly problemTestCasesFormatter: ProblemTestCasesFormatter,

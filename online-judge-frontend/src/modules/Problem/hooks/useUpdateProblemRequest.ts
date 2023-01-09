@@ -9,6 +9,6 @@ interface UpdateProblemRequestBody {
 }
 
 export function useUpdateProblemRequest(problemId: string) {
-  const apiUrl = `${config.backendAPIURL}/problems/${problemId}`;
+  const apiUrl = `${config.backendAPIURL}/admin/problems/${problemId}`;
   return useHTTPPutRequest<UpdateProblemRequestBody, Problem>(apiUrl);
 }

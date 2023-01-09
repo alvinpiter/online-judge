@@ -4,7 +4,7 @@ import { useSnackbarContext } from "../../../../core/Snackbar";
 import { ProblemDescriptionForm } from "./ProblemDescriptionForm";
 import { Problem, ProblemState } from "../../interfaces";
 import { useDraftProblemRequest } from "../../hooks/useDraftProblemRequest";
-import { useGetProblemRequest } from "../../hooks/useGetProblemRequest";
+import { useGetAdminProblemRequest } from "../../hooks/useGetAdminProblemRequest";
 import { usePublishProblemRequest } from "../../hooks/usePublishProblemRequest";
 import { useUpdateProblemRequest } from "../../hooks/useUpdateProblemRequest";
 
@@ -17,7 +17,8 @@ export const EditDescriptionTab: FC<{ problemId: string }> = ({
     undefined
   );
 
-  const { result: getProblemRequestResult } = useGetProblemRequest(problemId);
+  const { result: getProblemRequestResult } =
+    useGetAdminProblemRequest(problemId);
   const {
     result: publishProblemResult,
     requestFunction: publishProblemRequest,

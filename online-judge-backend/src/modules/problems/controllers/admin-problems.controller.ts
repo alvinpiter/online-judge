@@ -14,8 +14,8 @@ import { ProblemsGetDto } from '../data-transfer-objects/problems-get.dto';
 import { ProblemState } from '../entities/problem.entity';
 import { ProblemsService } from '../services/problems.service';
 
-@Controller('api')
-export class ProblemsController {
+@Controller('api/admin')
+export class AdminProblemsController {
   constructor(private readonly problemsService: ProblemsService) {}
 
   @Get('problems')

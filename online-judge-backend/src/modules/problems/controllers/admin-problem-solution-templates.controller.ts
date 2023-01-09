@@ -9,8 +9,8 @@ import {
 import { ProblemSolutionTemplateUpsertDto } from '../data-transfer-objects/problem-solution-template-upsert.dto';
 import { ProblemSolutionTemplatesService } from '../services/problem-solution-templates.service';
 
-@Controller('api')
-export class ProblemSolutionTemplatesController {
+@Controller('api/admin')
+export class AdminProblemSolutionTemplatesController {
   constructor(
     private readonly problemSolutionTemplatesService: ProblemSolutionTemplatesService,
   ) {}

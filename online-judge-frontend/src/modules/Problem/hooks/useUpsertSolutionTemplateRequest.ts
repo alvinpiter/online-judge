@@ -8,7 +8,7 @@ interface UpsertSolutionTemplateRequestBody {
 }
 
 export function useUpsertSolutionTemplateRequest(problemId: string) {
-  const apiUrl = `${config.backendAPIURL}/problems/${problemId}/solution-templates`;
+  const apiUrl = `${config.backendAPIURL}/admin/problems/${problemId}/solution-templates`;
   return useHTTPPostRequest<
     UpsertSolutionTemplateRequestBody,
     SolutionTemplate
