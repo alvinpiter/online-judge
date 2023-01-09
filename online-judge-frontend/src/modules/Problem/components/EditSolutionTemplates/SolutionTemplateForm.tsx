@@ -5,7 +5,7 @@ import { FC } from "react";
 import { CodeEditorField } from "../../../../forms/fields/CodeEditorField";
 import { ProgrammingLanguage } from "../../interfaces";
 
-interface UpsertSolutionTemplateFormProps {
+interface SolutionTemplateFormProps {
   programmingLanguage: ProgrammingLanguage;
   initialTemplate: string;
 
@@ -15,16 +15,18 @@ interface UpsertSolutionTemplateFormProps {
   ) => void;
 }
 
-interface UpsertSolutionTemplateFormData {
+interface SolutionTemplateFormData {
   template: string;
 }
 
-export const UpsertSolutionTemplateForm: FC<
-  UpsertSolutionTemplateFormProps
-> = ({ programmingLanguage, initialTemplate, onSubmit }) => {
+export const SolutionTemplateForm: FC<SolutionTemplateFormProps> = ({
+  programmingLanguage,
+  initialTemplate,
+  onSubmit,
+}) => {
   return (
     <>
-      <Formik<UpsertSolutionTemplateFormData>
+      <Formik<SolutionTemplateFormData>
         enableReinitialize
         initialValues={{
           template: initialTemplate,

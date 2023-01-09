@@ -4,7 +4,7 @@ import {
   ProgrammingLanguage,
   SupportedProgrammingLanguages,
 } from "../../interfaces";
-import { UpsertSolutionTemplateForm } from "./UpsertSolutionTemplateForm";
+import { SolutionTemplateForm } from "./SolutionTemplateForm";
 
 export const EditSolutionTemplatesTabContent = () => {
   const {
@@ -31,7 +31,7 @@ export const EditSolutionTemplatesTabContent = () => {
           </MenuItem>
         ))}
       </Select>
-      <UpsertSolutionTemplateForm
+      <SolutionTemplateForm
         programmingLanguage={activeProgrammingLanguage}
         initialTemplate={activeTemplate}
         onSubmit={upsertTemplate}

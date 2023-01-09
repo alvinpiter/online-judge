@@ -13,6 +13,7 @@ import { AdminProblemsController } from './controllers/admin-problems.controller
 import { AdminProblemTestCasesController } from './controllers/admin-problem-test-cases.controller';
 import { AdminProblemSolutionTemplatesController } from './controllers/admin-problem-solution-templates.controller';
 import { ProblemsController } from './controllers/problems.controller';
+import { ProblemSolutionTemplatesController } from './controllers/problem-solution-templates.controller';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { ProblemsController } from './controllers/problems.controller';
     AdminProblemTestCasesController,
     AdminProblemSolutionTemplatesController,
     ProblemsController,
+    ProblemSolutionTemplatesController,
   ],
 })
 export class ProblemsModule {}
