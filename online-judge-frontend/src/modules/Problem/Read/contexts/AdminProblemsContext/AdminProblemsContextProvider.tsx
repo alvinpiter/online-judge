@@ -1,4 +1,6 @@
 import { FC, ReactNode, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../../../constants/Routes";
 import { getNumberOfPages } from "../../../../Pagination/helpers";
 import { Problem } from "../../../interfaces";
 import { useGetAdminProblemsRequest } from "../../hooks/useGetAdminProblemsRequest";
@@ -6,40 +8,35 @@ import {
   AdminProblemsFilter,
   AdminProblemsOrderOption,
 } from "../../interfaces";
+import { AdminProblemsPageQueryStringObjectBuilder } from "./AdminProblemsPageQueryStringObjectBuilder";
 import { AdminProblemsContext } from "./context";
 
 interface AdminProblemsContextProviderProps {
-  handlePageChange: (newPage: number) => void;
-  handleFilterChange: (newFilter: AdminProblemsFilter) => void;
-  handleOrderChange: (newOrder: AdminProblemsOrderOption) => void;
-
-  page?: number;
-  filter?: AdminProblemsFilter;
-  order?: AdminProblemsOrderOption;
   children?: ReactNode;
 }
 
+const NUMBER_OF_PROBLEMS_PER_PAGE = 5;
+
 export const AdminProblemsContextProvider: FC<
   AdminProblemsContextProviderProps
-> = ({
-  page,
-  filter,
-  order,
-  children,
-  handlePageChange,
-  handleFilterChange,
-  handleOrderChange,
-}) => {
-  const numberOfProblemsPerPage = 5;
-  const currentPage = page || 1;
+> = ({ children }) => {
+  const navigate = useNavigate();
+  const currentLocation = useLocation();
+  const queryString = currentLocation.search.slice(1); // Exclude the '?'
+  const qsObjectBuilder = new AdminProblemsPageQueryStringObjectBuilder(
+    queryString
+  );
+
+  const numberOfProblemsPerPage = NUMBER_OF_PROBLEMS_PER_PAGE;
+  const currentPage = qsObjectBuilder.getPage();
   const [numberOfPages, setNumberOfPages] = useState(0);
 
   const { isLoading: isLoadingProblems, result: getAdminProblemsResult } =
     useGetAdminProblemsRequest(
       numberOfProblemsPerPage,
       currentPage,
-      filter,
-      order
+      qsObjectBuilder.getFilter(),
+      qsObjectBuilder.getOrder()
     );
 
   const [problems, setProblems] = useState<Problem[]>([]);
@@ -51,6 +48,21 @@ export const AdminProblemsContextProvider: FC<
     }
   }, [getAdminProblemsResult]);
 
+  const handlePageChange = (newPage: number) => {
+    const qsObject = qsObjectBuilder.setPage(newPage).build();
+    navigate(ROUTES.ADMIN_PROBLEMS_ROUTE.generatePath({}, qsObject));
+  };
+
+  const handleFilterChange = (newFilter: AdminProblemsFilter) => {
+    const qsObject = qsObjectBuilder.setFilter(newFilter).setPage(1).build();
+    navigate(ROUTES.ADMIN_PROBLEMS_ROUTE.generatePath({}, qsObject));
+  };
+
+  const handleOrderChange = (newOrder: AdminProblemsOrderOption) => {
+    const qsObject = qsObjectBuilder.setOrder(newOrder).setPage(1).build();
+    navigate(ROUTES.ADMIN_PROBLEMS_ROUTE.generatePath({}, qsObject));
+  };
+
   if (isLoadingProblems) {
     return <p> Loading problems... </p>;
   }
@@ -60,8 +72,8 @@ export const AdminProblemsContextProvider: FC<
       value={{
         currentPage,
         numberOfPages,
-        filter: filter || {},
-        order: order || AdminProblemsOrderOption.BY_ID_ASC,
+        filter: qsObjectBuilder.getFilter(),
+        order: qsObjectBuilder.getOrder(),
         problems,
         handleFilterChange,
         handlePageChange,
