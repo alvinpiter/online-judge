@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -6,8 +6,11 @@ import { ConfigKey, ConfigSchema } from './config';
 import { GlobalErrorFilter } from './errors/GlobalErrorFilter';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
+import { JobModule } from './modules/job/job.module';
 import { ObjectStorageModule } from './modules/object-storage/object-storage.module';
 import { ProblemsModule } from './modules/problems/problems.module';
+import { StatisticsModule } from './modules/statistics/statistics.module';
+import { SubmissionsModule } from './modules/submissions/submissions.module';
 
 @Module({
   providers: [
@@ -36,10 +39,14 @@ import { ProblemsModule } from './modules/problems/problems.module';
       }),
       inject: [ConfigService],
     }),
+    CacheModule.register({ isGlobal: true }),
+    JobModule,
     HealthCheckModule,
     AuthenticationModule,
     ObjectStorageModule,
     ProblemsModule,
+    SubmissionsModule,
+    StatisticsModule,
   ],
 })
 export class AppModule {}
