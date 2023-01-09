@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import { Box } from "@mui/system";
 import { Form, Formik } from "formik";
 import { FC } from "react";
-import { TextField } from "../../../../../forms/fields/TextField";
+import { CodeEditorField } from "../../../../../forms/fields/CodeEditorField";
 import { ProgrammingLanguage } from "../../../interfaces";
 
 interface UpsertSolutionTemplateFormProps {
@@ -37,7 +37,10 @@ export const UpsertSolutionTemplateForm: FC<
         {({ isSubmitting }) => (
           <Form>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <TextField margin="normal" name="template" label="Template" />
+              <CodeEditorField
+                name="template"
+                programmingLanguage={programmingLanguage}
+              />
               <Button
                 type="submit"
                 variant="contained"
