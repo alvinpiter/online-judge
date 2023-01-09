@@ -23,21 +23,18 @@ export class ProblemTestCasesService {
 
   async addTestCase(
     problemId: number,
-    inputFile: Express.Multer.File,
-    outputFile: Express.Multer.File,
+    inputFileName: string,
+    inputFileReadable: Readable,
+    outputFileName: string,
+    outputFileReadable: Readable,
   ) {
-    const inputFileName = inputFile.originalname;
     const inputFileKey = this.getTestCaseObjectKey(problemId, inputFileName);
-    await this.objectStorageService.putObject(
-      inputFileKey,
-      Readable.from(inputFile.buffer),
-    );
+    await this.objectStorageService.putObject(inputFileKey, inputFileReadable);
 
-    const outputFileName = outputFile.originalname;
     const outputFileKey = this.getTestCaseObjectKey(problemId, outputFileName);
     await this.objectStorageService.putObject(
       outputFileKey,
-      Readable.from(outputFile.buffer),
+      outputFileReadable,
     );
 
     // TODO: apply builder pattern?

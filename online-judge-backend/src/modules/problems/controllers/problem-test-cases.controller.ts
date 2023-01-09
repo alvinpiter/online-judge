@@ -9,6 +9,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { Readable } from 'stream';
 import { ProblemTestCasesFormatter } from '../formatters/problem-test-cases.formatter';
 import { ProblemTestCasesService } from '../services/problem-test-cases.service';
 
@@ -36,8 +37,10 @@ export class ProblemTestCasesController {
   ) {
     const problemTestCase = await this.problemTestCasesService.addTestCase(
       problemId,
-      files.inputFile[0],
-      files.outputFile[0],
+      files.inputFile[0].originalname,
+      Readable.from(files.inputFile[0].buffer),
+      files.outputFile[0].originalname,
+      Readable.from(files.outputFile[0].buffer),
     );
 
     return this.problemTestCasesFormatter.formatProblemTestCase(
