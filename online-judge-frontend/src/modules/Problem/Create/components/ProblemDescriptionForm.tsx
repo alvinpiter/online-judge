@@ -2,12 +2,11 @@ import { Button } from "@mui/material";
 import { Form, Formik } from "formik";
 import { FC } from "react";
 import { TextField } from "../../../../forms/fields/TextField";
+import { WysiwygEditorField } from "../../../../forms/fields/WysiwygEditorField";
+import { Problem } from "../../interfaces";
 
 interface ProblemDescriptionFormProps {
-  initialName?: string;
-  initialDescription?: string;
-  initialRating?: number;
-
+  problem?: Problem;
   onSubmit: (name: string, description: string, rating: number) => void;
 }
 
@@ -18,14 +17,12 @@ interface ProblemDescriptionFormData {
 }
 
 export const ProblemDescriptionForm: FC<ProblemDescriptionFormProps> = ({
-  initialName,
-  initialDescription,
-  initialRating,
+  problem,
   onSubmit,
 }) => {
-  const resolvedName = initialName || "";
-  const resolvedDescription = initialDescription || "";
-  const resolvedRating = initialRating || 0;
+  const resolvedName = problem?.name || "";
+  const resolvedDescription = problem?.description || "";
+  const resolvedRating = problem?.rating || 0;
 
   return (
     <Formik<ProblemDescriptionFormData>
@@ -49,13 +46,7 @@ export const ProblemDescriptionForm: FC<ProblemDescriptionFormProps> = ({
             fullWidth
             margin="normal"
           />
-          <TextField
-            name="description"
-            label="Description"
-            required
-            fullWidth
-            margin="normal"
-          />
+          <WysiwygEditorField name="description" />
           <TextField
             type="number"
             name="rating"
