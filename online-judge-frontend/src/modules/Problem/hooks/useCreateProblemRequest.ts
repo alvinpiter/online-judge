@@ -9,6 +9,6 @@ interface CreateProblemRequestBody {
 }
 
 export function useCreateProblemRequest() {
-  const apiUrl = `${config.backendAPIURL}/problems`;
+  const apiUrl = `${config.backendAPIURL}/admin/problems`;
   return useHTTPPostRequest<CreateProblemRequestBody, Problem>(apiUrl);
 }

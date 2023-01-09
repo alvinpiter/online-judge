@@ -10,6 +10,6 @@ interface UrlParameters {
 export function useDeleteTestCaseRequest() {
   return useHTTPDeleteRequest<UrlParameters, TestCase>(
     (urlParameters: UrlParameters) =>
-      `${config.backendAPIURL}/problems/${urlParameters.problemId}/test-cases/${urlParameters.testCaseId}`
+      `${config.backendAPIURL}/admin/problems/${urlParameters.problemId}/test-cases/${urlParameters.testCaseId}`
   );
 }

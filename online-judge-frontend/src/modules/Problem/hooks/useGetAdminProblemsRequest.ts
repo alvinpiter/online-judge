@@ -27,7 +27,7 @@ export function useGetAdminProblemsRequest(
     { addQueryPrefix: true }
   );
 
-  const apiUrl = `${config.backendAPIURL}/problems${queryString}`;
+  const apiUrl = `${config.backendAPIURL}/admin/problems${queryString}`;
 
   return useHTTPGetRequest<AdminProblemsRequestResponse>(apiUrl);
 }
