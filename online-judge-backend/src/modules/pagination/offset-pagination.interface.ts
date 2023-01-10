@@ -8,7 +8,7 @@ export interface OffsetPaginationMeta extends OffsetPaginationParameter {
 }
 
 export type OffsetPaginationResult<DataType> = {
-  result: DataType[];
+  data: DataType[];
   meta: OffsetPaginationMeta;
 };
 

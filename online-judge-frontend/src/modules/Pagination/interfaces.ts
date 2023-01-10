@@ -3,3 +3,8 @@ export interface OffsetPaginationMeta {
   limit: number;
   total: number;
 }
+
+export interface OffsetPaginationResult<DataType> {
+  data: DataType[];
+  meta: OffsetPaginationMeta;
+}
