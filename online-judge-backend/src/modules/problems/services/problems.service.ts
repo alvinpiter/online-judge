@@ -46,19 +46,13 @@ export class ProblemsService {
         qb.orderBy('id', 'ASC');
     }
 
-    const paginationResult =
-      await this.offsetPaginationService.paginate<Problem>(
-        new TypeORMPaginatedQueryBuilderAdapter(qb),
-        {
-          offset: problemsGetDto.offset || DEFAULT_OFFSET,
-          limit: problemsGetDto.limit || DEFAULT_LIMIT,
-        },
-      );
-
-    return {
-      problems: paginationResult.result,
-      meta: paginationResult.meta,
-    };
+    return this.offsetPaginationService.paginate<Problem>(
+      new TypeORMPaginatedQueryBuilderAdapter(qb),
+      {
+        offset: problemsGetDto.offset || DEFAULT_OFFSET,
+        limit: problemsGetDto.limit || DEFAULT_LIMIT,
+      },
+    );
   }
 
   async createProblem(problemCreationDto: ProblemCreationDto) {
