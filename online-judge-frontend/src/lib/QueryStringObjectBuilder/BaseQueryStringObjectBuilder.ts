@@ -30,7 +30,7 @@ export abstract class BaseQueryStringObjectBuilder<Filter, Order>
   }
 
   abstract getFilter(): Filter;
-  abstract setFilter(filter: Filter): void;
+  abstract setFilter(filter: Filter): QueryStringObjectBuilder<Filter, Order>;
 
   abstract getOrder(): Order;
 }
