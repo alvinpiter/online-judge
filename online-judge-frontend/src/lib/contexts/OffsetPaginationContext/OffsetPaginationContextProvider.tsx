@@ -1,30 +1,25 @@
 import QueryString from "qs";
 import { useEffect, useState } from "react";
-import { AppError } from "../../../AppError";
 import { getNumberOfPages } from "../../../modules/Pagination/helpers";
-import { OffsetPaginationResult } from "../../../modules/Pagination/interfaces";
-import { QueryStringObjectBuilder } from "../../QueryStringObjectBuilder/QueryStringObjectBuilder";
+import { OffsetPaginationRequestHook } from "../../../modules/Pagination/interfaces";
+import { OffsetPaginationQueryStringObjectBuilder } from "../../../modules/Pagination/OffsetPaginationQueryStringObjectBuilder/OffsetPaginationQueryStringObjectBuilder";
 import {
   DEFAULT_NUMBER_OF_ENTITIES_PER_PAGE,
   OffsetPaginationContextValue,
 } from "./interfaces";
 
+/*
+TODO:
+This provider is very coupled with URL's query string.
+Is it a good practice?
+ */
 interface OffsetPaginationContextProvideProps<Entity, Filter, Order> {
   Context: React.Context<
     OffsetPaginationContextValue<Entity, Filter, Order> | undefined
   >;
-  qsObjectBuilder: QueryStringObjectBuilder<Filter, Order>;
-  getEntitiesRequestHook: (
-    numberOfEntitiesPerPage: number,
-    page: number,
-    filter?: Filter,
-    order?: Order
-  ) => {
-    isLoading: boolean;
-    result: OffsetPaginationResult<Entity> | undefined;
-    error: AppError | undefined;
-    requestFunction: () => Promise<void>;
-  };
+
+  qsObjectBuilder: OffsetPaginationQueryStringObjectBuilder<Filter, Order>;
+  getEntitiesRequestHook: OffsetPaginationRequestHook<Entity, Filter, Order>;
 
   onQsObjectChange?: (qsObject: QueryString.ParsedQs) => void;
   children?: React.ReactNode;

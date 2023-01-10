@@ -1,9 +1,11 @@
 import QueryString, { parse } from "qs";
 import { QUERY_STRING_ORDER_KEY, QUERY_STRING_PAGE_KEY } from "./constants";
-import { QueryStringObjectBuilder } from "./QueryStringObjectBuilder";
+import { OffsetPaginationQueryStringObjectBuilder } from "./OffsetPaginationQueryStringObjectBuilder";
 
-export abstract class BaseQueryStringObjectBuilder<Filter, Order>
-  implements QueryStringObjectBuilder<Filter, Order>
+export abstract class BaseOffsetPaginationQueryStringObjectBuilder<
+  Filter,
+  Order
+> implements OffsetPaginationQueryStringObjectBuilder<Filter, Order>
 {
   protected qsObject: QueryString.ParsedQs;
 
@@ -30,7 +32,9 @@ export abstract class BaseQueryStringObjectBuilder<Filter, Order>
   }
 
   abstract getFilter(): Filter;
-  abstract setFilter(filter: Filter): QueryStringObjectBuilder<Filter, Order>;
+  abstract setFilter(
+    filter: Filter
+  ): OffsetPaginationQueryStringObjectBuilder<Filter, Order>;
 
   abstract getOrder(): Order;
 }

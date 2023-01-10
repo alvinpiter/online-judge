@@ -1,12 +1,12 @@
-import { BaseQueryStringObjectBuilder } from "../../../../lib/QueryStringObjectBuilder/BaseQueryStringObjectBuilder";
-import { QUERY_STRING_ORDER_KEY } from "../../../../lib/QueryStringObjectBuilder/constants";
+import { BaseOffsetPaginationQueryStringObjectBuilder } from "../../../Pagination/OffsetPaginationQueryStringObjectBuilder/BaseOffsetPaginationQueryStringObjectBuilder";
+import { QUERY_STRING_ORDER_KEY } from "../../../Pagination/OffsetPaginationQueryStringObjectBuilder/constants";
 import {
   AdminProblemsFilter,
   AdminProblemsOrderOption,
   ProblemState,
 } from "../../interfaces";
 
-export class AdminProblemsPageQueryStringObjectBuilder extends BaseQueryStringObjectBuilder<
+export class AdminProblemsPageQueryStringObjectBuilder extends BaseOffsetPaginationQueryStringObjectBuilder<
   AdminProblemsFilter,
   AdminProblemsOrderOption
 > {
