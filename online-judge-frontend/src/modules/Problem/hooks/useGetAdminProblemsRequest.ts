@@ -1,17 +1,12 @@
 import { stringify } from "qs";
 import { config } from "../../../config";
 import { useHTTPGetRequest } from "../../../lib/http/useHTTPGetRequest";
-import { OffsetPaginationMeta } from "../../Pagination/interfaces";
+import { OffsetPaginationResult } from "../../Pagination/interfaces";
 import {
   AdminProblemsFilter,
   AdminProblemsOrderOption,
   Problem,
 } from "../interfaces";
-
-interface AdminProblemsRequestResponse {
-  problems: Problem[];
-  meta: OffsetPaginationMeta;
-}
 
 export function useGetAdminProblemsRequest(
   numberOfProblemsPerPage: number,
@@ -29,5 +24,5 @@ export function useGetAdminProblemsRequest(
 
   const apiUrl = `${config.backendAPIURL}/admin/problems${queryString}`;
 
-  return useHTTPGetRequest<AdminProblemsRequestResponse>(apiUrl);
+  return useHTTPGetRequest<OffsetPaginationResult<Problem>>(apiUrl);
 }

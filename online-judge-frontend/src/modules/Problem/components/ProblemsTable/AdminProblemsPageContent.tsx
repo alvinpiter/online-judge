@@ -7,7 +7,7 @@ import { AdminProblemsTable } from "./AdminProblemsTable";
 
 export const AdminProblemsPageContent: FC = () => {
   const {
-    problems,
+    entities: problems,
     currentPage,
     filter,
     numberOfPages,

@@ -1,26 +1,15 @@
-import QueryString, { parse } from "qs";
+import { BaseOffsetPaginationQueryStringObjectBuilder } from "../../../Pagination/OffsetPaginationQueryStringObjectBuilder/BaseOffsetPaginationQueryStringObjectBuilder";
+import { QUERY_STRING_ORDER_KEY } from "../../../Pagination/OffsetPaginationQueryStringObjectBuilder/constants";
 import {
   AdminProblemsFilter,
   AdminProblemsOrderOption,
   ProblemState,
 } from "../../interfaces";
 
-export class AdminProblemsPageQueryStringObjectBuilder {
-  private qsObject: QueryString.ParsedQs;
-
-  constructor(queryString: string) {
-    this.qsObject = parse(queryString);
-  }
-
-  getPage(): number {
-    return parseInt(this.qsObject["page"] as string) || 1;
-  }
-
-  setPage(page: number) {
-    this.qsObject["page"] = page.toString();
-    return this;
-  }
-
+export class AdminProblemsPageQueryStringObjectBuilder extends BaseOffsetPaginationQueryStringObjectBuilder<
+  AdminProblemsFilter,
+  AdminProblemsOrderOption
+> {
   getFilter(): AdminProblemsFilter {
     return {
       state: this.qsObject["state"] as ProblemState,
@@ -28,22 +17,16 @@ export class AdminProblemsPageQueryStringObjectBuilder {
   }
 
   setFilter(filter: AdminProblemsFilter) {
-    this.qsObject = { ...this.qsObject, state: filter.state };
+    this.qsObject = {
+      ...this.qsObject,
+      state: filter.state,
+    };
     return this;
   }
 
   getOrder(): AdminProblemsOrderOption {
-    return this.qsObject["order"]
-      ? (this.qsObject["order"] as AdminProblemsOrderOption)
+    return this.qsObject[QUERY_STRING_ORDER_KEY]
+      ? (this.qsObject[QUERY_STRING_ORDER_KEY] as AdminProblemsOrderOption)
       : AdminProblemsOrderOption.BY_ID_ASC;
-  }
-
-  setOrder(order: AdminProblemsOrderOption) {
-    this.qsObject["order"] = order;
-    return this;
-  }
-
-  build() {
-    return this.qsObject;
   }
 }

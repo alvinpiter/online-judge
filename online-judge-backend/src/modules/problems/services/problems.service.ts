@@ -85,15 +85,9 @@ export class ProblemsService {
     offset = DEFAULT_OFFSET,
     limit = DEFAULT_LIMIT,
   ) {
-    const paginationResult =
-      await this.offsetPaginationService.paginate<Problem>(
-        new TypeORMPaginatedQueryBuilderAdapter(qb),
-        { offset, limit },
-      );
-
-    return {
-      problems: paginationResult.result,
-      meta: paginationResult.meta,
-    };
+    return this.offsetPaginationService.paginate<Problem>(
+      new TypeORMPaginatedQueryBuilderAdapter(qb),
+      { offset, limit },
+    );
   }
 }

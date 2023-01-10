@@ -16,10 +16,10 @@ export class OffsetPaginationService {
     queryBuilder.offset(offset);
     queryBuilder.limit(limit);
 
-    const [result, total] = await queryBuilder.getDataAndTotalCount();
+    const [data, total] = await queryBuilder.getDataAndTotalCount();
 
     return {
-      result,
+      data,
       meta: { offset, limit, total },
     };
   }
