@@ -21,11 +21,18 @@ export interface Problem {
   rating: number;
 }
 
-export interface AdminProblemsFilter {
+/*
+TODO:
+`state` is only applicable for admin's request, but this interface is also
+used for user's request. Is there a better way to implement this interface?
+ */
+export interface ProblemsFilter {
   state?: ProblemState;
+  ratingGte?: number;
+  ratingLte?: number;
 }
 
-export enum AdminProblemsOrderOption {
+export enum ProblemsOrderOption {
   BY_ID_ASC = "BY_ID_ASC",
   BY_ID_DESC = "BY_ID_DESC",
   BY_RATING_ASC = "BY_RATING_ASC",

@@ -2,18 +2,21 @@ import { Button, MenuItem } from "@mui/material";
 import { Form, Formik } from "formik";
 import { FC } from "react";
 import { SelectField } from "../../../../forms/fields/SelectField";
-import { AdminProblemsFilter, ProblemState } from "../../interfaces";
+import { TextField } from "../../../../forms/fields/TextField";
+import { ProblemsFilter, ProblemState } from "../../interfaces";
 
-interface AdminProblemsFilterFormProps {
-  initialFilter: AdminProblemsFilter;
-  onSubmit: (filter: AdminProblemsFilter) => void;
+interface ProblemsFilterFormProps {
+  initialFilter: ProblemsFilter;
+  onSubmit: (filter: ProblemsFilter) => void;
 }
 
-interface AdminProblemsFilterFormData {
+interface ProblemsFilterFormData {
   state: ProblemState | "ALL";
+  ratingGte: number;
+  ratingLte: number;
 }
 
-export const AdminProblemsFilterForm: FC<AdminProblemsFilterFormProps> = ({
+export const ProblemsFilterForm: FC<ProblemsFilterFormProps> = ({
   initialFilter,
   onSubmit,
 }) => {
@@ -27,13 +30,17 @@ export const AdminProblemsFilterForm: FC<AdminProblemsFilterFormProps> = ({
 
   return (
     <>
-      <Formik<AdminProblemsFilterFormData>
+      <Formik<ProblemsFilterFormData>
         initialValues={{
           state: initialFilter.state || "ALL",
+          ratingGte: initialFilter.ratingGte || 0,
+          ratingLte: initialFilter.ratingLte || 3000,
         }}
         onSubmit={(values) => {
           onSubmit({
             state: normalizeStateValue(values.state),
+            ratingGte: values.ratingGte,
+            ratingLte: values.ratingLte,
           });
         }}
       >
@@ -48,6 +55,21 @@ export const AdminProblemsFilterForm: FC<AdminProblemsFilterFormProps> = ({
                 {ProblemState.DRAFT}
               </MenuItem>
             </SelectField>
+
+            <TextField
+              type="number"
+              name="ratingGte"
+              label="Min Rating"
+              margin="normal"
+            />
+
+            <TextField
+              type="number"
+              name="ratingLte"
+              label="Max Rating"
+              margin="normal"
+            />
+
             <Button type="submit" variant="contained" sx={{ ml: 2 }}>
               Filter
             </Button>

@@ -1,40 +1,42 @@
-import { Repository, SelectQueryBuilder } from 'typeorm';
-import {
-  Problem,
-  ProblemsOrderOption,
-  ProblemState,
-} from '../entities/problem.entity';
+import { Repository } from 'typeorm';
+import { ProblemsGetDto } from '../data-transfer-objects/problems-get.dto';
+import { Problem, ProblemsOrderOption } from '../entities/problem.entity';
 
 export class ProblemsSelectQueryBuilder {
-  private readonly qb: SelectQueryBuilder<Problem>;
+  static build(
+    problemsRepository: Repository<Problem>,
+    problemsGetDto: ProblemsGetDto,
+  ) {
+    const qb = problemsRepository.createQueryBuilder('problems').select();
 
-  constructor(problemsRepository: Repository<Problem>) {
-    this.qb = problemsRepository.createQueryBuilder('problems').select();
-  }
+    const { state, ratingGte, ratingLte, order } = problemsGetDto;
 
-  applyStateFilter(state: ProblemState) {
-    this.qb.andWhere('problems.state = :state', {
-      state,
-    });
-  }
+    if (state) {
+      qb.andWhere('problems.state = :state', { state });
+    }
 
-  applyOrder(order: ProblemsOrderOption) {
+    if (ratingGte) {
+      qb.andWhere('problems.rating >= :ratingGte', { ratingGte });
+    }
+
+    if (ratingLte) {
+      qb.andWhere('problems.rating <= :ratingLte', { ratingLte });
+    }
+
     switch (order) {
       case ProblemsOrderOption.BY_ID_DESC:
-        this.qb.orderBy('id', 'DESC');
+        qb.orderBy('id', 'DESC');
         break;
       case ProblemsOrderOption.BY_RATING_ASC:
-        this.qb.orderBy('rating', 'ASC');
+        qb.orderBy('rating', 'ASC');
         break;
       case ProblemsOrderOption.BY_RATING_DESC:
-        this.qb.orderBy('rating', 'DESC');
+        qb.orderBy('rating', 'DESC');
         break;
       default:
-        this.qb.orderBy('id', 'ASC');
+        qb.orderBy('id', 'ASC');
     }
-  }
 
-  getQueryBuilder() {
-    return this.qb;
+    return qb;
   }
 }

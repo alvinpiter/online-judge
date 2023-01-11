@@ -1,12 +1,8 @@
 import { OffsetPaginationContextValue } from "../../../../lib/contexts/OffsetPaginationContext/interfaces";
-import {
-  AdminProblemsFilter,
-  AdminProblemsOrderOption,
-  Problem,
-} from "../../interfaces";
+import { ProblemsFilter, ProblemsOrderOption, Problem } from "../../interfaces";
 
 export type AdminProblemsContextValue = OffsetPaginationContextValue<
   Problem,
-  AdminProblemsFilter,
-  AdminProblemsOrderOption
+  ProblemsFilter,
+  ProblemsOrderOption
 >;

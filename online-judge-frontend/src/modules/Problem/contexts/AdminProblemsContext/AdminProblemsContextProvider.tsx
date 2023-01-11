@@ -1,13 +1,9 @@
 import { FC, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../constants/Routes";
-import {
-  AdminProblemsFilter,
-  AdminProblemsOrderOption,
-  Problem,
-} from "../../interfaces";
+import { ProblemsFilter, ProblemsOrderOption, Problem } from "../../interfaces";
 import { useGetAdminProblemsRequest } from "../../hooks/useGetAdminProblemsRequest";
-import { AdminProblemsPageQueryStringObjectBuilder } from "./AdminProblemsPageQueryStringObjectBuilder";
+import { ProblemsPageQueryStringObjectBuilder } from "../../helpers/ProblemsPageQueryStringObjectBuilder";
 import { AdminProblemsContext } from "./context";
 import { useCurrentQueryString } from "../../../../lib/general/useCurrentQueryString";
 import { OffsetPaginationContextProvider } from "../../../../lib/contexts/OffsetPaginationContext";
@@ -22,15 +18,15 @@ export const AdminProblemsContextProvider: FC<
   const navigate = useNavigate();
 
   const currentQueryString = useCurrentQueryString();
-  const qsObjectBuilder = new AdminProblemsPageQueryStringObjectBuilder(
+  const qsObjectBuilder = new ProblemsPageQueryStringObjectBuilder(
     currentQueryString
   );
 
   return (
     <OffsetPaginationContextProvider<
       Problem,
-      AdminProblemsFilter,
-      AdminProblemsOrderOption
+      ProblemsFilter,
+      ProblemsOrderOption
     >
       Context={AdminProblemsContext}
       qsObjectBuilder={qsObjectBuilder}

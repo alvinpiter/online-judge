@@ -2,17 +2,13 @@ import { stringify } from "qs";
 import { config } from "../../../config";
 import { useHTTPGetRequest } from "../../../lib/http/useHTTPGetRequest";
 import { OffsetPaginationResult } from "../../Pagination/interfaces";
-import {
-  AdminProblemsFilter,
-  AdminProblemsOrderOption,
-  Problem,
-} from "../interfaces";
+import { ProblemsFilter, ProblemsOrderOption, Problem } from "../interfaces";
 
 export function useGetAdminProblemsRequest(
   numberOfProblemsPerPage: number,
   page: number,
-  filter?: AdminProblemsFilter,
-  order?: AdminProblemsOrderOption
+  filter?: ProblemsFilter,
+  order?: ProblemsOrderOption
 ) {
   const offset = (page - 1) * numberOfProblemsPerPage;
   const limit = numberOfProblemsPerPage;

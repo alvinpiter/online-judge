@@ -1,8 +1,8 @@
 import { Box, Button, Pagination, Typography } from "@mui/material";
 import { ChangeEvent, FC } from "react";
 import { useAdminProblemsContext } from "../../contexts/AdminProblemsContext";
-import { AdminProblemsOrderOption } from "../../interfaces";
-import { AdminProblemsFilterForm } from "./AdminProblemsFilterForm";
+import { ProblemsOrderOption } from "../../interfaces";
+import { ProblemsFilterForm } from "./ProblemsFilterForm";
 import { AdminProblemsTable } from "./AdminProblemsTable";
 
 export const AdminProblemsPageContent: FC = () => {
@@ -25,16 +25,16 @@ export const AdminProblemsPageContent: FC = () => {
 
   return (
     <>
-      <AdminProblemsFilterForm
+      <ProblemsFilterForm
         initialFilter={filter}
         onSubmit={handleFilterChange}
       />
       <Box>
         <Typography variant="body1"> Order by </Typography>
-        {Object.keys(AdminProblemsOrderOption).map((order) => (
+        {Object.keys(ProblemsOrderOption).map((order) => (
           <Button
             variant="contained"
-            onClick={() => handleOrderChange(order as AdminProblemsOrderOption)}
+            onClick={() => handleOrderChange(order as ProblemsOrderOption)}
             sx={{ mr: 2 }}
           >
             {order}
