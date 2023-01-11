@@ -49,7 +49,7 @@ export const SolutionTemplateForm: FC<SolutionTemplateFormProps> = ({
                 disabled={isSubmitting}
                 sx={{ mt: 2 }}
               >
-                Update Solution Template
+                Submit
               </Button>
             </Box>
           </Form>

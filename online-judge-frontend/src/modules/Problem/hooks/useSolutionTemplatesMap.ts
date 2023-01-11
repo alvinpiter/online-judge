@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
-import { AppError } from "../../../AppError";
+import { HTTPGetRequestHook } from "../../../lib/http/interfaces";
 import { ProgrammingLanguage, SolutionTemplate } from "../interfaces";
 
-type UseGetSolutionTemplatesRequestHook<T> = (problemId: string) => {
-  isLoading: boolean;
-  result: T[] | undefined;
-  error: AppError | undefined;
-  requestFunction: () => Promise<void>;
-};
+type UseGetSolutionTemplatesRequestHook<T> = (
+  problemId: string
+) => HTTPGetRequestHook<T[]>;
 
 export function useSolutionTemplatesMap<T extends SolutionTemplate>(
   problemId: string,

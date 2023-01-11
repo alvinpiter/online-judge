@@ -1,6 +1,8 @@
 import { BaseOffsetPaginationQueryStringObjectBuilder } from "../../Pagination/OffsetPaginationQueryStringObjectBuilder/BaseOffsetPaginationQueryStringObjectBuilder";
 import { QUERY_STRING_ORDER_KEY } from "../../Pagination/OffsetPaginationQueryStringObjectBuilder/constants";
 import {
+  MAX_PROBLEM_RATING,
+  MIN_PROBLEM_RATING,
   ProblemsFilter,
   ProblemsOrderOption,
   ProblemState,
@@ -13,8 +15,10 @@ export class ProblemsPageQueryStringObjectBuilder extends BaseOffsetPaginationQu
   getFilter(): ProblemsFilter {
     return {
       state: this.qsObject["state"] as ProblemState,
-      ratingGte: parseInt(this.qsObject["ratingGte"] as string) || 0,
-      ratingLte: parseInt(this.qsObject["ratingLte"] as string) || 3000,
+      ratingGte:
+        parseInt(this.qsObject["ratingGte"] as string) || MIN_PROBLEM_RATING,
+      ratingLte:
+        parseInt(this.qsObject["ratingLte"] as string) || MAX_PROBLEM_RATING,
     };
   }
 

@@ -1,6 +1,6 @@
-import { stringify } from "qs";
 import { config } from "../../../config";
 import { useHTTPGetRequest } from "../../../lib/http/useHTTPGetRequest";
+import { constructPaginationQueryString } from "../../Pagination/helpers";
 import { OffsetPaginationResult } from "../../Pagination/interfaces";
 import { ProblemsFilter, ProblemsOrderOption, Problem } from "../interfaces";
 
@@ -10,14 +10,12 @@ export function useGetAdminProblemsRequest(
   filter?: ProblemsFilter,
   order?: ProblemsOrderOption
 ) {
-  const offset = (page - 1) * numberOfProblemsPerPage;
-  const limit = numberOfProblemsPerPage;
-
-  const queryString = stringify(
-    { offset, limit, ...filter, order },
-    { addQueryPrefix: true }
+  const queryString = constructPaginationQueryString(
+    numberOfProblemsPerPage,
+    page,
+    filter,
+    order
   );
-
   const apiUrl = `${config.backendAPIURL}/admin/problems${queryString}`;
 
   return useHTTPGetRequest<OffsetPaginationResult<Problem>>(apiUrl);

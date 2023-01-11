@@ -3,7 +3,12 @@ import { Form, Formik } from "formik";
 import { FC } from "react";
 import { SelectField } from "../../../../forms/fields/SelectField";
 import { TextField } from "../../../../forms/fields/TextField";
-import { ProblemsFilter, ProblemState } from "../../interfaces";
+import {
+  MAX_PROBLEM_RATING,
+  MIN_PROBLEM_RATING,
+  ProblemsFilter,
+  ProblemState,
+} from "../../interfaces";
 
 interface ProblemsFilterFormProps {
   initialFilter: ProblemsFilter;
@@ -36,8 +41,8 @@ export const ProblemsFilterForm: FC<ProblemsFilterFormProps> = ({
       <Formik<ProblemsFilterFormData>
         initialValues={{
           state: initialFilter.state || "ALL",
-          ratingGte: initialFilter.ratingGte || 0,
-          ratingLte: initialFilter.ratingLte || 3000,
+          ratingGte: initialFilter.ratingGte || MIN_PROBLEM_RATING,
+          ratingLte: initialFilter.ratingLte || MAX_PROBLEM_RATING,
         }}
         onSubmit={(values) => {
           onSubmit({

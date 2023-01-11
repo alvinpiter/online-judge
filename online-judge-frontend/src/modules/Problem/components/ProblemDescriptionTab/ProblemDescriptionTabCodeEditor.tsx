@@ -1,40 +1,12 @@
-import { Box, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { FC, useState } from "react";
-import { useGetUserProblemRequest } from "../hooks/useGetUserProblemRequest";
-import { useGetUserSolutionTemplatesRequest } from "../hooks/useGetUserSolutionTemplatesRequest";
-import { useSolutionTemplatesMap } from "../hooks/useSolutionTemplatesMap";
+import { useGetSolutionTemplatesRequest } from "../../hooks/useGetSolutionTemplatesRequest";
+import { useSolutionTemplatesMap } from "../../hooks/useSolutionTemplatesMap";
 import {
   ProgrammingLanguage,
   SupportedProgrammingLanguages,
-} from "../interfaces";
-import { SolutionTemplateForm } from "./EditSolutionTemplates/SolutionTemplateForm";
-
-interface ProblemDescriptionTabProps {
-  problemId: string;
-}
-
-export const ProblemDescriptionTab: FC<ProblemDescriptionTabProps> = ({
-  problemId,
-}) => {
-  const { isLoading: isLoadingProblem, result: getProblemResult } =
-    useGetUserProblemRequest(problemId);
-
-  if (isLoadingProblem || !getProblemResult) {
-    return <p> Loading problem... </p>;
-  }
-
-  return (
-    <>
-      <div
-        style={{ width: "100%", backgroundColor: "#F1F1F1" }}
-        dangerouslySetInnerHTML={{ __html: getProblemResult.description }}
-      />
-      <Box sx={{ mt: 2 }}>
-        <ProblemDescriptionTabCodeEditor problemId={problemId} />
-      </Box>
-    </>
-  );
-};
+} from "../../interfaces";
+import { SolutionTemplateForm } from "../EditSolutionTemplates/SolutionTemplateForm";
 
 interface ProblemDescriptionTabCodeEditorProps {
   problemId: string;
@@ -49,7 +21,7 @@ export const ProblemDescriptionTabCodeEditor: FC<
 
   const { solutionTemplatesMap } = useSolutionTemplatesMap(
     problemId,
-    useGetUserSolutionTemplatesRequest
+    useGetSolutionTemplatesRequest
   );
 
   const activeSolutionTemplate =

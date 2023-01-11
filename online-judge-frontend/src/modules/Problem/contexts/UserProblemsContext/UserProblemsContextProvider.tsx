@@ -6,7 +6,7 @@ import { useCurrentQueryString } from "../../../../lib/general/useCurrentQuerySt
 import { Problem, ProblemsFilter, ProblemsOrderOption } from "../../interfaces";
 import { UserProblemsContext } from "./context";
 import { ROUTES } from "../../../../constants/Routes";
-import { useGetUserProblemsRequest } from "../../hooks/useGetUserProblemsRequest";
+import { useGetProblemsRequest } from "../../hooks/useGetProblemsRequest";
 
 interface UserProblemsContextProviderProps {
   children?: ReactNode;
@@ -30,7 +30,7 @@ export const UserProblemsContextProvider: FC<
     >
       Context={UserProblemsContext}
       qsObjectBuilder={qsObjectBuilder}
-      getEntitiesRequestHook={useGetUserProblemsRequest}
+      getEntitiesRequestHook={useGetProblemsRequest}
       onQsObjectChange={(qsObject) =>
         navigate(ROUTES.USER_PROBLEMS_ROUTE.generatePath({}, qsObject))
       }

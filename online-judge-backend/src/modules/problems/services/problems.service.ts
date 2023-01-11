@@ -20,11 +20,11 @@ export class ProblemsService {
     private readonly offsetPaginationService: OffsetPaginationService,
   ) {}
 
-  async getProblems(problemsGetDto: ProblemsGetDto) {
+  async getAdminProblems(problemsGetDto: ProblemsGetDto) {
     return this.doGetProblems(problemsGetDto);
   }
 
-  async getUserProblems(problemsGetDto: ProblemsGetDto) {
+  async getProblems(problemsGetDto: ProblemsGetDto) {
     problemsGetDto.state = ProblemState.PUBLISHED;
     return this.doGetProblems(problemsGetDto);
   }

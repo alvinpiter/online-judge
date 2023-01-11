@@ -1,8 +1,8 @@
 import { Tab, Tabs } from "@mui/material";
 import { FC, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ProblemDescriptionTab } from "../modules/Problem/components/ProblemDescriptionTab";
-import { ProblemSubmissionsTab } from "../modules/Problem/components/ProblemSubmissionsTab";
+import { ProblemDescriptionTab } from "../modules/Problem/components/ProblemDescriptionTab/ProblemDescriptionTab";
+import { ProblemSubmissionsTab } from "../modules/Problem/components/ProblemSubmissionsTab/ProblemSubmissionsTab";
 
 export const UserProblemPage: FC = () => {
   const params = useParams<{ problemId: string }>();

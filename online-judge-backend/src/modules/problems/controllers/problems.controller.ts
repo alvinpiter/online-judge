@@ -8,7 +8,7 @@ export class ProblemsController {
 
   @Get('problems')
   async getProblems(@Query() problemsGetDto: ProblemsGetDto) {
-    return this.problemsService.getUserProblems(problemsGetDto);
+    return this.problemsService.getProblems(problemsGetDto);
   }
 
   @Get('problems/:problemId')

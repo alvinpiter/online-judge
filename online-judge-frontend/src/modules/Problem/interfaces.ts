@@ -57,3 +57,6 @@ export interface TestCase {
     url: string;
   };
 }
+
+export const MIN_PROBLEM_RATING = 0;
+export const MAX_PROBLEM_RATING = 3000;

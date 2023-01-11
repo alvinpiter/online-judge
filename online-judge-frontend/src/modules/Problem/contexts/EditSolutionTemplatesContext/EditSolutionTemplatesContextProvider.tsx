@@ -1,10 +1,10 @@
 import { FC, ReactNode, useEffect, useState } from "react";
 import { useSnackbarContext } from "../../../../core/Snackbar";
 import { ProgrammingLanguage } from "../../interfaces";
-import { useGetSolutionTemplatesRequest } from "../../hooks/useGetSolutionTemplatesRequest";
 import { EditSolutionTemplatesContext } from "./context";
 import { useUpsertSolutionTemplateRequest } from "../../hooks/useUpsertSolutionTemplateRequest";
 import { useSolutionTemplatesMap } from "../../hooks/useSolutionTemplatesMap";
+import { useGetAdminSolutionTemplatesRequest } from "../../hooks/useGetAdminSolutionTemplatesRequest";
 
 interface EditSolutionTemplatesContextProviderProps {
   problemId: string;
@@ -17,7 +17,7 @@ export const EditSolutionTemplatesContextProvider: FC<
   const { openSnackbar } = useSnackbarContext();
 
   const { solutionTemplatesMap, setSolutionTemplatesMap } =
-    useSolutionTemplatesMap(problemId, useGetSolutionTemplatesRequest);
+    useSolutionTemplatesMap(problemId, useGetAdminSolutionTemplatesRequest);
 
   const {
     isLoading: isUpsertingSolutionTemplate,
