@@ -20,7 +20,7 @@ export class AdminProblemsController {
 
   @Get('problems')
   async getProblems(@Query() problemsGetDto: ProblemsGetDto) {
-    return this.problemsService.getProblems(problemsGetDto);
+    return this.problemsService.getAdminProblems(problemsGetDto);
   }
 
   @Post('problems')

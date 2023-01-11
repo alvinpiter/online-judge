@@ -1,4 +1,4 @@
-import { AppError } from "../../AppError";
+import { HTTPGetRequestHook } from "../../lib/http/interfaces";
 
 export interface OffsetPaginationMeta {
   offset: number;
@@ -16,9 +16,4 @@ export type OffsetPaginationRequestHook<Entity, Filter, Order> = (
   page: number,
   filter?: Filter,
   order?: Order
-) => {
-  isLoading: boolean;
-  result: OffsetPaginationResult<Entity> | undefined;
-  error: AppError | undefined;
-  requestFunction: () => Promise<void>;
-};
+) => HTTPGetRequestHook<OffsetPaginationResult<Entity>>;

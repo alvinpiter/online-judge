@@ -4,7 +4,8 @@ import { constructPaginationQueryString } from "../../Pagination/helpers";
 import { OffsetPaginationResult } from "../../Pagination/interfaces";
 import { ProblemsFilter, ProblemsOrderOption, Problem } from "../interfaces";
 
-export function useGetAdminProblemsRequest(
+// TODO: Refactor. Similar with useGetAdminProblemsRequest.
+export function useGetProblemsRequest(
   numberOfProblemsPerPage: number,
   page: number,
   filter?: ProblemsFilter,
@@ -16,7 +17,7 @@ export function useGetAdminProblemsRequest(
     filter,
     order
   );
-  const apiUrl = `${config.backendAPIURL}/admin/problems${queryString}`;
+  const apiUrl = `${config.backendAPIURL}/problems${queryString}`;
 
   return useHTTPGetRequest<OffsetPaginationResult<Problem>>(apiUrl);
 }
