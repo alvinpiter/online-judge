@@ -39,6 +39,7 @@ export class CreateSubmissionsTable1673427885695 implements MigrationInterface {
       {
         name: 'verdict',
         type: 'varchar',
+        isNullable: true,
       },
     ],
     foreignKeys: [
