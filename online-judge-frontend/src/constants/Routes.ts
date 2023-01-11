@@ -5,7 +5,7 @@ export const ROUTES = {
   SIGN_IN_ROUTE: new Route<{}, {}>("/sign-in"),
 
   USER_PROBLEMS_ROUTE: new Route<{}, {}>("/problems"),
-  USER_PROBLEM_ROUTE: new Route<{}, { problemId: string }>(
+  USER_PROBLEM_ROUTE: new Route<{ problemId: string }, {}>(
     "/problems/:problemId"
   ),
 

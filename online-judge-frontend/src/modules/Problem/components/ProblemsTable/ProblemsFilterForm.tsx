@@ -8,6 +8,8 @@ import { ProblemsFilter, ProblemState } from "../../interfaces";
 interface ProblemsFilterFormProps {
   initialFilter: ProblemsFilter;
   onSubmit: (filter: ProblemsFilter) => void;
+
+  showStateField?: boolean;
 }
 
 interface ProblemsFilterFormData {
@@ -19,6 +21,7 @@ interface ProblemsFilterFormData {
 export const ProblemsFilterForm: FC<ProblemsFilterFormProps> = ({
   initialFilter,
   onSubmit,
+  showStateField,
 }) => {
   const normalizeStateValue = (state: ProblemState | "ALL") => {
     if (state === "ALL") {
@@ -46,29 +49,21 @@ export const ProblemsFilterForm: FC<ProblemsFilterFormProps> = ({
       >
         {() => (
           <Form>
-            <SelectField label="State" name="state">
-              <MenuItem value="ALL"> All </MenuItem>
-              <MenuItem value={ProblemState.PUBLISHED}>
-                {ProblemState.PUBLISHED}
-              </MenuItem>
-              <MenuItem value={ProblemState.DRAFT}>
-                {ProblemState.DRAFT}
-              </MenuItem>
-            </SelectField>
+            {showStateField && (
+              <SelectField label="State" name="state">
+                <MenuItem value="ALL"> All </MenuItem>
+                <MenuItem value={ProblemState.PUBLISHED}>
+                  {ProblemState.PUBLISHED}
+                </MenuItem>
+                <MenuItem value={ProblemState.DRAFT}>
+                  {ProblemState.DRAFT}
+                </MenuItem>
+              </SelectField>
+            )}
 
-            <TextField
-              type="number"
-              name="ratingGte"
-              label="Min Rating"
-              margin="normal"
-            />
+            <TextField type="number" name="ratingGte" label="Min Rating" />
 
-            <TextField
-              type="number"
-              name="ratingLte"
-              label="Max Rating"
-              margin="normal"
-            />
+            <TextField type="number" name="ratingLte" label="Max Rating" />
 
             <Button type="submit" variant="contained" sx={{ ml: 2 }}>
               Filter

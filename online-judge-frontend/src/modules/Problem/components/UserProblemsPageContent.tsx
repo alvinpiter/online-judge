@@ -1,11 +1,12 @@
 import { Box, Button, Pagination, Typography } from "@mui/material";
 import { ChangeEvent, FC } from "react";
-import { useAdminProblemsContext } from "../../contexts/AdminProblemsContext";
-import { ProblemsOrderOption } from "../../interfaces";
-import { ProblemsFilterForm } from "./ProblemsFilterForm";
-import { AdminProblemsTable } from "./AdminProblemsTable";
+import { useUserProblemsContext } from "../contexts/UserProblemsContext/context";
+import { ProblemsOrderOption } from "../interfaces";
+import { ProblemsFilterForm } from "./ProblemsTable/ProblemsFilterForm";
+import { UserProblemsTable } from "./ProblemsTable/UserProblemsTable";
 
-export const AdminProblemsPageContent: FC = () => {
+// TODO: Refactor. Similar with AdminProblemsPageContet
+export const UserProblemsPageContent: FC = () => {
   const {
     entities: problems,
     currentPage,
@@ -14,7 +15,7 @@ export const AdminProblemsPageContent: FC = () => {
     handlePageChange,
     handleFilterChange,
     handleOrderChange,
-  } = useAdminProblemsContext();
+  } = useUserProblemsContext();
 
   const handlePaginationChange = (
     event: ChangeEvent<unknown>,
@@ -26,7 +27,6 @@ export const AdminProblemsPageContent: FC = () => {
   return (
     <>
       <ProblemsFilterForm
-        showStateField
         initialFilter={filter}
         onSubmit={handleFilterChange}
       />
@@ -42,7 +42,7 @@ export const AdminProblemsPageContent: FC = () => {
           </Button>
         ))}
       </Box>
-      <AdminProblemsTable problems={problems} />
+      <UserProblemsTable problems={problems} />
       <Pagination
         page={currentPage}
         count={numberOfPages}
