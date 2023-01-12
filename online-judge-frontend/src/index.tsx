@@ -20,6 +20,8 @@ import { render } from "react-dom";
 import { UserProblemPage } from "./pages/UserProblemPage";
 import { SubmissionsPage } from "./pages/SubmissionsPage";
 import { ProblemSubmissionsPage } from "./pages/ProblemSubmissionsPage";
+import { UserSubmissionsPage } from "./pages/UserSubmissionsPage";
+import { UserProfilePage } from "./pages/UserProfilePage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,6 +31,10 @@ const router = createBrowserRouter(
       errorElement={<h1> 404! </h1>}
     >
       <Route path={ROUTES.SIGN_IN_ROUTE.path} element={<SignInPage />} />
+      <Route
+        path={ROUTES.USER_PROFILE_ROUTE.path}
+        element={<UserProfilePage />}
+      />
       <Route
         path={ROUTES.USER_PROBLEMS_ROUTE.path}
         element={<UserProblemsPage />}
@@ -44,6 +50,10 @@ const router = createBrowserRouter(
       <Route
         path={ROUTES.PROBLEM_SUBMISSIONS_ROUTE.path}
         element={<ProblemSubmissionsPage />}
+      />
+      <Route
+        path={ROUTES.USER_SUBMISSIONS_ROUTE.path}
+        element={<UserSubmissionsPage />}
       />
 
       <Route element={<AuthenticatedAdminPages />}>

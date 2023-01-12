@@ -19,4 +19,8 @@ export const ROUTES = {
   PROBLEM_SUBMISSIONS_ROUTE: new Route<{ problemId: string }, {}>(
     "/problems/:problemId/submissions"
   ),
+  USER_SUBMISSIONS_ROUTE: new Route<{ userId: string }, {}>(
+    "/users/:userId/submissions"
+  ),
+  USER_PROFILE_ROUTE: new Route<{ userId: string }, {}>("/users/:userId"),
 };

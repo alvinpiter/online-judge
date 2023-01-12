@@ -25,7 +25,13 @@ export const SubmissionsTableItem: FC<SubmissionsTableItemProps> = ({
         </Link>
       </TableCell>
       <TableCell>
-        <Link href="#">{user.username}</Link>
+        <Link
+          href={ROUTES.USER_PROFILE_ROUTE.generatePath({
+            userId: user.id.toString(),
+          })}
+        >
+          {user.username}
+        </Link>
       </TableCell>
       <TableCell> {submission.programmingLanguage} </TableCell>
       <TableCell> {submission.verdict} </TableCell>
