@@ -19,6 +19,7 @@ import { SnackbarContextProvider } from "./core/Snackbar";
 import { render } from "react-dom";
 import { UserProblemPage } from "./pages/UserProblemPage";
 import { SubmissionsPage } from "./pages/SubmissionsPage";
+import { ProblemSubmissionsPage } from "./pages/ProblemSubmissionsPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -39,6 +40,10 @@ const router = createBrowserRouter(
       <Route
         path={ROUTES.SUBMISSIONS_ROUTE.path}
         element={<SubmissionsPage />}
+      />
+      <Route
+        path={ROUTES.PROBLEM_SUBMISSIONS_ROUTE.path}
+        element={<ProblemSubmissionsPage />}
       />
 
       <Route element={<AuthenticatedAdminPages />}>

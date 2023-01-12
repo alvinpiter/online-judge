@@ -1,9 +1,7 @@
+import QueryString from "qs";
 import { FC, PropsWithChildren } from "react";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../../../constants/Routes";
 import { OffsetPaginationContextProvider } from "../../../../lib/contexts/OffsetPaginationContext";
-import { useCurrentQueryString } from "../../../../lib/general/useCurrentQueryString";
-import { SubmissionsPageQueryStringObjectBuilder } from "../../helpers/SubmissionsPageQueryStringObjectBuilder";
+import { OffsetPaginationQueryStringObjectBuilder } from "../../../Pagination/OffsetPaginationQueryStringObjectBuilder/OffsetPaginationQueryStringObjectBuilder";
 import { useGetSubmissionsRequest } from "../../hooks/useGetSubmissionsRequest";
 import {
   Submission,
@@ -12,18 +10,17 @@ import {
 } from "../../interfaces";
 import { SubmissionsContext } from "./context";
 
-interface SubmissionsContextProviderProps extends PropsWithChildren {}
+interface SubmissionsContextProviderProps extends PropsWithChildren {
+  qsObjectBuilder: OffsetPaginationQueryStringObjectBuilder<
+    SubmissionsFilter,
+    SubmissionsOrderOption
+  >;
+  onQsObjectChange?: (qsObject: QueryString.ParsedQs) => void;
+}
 
 export const SubmissionsContextProvider: FC<
   SubmissionsContextProviderProps
-> = ({ children }) => {
-  const navigate = useNavigate();
-
-  const currentQueryString = useCurrentQueryString();
-  const qsObjectBuilder = new SubmissionsPageQueryStringObjectBuilder(
-    currentQueryString
-  );
-
+> = ({ qsObjectBuilder, onQsObjectChange, children }) => {
   return (
     <OffsetPaginationContextProvider<
       Submission,
@@ -33,9 +30,7 @@ export const SubmissionsContextProvider: FC<
       Context={SubmissionsContext}
       qsObjectBuilder={qsObjectBuilder}
       getEntitiesRequestHook={useGetSubmissionsRequest}
-      onQsObjectChange={(qsObject) =>
-        navigate(ROUTES.SUBMISSIONS_ROUTE.generatePath({}, qsObject))
-      }
+      onQsObjectChange={onQsObjectChange}
     >
       {children}
     </OffsetPaginationContextProvider>

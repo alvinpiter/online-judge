@@ -12,6 +12,8 @@ import { SubmissionsFilter, SubmissionVerdict } from "../../interfaces";
 interface SubmissionsFilterFormProps {
   initialFilter: SubmissionsFilter;
   onSubmit: (filter: SubmissionsFilter) => void;
+
+  hideProblemFilter?: boolean;
 }
 
 interface SubmissionsFilterFormData {
@@ -24,6 +26,7 @@ interface SubmissionsFilterFormData {
 export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
   initialFilter,
   onSubmit,
+  hideProblemFilter,
 }) => {
   const normalizeFormData = (
     values: SubmissionsFilterFormData
@@ -53,7 +56,10 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
       >
         {() => (
           <Form>
-            <TextField type="number" name="problemId" label="Problem ID" />
+            {!hideProblemFilter && (
+              <TextField type="number" name="problemId" label="Problem ID" />
+            )}
+
             <TextField type="number" name="userId" label="User ID" />
 
             <SelectField
