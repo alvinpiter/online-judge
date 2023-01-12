@@ -9,7 +9,7 @@ export class SubmissionsSelectQueryBuilder {
     submissionsRepository: Repository<Submission>,
     submissionsGetDto: SubmissionsGetDto,
   ) {
-    const { userId, problemId, programmingLanguage, verdict } =
+    const { userId, problemId, programmingLanguage, verdict, order } =
       submissionsGetDto;
 
     const qb = submissionsRepository.createQueryBuilder('submission').select();
@@ -33,6 +33,11 @@ export class SubmissionsSelectQueryBuilder {
 
     if (verdict) {
       qb.andWhere('submission.verdict = :verdict', { verdict });
+    }
+
+    switch (order) {
+      default:
+        qb.orderBy('submission.id', 'DESC');
     }
 
     return qb;

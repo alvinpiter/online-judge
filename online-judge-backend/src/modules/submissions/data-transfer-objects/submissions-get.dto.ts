@@ -5,7 +5,10 @@ import {
   SupportedProgrammingLanguages,
 } from 'src/constants/programming-languages';
 import { OffsetPaginationDto } from 'src/modules/pagination/data-transfer-objects/offset-pagination.dto';
-import { SubmissionVerdict } from '../entities/submission.entity';
+import {
+  SubmissionsOrderOption,
+  SubmissionVerdict,
+} from '../entities/submission.entity';
 
 export class SubmissionsGetDto extends OffsetPaginationDto {
   @IsOptional()
@@ -25,4 +28,8 @@ export class SubmissionsGetDto extends OffsetPaginationDto {
   @IsOptional()
   @IsIn(Object.keys(SubmissionVerdict))
   verdict?: SubmissionVerdict;
+
+  @IsOptional()
+  @IsIn(Object.keys(SubmissionsOrderOption))
+  order = SubmissionsOrderOption.BY_ID_DESC;
 }

@@ -18,3 +18,14 @@ export interface Submission {
   submittedAt: string;
   verdict: SubmissionVerdict;
 }
+
+export interface SubmissionsFilter {
+  userId?: number;
+  problemId?: number;
+  programmingLanguage?: ProgrammingLanguage;
+  verdict?: SubmissionVerdict;
+}
+
+export enum SubmissionsOrderOption {
+  BY_ID_DESC = "BY_ID_DESC",
+}

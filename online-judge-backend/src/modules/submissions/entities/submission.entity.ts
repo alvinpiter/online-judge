@@ -17,6 +17,10 @@ export enum SubmissionVerdict {
   ACCEPTED = 'ACCEPTED',
 }
 
+export enum SubmissionsOrderOption {
+  BY_ID_DESC = 'BY_ID_DESC',
+}
+
 @Entity('submissions')
 export class Submission {
   @PrimaryGeneratedColumn()

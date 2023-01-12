@@ -15,4 +15,5 @@ export const ROUTES = {
   EDIT_PROBLEM_ROUTE: new Route<{ problemId: string }, {}>(
     "/admin/problems/:problemId/edit"
   ),
+  SUBMISSIONS_ROUTE: new Route<{}, {}>("/submissions"),
 };

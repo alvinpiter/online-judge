@@ -18,6 +18,7 @@ import { PlaygroundPage } from "./pages/PlaygroundPage";
 import { SnackbarContextProvider } from "./core/Snackbar";
 import { render } from "react-dom";
 import { UserProblemPage } from "./pages/UserProblemPage";
+import { SubmissionsPage } from "./pages/SubmissionsPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +35,10 @@ const router = createBrowserRouter(
       <Route
         path={ROUTES.USER_PROBLEM_ROUTE.path}
         element={<UserProblemPage />}
+      />
+      <Route
+        path={ROUTES.SUBMISSIONS_ROUTE.path}
+        element={<SubmissionsPage />}
       />
 
       <Route element={<AuthenticatedAdminPages />}>

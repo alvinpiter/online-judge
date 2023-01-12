@@ -11,7 +11,7 @@ export class SubmissionFormatter {
       id: submission.id,
       user: this.userFormatter.format(submission.user),
       problem: submission.problem,
-      programmingLanguage: submission.problemId,
+      programmingLanguage: submission.programmingLanguage,
       code: submission.code,
       submittedAt: submission.submittedAt,
       verdict: submission.verdict,

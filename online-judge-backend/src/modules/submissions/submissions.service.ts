@@ -74,9 +74,17 @@ export class SubmissionsService {
       );
 
     const submissionIds = submissions.map((submission) => submission.id);
+
+    /*
+    TODO:
+    Select * where in (...) doesn't guarantee the rows are returned in
+    order. We need to specify the order here, hence the order in SubmissionsSelectQueryBuilder
+    is redundant. Find a way to solve this.
+     */
     const populatedSubmissions = (await this.submissionsRepository.find({
       where: { id: In(submissionIds) },
       relations: ['user', 'problem'],
+      order: { id: 'DESC' },
     })) as SubmissionWithResolvedProperty[];
 
     return {
