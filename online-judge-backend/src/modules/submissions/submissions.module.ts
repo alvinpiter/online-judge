@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JobModule } from '../job/job.module';
+import { PaginationModule } from '../pagination/pagination.module';
 import { ProblemsModule } from '../problems/problems.module';
 import { UsersModule } from '../users/users.module';
 import { Submission } from './entities/submission.entity';
@@ -18,6 +19,7 @@ import { SubmissionsService } from './submissions.service';
     UsersModule,
     ProblemsModule,
     JobModule,
+    PaginationModule,
   ],
   providers: [
     SubmissionsService,

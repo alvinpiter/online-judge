@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { JobQueueItem } from '../job/interfaces';
 import { JobService } from '../job/job.service';
-import { ProblemsService } from '../problems/services/problems.service';
-import { UsersService } from '../users/users.service';
+import { TypeORMPaginatedQueryBuilderAdapter } from '../pagination/adapters/TypeORMPaginatedQueryBuilderAdapter';
+import { OffsetPaginationService } from '../pagination/offset-pagination.service';
 import { SubmissionCreationDto } from './data-transfer-objects/submission-creation.dto';
+import { SubmissionsGetDto } from './data-transfer-objects/submissions-get.dto';
 import { Submission } from './entities/submission.entity';
+import { SubmissionsSelectQueryBuilder } from './helpers/submissions-select.query-builder';
 import { SubmissionWithResolvedProperty } from './interfaces/submission-with-resolved-property';
 import { GlobalSubmissionsStatisticsUpdateQueue } from './queues/global-submissions-statistics-update.queue';
 import {
@@ -14,6 +16,9 @@ import {
   SubmissionsJudgementQueueItem,
 } from './queues/submissions-judgement.queue';
 import { UserSubmissionsStatisticsUpdateQueue } from './queues/user-submissions-statistics-update.queue';
+
+const SUBMISSIONS_DEFAULT_OFFSET = 0;
+const SUBMISSIONS_DEFAULT_LIMIT = 10;
 
 @Injectable()
 export class SubmissionsService {
@@ -24,8 +29,7 @@ export class SubmissionsService {
     private readonly userSubmissionsStatisticsUpdateQueue: UserSubmissionsStatisticsUpdateQueue,
     private readonly globalSubmissionsStatisticsUpdateQueue: GlobalSubmissionsStatisticsUpdateQueue,
     private readonly jobService: JobService,
-    private readonly usersService: UsersService,
-    private readonly problemsService: ProblemsService,
+    private readonly offsetPaginationService: OffsetPaginationService,
   ) {
     this.submissionsJudgementQueue.setConsumer((item) => this.judge(item));
   }
@@ -48,17 +52,36 @@ export class SubmissionsService {
   async getSubmission(
     submissionId: number,
   ): Promise<SubmissionWithResolvedProperty> {
-    const submission = await this.submissionsRepository.findOneByOrFail({
-      id: submissionId,
+    return this.submissionsRepository.findOneOrFail({
+      where: { id: submissionId },
+      relations: ['user', 'problem'],
     });
+  }
 
-    const user = await this.usersService.getUser(submission.userId);
-    const problem = await this.problemsService.getProblem(submission.problemId);
+  async getSubmissions(submissionsGetDto: SubmissionsGetDto) {
+    const qb = SubmissionsSelectQueryBuilder.build(
+      this.submissionsRepository,
+      submissionsGetDto,
+    );
+
+    const { data: submissions, meta } =
+      await this.offsetPaginationService.paginate(
+        new TypeORMPaginatedQueryBuilderAdapter(qb),
+        {
+          offset: submissionsGetDto.offset || SUBMISSIONS_DEFAULT_OFFSET,
+          limit: submissionsGetDto.limit || SUBMISSIONS_DEFAULT_LIMIT,
+        },
+      );
+
+    const submissionIds = submissions.map((submission) => submission.id);
+    const populatedSubmissions = (await this.submissionsRepository.find({
+      where: { id: In(submissionIds) },
+      relations: ['user', 'problem'],
+    })) as SubmissionWithResolvedProperty[];
 
     return {
-      ...submission,
-      user,
-      problem,
+      data: populatedSubmissions,
+      meta,
     };
   }
 

@@ -1,7 +1,16 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtGuard } from '../authentication/guards/jwt.guard';
 import { User } from '../users/user.entity';
 import { SubmissionCreationDto } from './data-transfer-objects/submission-creation.dto';
+import { SubmissionsGetDto } from './data-transfer-objects/submissions-get.dto';
 import { SubmissionFormatter } from './formatters/submission.formatter';
 import { SubmissionsService } from './submissions.service';
 
@@ -25,5 +34,18 @@ export class SubmissionsController {
         submissionCreationDto,
       ),
     );
+  }
+
+  @Get('submissions')
+  async getSubmissions(@Query() submissionsGetDto: SubmissionsGetDto) {
+    const { data: submissions, meta } =
+      await this.submissionsService.getSubmissions(submissionsGetDto);
+
+    return {
+      data: submissions.map((submission) =>
+        this.submissionFormatter.format(submission),
+      ),
+      meta,
+    };
   }
 }

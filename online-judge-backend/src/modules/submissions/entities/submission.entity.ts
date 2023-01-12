@@ -1,5 +1,13 @@
 import { ProgrammingLanguage } from 'src/constants/programming-languages';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Problem } from 'src/modules/problems/entities/problem.entity';
+import { User } from 'src/modules/users/user.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export enum SubmissionVerdict {
   COMPILE_ERROR = 'COMPILE_ERROR',
@@ -17,8 +25,16 @@ export class Submission {
   @Column()
   problemId: number;
 
+  @ManyToOne(() => Problem)
+  @JoinColumn({ name: 'problemId' })
+  problem: Problem;
+
   @Column()
   userId: number;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'userId' })
+  user: User;
 
   @Column()
   programmingLanguage: ProgrammingLanguage;
@@ -29,6 +45,6 @@ export class Submission {
   @Column({ type: 'datetime' })
   submittedAt = new Date();
 
-  @Column()
+  @Column({ nullable: true })
   verdict: SubmissionVerdict;
 }
