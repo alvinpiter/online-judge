@@ -101,8 +101,10 @@ export class SubmissionsService {
 
   async runCodeForSubmission(submissionId: number) {
     const submission = await this.getSubmission(submissionId);
-    console.log(submission);
-    return this.codeRunnerService.runCode();
+    return this.codeRunnerService.runCode(
+      submission.programmingLanguage,
+      submission.code,
+    );
   }
 
   async judge(
