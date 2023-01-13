@@ -1,22 +1,42 @@
 import { Injectable } from '@nestjs/common';
+import * as fs from 'fs';
+import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { ProgrammingLanguage } from 'src/constants/programming-languages';
 import { RunnableCodeFactory } from './runnable-code.factory';
+import { CodeCompiler } from './helpers/code-compiler';
+import { CodeRunner } from './helpers/code-runner';
+
+const WORKING_DIRECTORY_DELETION_DELAY = 10 * 60 * 1000; // 10 minutes
 
 @Injectable()
 export class CodeRunnerService {
-  runCode(programmingLanguage: ProgrammingLanguage, sourceCode: string) {
+  async runCode(programmingLanguage: ProgrammingLanguage, sourceCode: string) {
+    const runnableCodeId = uuidv4();
     const runnableCode = RunnableCodeFactory.create(
-      uuidv4(),
+      runnableCodeId,
       programmingLanguage,
       sourceCode,
     );
 
-    console.log({
-      fileName: runnableCode.getFileName(),
-      needCompilation: runnableCode.needCompilation(),
-      compilationCommand: runnableCode.compilationCommand(),
-      runCommand: runnableCode.runCommand(),
-    });
+    const workingDirectory = path.join(__dirname, 'tmp', runnableCodeId);
+
+    fs.mkdirSync(workingDirectory, { recursive: true });
+
+    setTimeout(
+      () => fs.rmSync(workingDirectory, { recursive: true, force: true }),
+      WORKING_DIRECTORY_DELETION_DELAY,
+    );
+
+    const runnableCodePath = path.join(
+      workingDirectory,
+      runnableCode.getFileName(),
+    );
+
+    fs.writeFileSync(runnableCodePath, runnableCode.getSourceCode());
+
+    await CodeCompiler.compile(workingDirectory, runnableCode);
+
+    return CodeRunner.run(workingDirectory, runnableCode);
   }
 }
