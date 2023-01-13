@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CodeRunnerModule } from '../code-runner/code-runner.module';
 import { JobModule } from '../job/job.module';
 import { PaginationModule } from '../pagination/pagination.module';
 import { ProblemsModule } from '../problems/problems.module';
@@ -20,6 +21,7 @@ import { SubmissionsService } from './submissions.service';
     ProblemsModule,
     JobModule,
     PaginationModule,
+    CodeRunnerModule,
   ],
   providers: [
     SubmissionsService,
