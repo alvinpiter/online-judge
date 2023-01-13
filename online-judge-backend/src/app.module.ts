@@ -36,6 +36,7 @@ import { SubmissionsModule } from './modules/submissions/submissions.module';
         password: configService.get<string>(ConfigKey.DATABASE_PASSWORD),
         synchronize: false,
         autoLoadEntities: true,
+        bigNumberStrings: false,
       }),
       inject: [ConfigService],
     }),

@@ -38,5 +38,6 @@ import { ProblemSolutionTemplatesController } from './controllers/problem-soluti
     ProblemsController,
     ProblemSolutionTemplatesController,
   ],
+  exports: [ProblemsService],
 })
 export class ProblemsModule {}

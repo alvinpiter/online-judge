@@ -1,8 +1,9 @@
 import { Transform } from 'class-transformer';
 import { IsIn, IsNumber, IsOptional } from 'class-validator';
+import { OffsetPaginationDto } from 'src/modules/pagination/data-transfer-objects/offset-pagination.dto';
 import { ProblemsOrderOption, ProblemState } from '../entities/problem.entity';
 
-export class ProblemsGetDto {
+export class ProblemsGetDto extends OffsetPaginationDto {
   @IsOptional()
   @IsIn(Object.keys(ProblemState))
   state?: ProblemState;
@@ -20,14 +21,4 @@ export class ProblemsGetDto {
   @IsOptional()
   @IsIn(Object.keys(ProblemsOrderOption))
   order = ProblemsOrderOption.BY_ID_ASC;
-
-  @IsOptional()
-  @Transform(({ value }) => parseInt(value))
-  @IsNumber()
-  offset?: number;
-
-  @IsOptional()
-  @Transform(({ value }) => parseInt(value))
-  @IsNumber()
-  limit?: number;
 }

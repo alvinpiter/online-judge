@@ -1,13 +1,8 @@
 import { config } from "../../../config";
 import { useHTTPGetRequest } from "../../../lib/http/useHTTPGetRequest";
-import { UserRole } from "../interface";
-
-interface CurrentUserResponse {
-  username: string;
-  role: UserRole;
-}
+import { User } from "../interface";
 
 export function useCurrentUserRequest() {
   const apiUrl = `${config.backendAPIURL}/current-user`;
-  return useHTTPGetRequest<CurrentUserResponse>(apiUrl);
+  return useHTTPGetRequest<User>(apiUrl);
 }

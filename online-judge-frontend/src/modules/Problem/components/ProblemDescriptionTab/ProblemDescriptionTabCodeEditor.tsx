@@ -1,5 +1,7 @@
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import { useSnackbarContext } from "../../../../core/Snackbar";
+import { useCreateSubmissionRequest } from "../../../Submission/hooks/useCreateSubmissionRequest";
 import { useGetSolutionTemplatesRequest } from "../../hooks/useGetSolutionTemplatesRequest";
 import { useSolutionTemplatesMap } from "../../hooks/useSolutionTemplatesMap";
 import {
@@ -24,6 +26,14 @@ export const ProblemDescriptionTabCodeEditor: FC<
     useGetSolutionTemplatesRequest
   );
 
+  const {
+    result: createSubmissionResult,
+    error: createSubmissionError,
+    requestFunction: createSubmissionRequest,
+  } = useCreateSubmissionRequest();
+
+  const { openSnackbar } = useSnackbarContext();
+
   const activeSolutionTemplate =
     solutionTemplatesMap.get(activeProgrammingLanguage) || "";
 
@@ -35,9 +45,24 @@ export const ProblemDescriptionTabCodeEditor: FC<
     programmingLanguage: ProgrammingLanguage,
     code: string
   ) => {
-    console.log(programmingLanguage);
-    console.log(code);
+    createSubmissionRequest({
+      problemId: parseInt(problemId),
+      programmingLanguage,
+      code,
+    });
   };
+
+  useEffect(() => {
+    if (createSubmissionResult) {
+      openSnackbar("success", "Solution is submitted!");
+    }
+  }, [createSubmissionResult, openSnackbar]);
+
+  useEffect(() => {
+    if (createSubmissionError) {
+      openSnackbar("error", createSubmissionError.message);
+    }
+  }, [createSubmissionError, openSnackbar]);
 
   // TODO: This is quite similar with EditSolutionTemplatesTabContent
   return (

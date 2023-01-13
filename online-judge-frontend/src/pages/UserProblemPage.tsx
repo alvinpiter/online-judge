@@ -1,8 +1,8 @@
-import { Tab, Tabs } from "@mui/material";
+import { Link, Tab, Tabs } from "@mui/material";
 import { FC, useState } from "react";
 import { useParams } from "react-router-dom";
+import { ROUTES } from "../constants/Routes";
 import { ProblemDescriptionTab } from "../modules/Problem/components/ProblemDescriptionTab/ProblemDescriptionTab";
-import { ProblemSubmissionsTab } from "../modules/Problem/components/ProblemSubmissionsTab/ProblemSubmissionsTab";
 
 export const UserProblemPage: FC = () => {
   const params = useParams<{ problemId: string }>();
@@ -17,11 +17,12 @@ export const UserProblemPage: FC = () => {
         onChange={(event, newTabIndex: number) => setTabIndex(newTabIndex)}
       >
         <Tab label="Problem" />
-        <Tab label="Submissions" />
       </Tabs>
+      <Link href={ROUTES.PROBLEM_SUBMISSIONS_ROUTE.generatePath({ problemId })}>
+        Submissions
+      </Link>
 
       {tabIndex === 0 && <ProblemDescriptionTab problemId={problemId} />}
-      {tabIndex === 1 && <ProblemSubmissionsTab problemId={problemId} />}
     </>
   );
 };
