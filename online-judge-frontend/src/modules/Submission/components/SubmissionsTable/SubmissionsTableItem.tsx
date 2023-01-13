@@ -1,4 +1,5 @@
 import { Link, TableCell, TableRow } from "@mui/material";
+import moment from "moment";
 import { FC } from "react";
 import { ROUTES } from "../../../../constants/Routes";
 import { Submission } from "../../interfaces";
@@ -35,6 +36,7 @@ export const SubmissionsTableItem: FC<SubmissionsTableItemProps> = ({
       </TableCell>
       <TableCell> {submission.programmingLanguage} </TableCell>
       <TableCell> {submission.verdict} </TableCell>
+      <TableCell>{moment(submission.submittedAt).fromNow()}</TableCell>
       <TableCell>
         <Link href="#"> Detail </Link>
       </TableCell>

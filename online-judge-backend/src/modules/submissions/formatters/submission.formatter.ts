@@ -13,7 +13,7 @@ export class SubmissionFormatter {
       problem: submission.problem,
       programmingLanguage: submission.programmingLanguage,
       code: submission.code,
-      submittedAt: submission.submittedAt,
+      submittedAt: submission.submittedAt.toISOString(),
       verdict: submission.verdict,
     };
   }

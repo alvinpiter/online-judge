@@ -80,6 +80,10 @@ export class SubmissionsService {
     Select * where in (...) doesn't guarantee the rows are returned in
     order. We need to specify the order here, hence the order in SubmissionsSelectQueryBuilder
     is redundant. Find a way to solve this.
+
+    Reference:
+    * https://stackoverflow.com/a/3799966
+    * https://github.com/typeorm/typeorm/issues/5544#issuecomment-602110571
      */
     const populatedSubmissions = (await this.submissionsRepository.find({
       where: { id: In(submissionIds) },

@@ -28,6 +28,7 @@ export const SubmissionsTable: FC<SubmissionsTableProps> = ({
             <TableCell> User </TableCell>
             <TableCell> Programming Language </TableCell>
             <TableCell> Verdict </TableCell>
+            <TableCell> Submitted at </TableCell>
             <TableCell> Detail </TableCell>
           </TableRow>
         </TableHead>
