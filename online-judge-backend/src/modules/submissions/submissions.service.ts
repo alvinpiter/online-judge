@@ -99,12 +99,24 @@ export class SubmissionsService {
     };
   }
 
+  async postRunCallback(jobId: string, inputIdx: number, output: string) {
+    console.log(
+      `postRunCallback is called! Result: ${JSON.stringify({
+        jobId,
+        inputIdx,
+        output,
+      })}`,
+    );
+  }
+
   async runCodeForSubmission(submissionId: number) {
     const submission = await this.getSubmission(submissionId);
     return this.codeRunnerService.runCode(
       submission.programmingLanguage,
       submission.code,
       ['1 2\n', '3 4\n', '5 6\n'],
+      (inputIdx: number, output: string) =>
+        this.postRunCallback('jobId', inputIdx, output),
     );
   }
 

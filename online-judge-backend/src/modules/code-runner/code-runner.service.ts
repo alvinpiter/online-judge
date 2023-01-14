@@ -10,12 +10,18 @@ import { CodeRunOptions } from './interfaces';
 
 const WORKING_DIRECTORY_DELETION_DELAY = 10 * 60 * 1000; // 10 minutes
 
+type PostRunCallback = (
+  inputIdx: number,
+  output: string,
+) => Promise<void> | void;
+
 @Injectable()
 export class CodeRunnerService {
   async runCode(
     programmingLanguage: ProgrammingLanguage,
     sourceCode: string,
     inputs: string[],
+    postRunCallback?: PostRunCallback,
     codeRunOptions?: CodeRunOptions,
   ) {
     const runnableCodeId = uuidv4();
@@ -44,13 +50,18 @@ export class CodeRunnerService {
     await CodeCompiler.compile(workingDirectory, runnableCode);
 
     let result = '';
-    for (const input of inputs) {
-      result += await CodeRunner.run(
+    for (let inputIdx = 0; inputIdx < inputs.length; inputIdx++) {
+      const input = inputs[inputIdx];
+      const output = await CodeRunner.run(
         workingDirectory,
         runnableCode,
         input,
         codeRunOptions,
       );
+
+      postRunCallback && postRunCallback(inputIdx, output);
+
+      result += output;
     }
 
     return result;
