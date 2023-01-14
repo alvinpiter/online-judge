@@ -15,6 +15,7 @@ export class CodeRunnerService {
   async runCode(
     programmingLanguage: ProgrammingLanguage,
     sourceCode: string,
+    inputs: string[],
     codeRunOptions?: CodeRunOptions,
   ) {
     const runnableCodeId = uuidv4();
@@ -42,6 +43,16 @@ export class CodeRunnerService {
 
     await CodeCompiler.compile(workingDirectory, runnableCode);
 
-    return CodeRunner.run(workingDirectory, runnableCode, codeRunOptions);
+    let result = '';
+    for (const input of inputs) {
+      result += await CodeRunner.run(
+        workingDirectory,
+        runnableCode,
+        input,
+        codeRunOptions,
+      );
+    }
+
+    return result;
   }
 }
