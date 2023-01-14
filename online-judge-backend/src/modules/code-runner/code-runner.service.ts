@@ -6,12 +6,17 @@ import { ProgrammingLanguage } from 'src/constants/programming-languages';
 import { RunnableCodeFactory } from './runnable-code.factory';
 import { CodeCompiler } from './helpers/code-compiler';
 import { CodeRunner } from './helpers/code-runner';
+import { CodeRunOptions } from './interfaces';
 
 const WORKING_DIRECTORY_DELETION_DELAY = 10 * 60 * 1000; // 10 minutes
 
 @Injectable()
 export class CodeRunnerService {
-  async runCode(programmingLanguage: ProgrammingLanguage, sourceCode: string) {
+  async runCode(
+    programmingLanguage: ProgrammingLanguage,
+    sourceCode: string,
+    codeRunOptions?: CodeRunOptions,
+  ) {
     const runnableCodeId = uuidv4();
     const runnableCode = RunnableCodeFactory.create(
       runnableCodeId,
@@ -37,6 +42,6 @@ export class CodeRunnerService {
 
     await CodeCompiler.compile(workingDirectory, runnableCode);
 
-    return CodeRunner.run(workingDirectory, runnableCode);
+    return CodeRunner.run(workingDirectory, runnableCode, codeRunOptions);
   }
 }

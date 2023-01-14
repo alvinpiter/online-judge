@@ -15,14 +15,16 @@ export class CodeCompiler {
       exec(
         runnableCode.compilationCommand(),
         { cwd: workingDirectory },
-        (error, _, stderr) => {
+        (error) => {
           if (error) {
             reject(new CompilationError(error.message));
+            return;
           }
 
-          if (stderr) {
-            reject(new CompilationError(stderr));
-          }
+          /*
+          Ignoring stderr is intended, because compilation warning is written
+          to stderr as well.
+          */
 
           resolve(true);
         },
