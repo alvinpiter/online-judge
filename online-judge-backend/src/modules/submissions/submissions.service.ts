@@ -3,8 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { CodeRunnerService } from '../code-runner/code-runner.service';
 import { CompilationError } from '../code-runner/errors/compilation-error';
-import { RunTimeError } from '../code-runner/errors/run-time-error';
-import { TimeLimitExceededError } from '../code-runner/errors/time-limit-exceeded-error';
+import { CodeRunResult } from '../code-runner/interfaces';
 import { JobQueueItem } from '../job/interfaces';
 import { ObjectStorageService } from '../object-storage/object-storage.service';
 // import { JobService } from '../job/job.service';
@@ -13,7 +12,8 @@ import { OffsetPaginationService } from '../pagination/offset-pagination.service
 import { ProblemTestCasesService } from '../problems/services/problem-test-cases.service';
 import { SubmissionCreationDto } from './data-transfer-objects/submission-creation.dto';
 import { SubmissionsGetDto } from './data-transfer-objects/submissions-get.dto';
-import { Submission, SubmissionVerdict } from './entities/submission.entity';
+import { Submission } from './entities/submission.entity';
+import { getSubmissionVerdict } from './get-submission-verdict';
 import { SubmissionsSelectQueryBuilder } from './helpers/submissions-select.query-builder';
 import { SubmissionWithResolvedProperty } from './interfaces/submission-with-resolved-property';
 import {
@@ -133,55 +133,33 @@ export class SubmissionsService {
       ),
     );
 
-    const submissionRunVerdicts = new Map<
-      number,
-      SubmissionVerdict | undefined
-    >(inputs.map((_, idx) => [idx, undefined]));
-
     const afterOneInputRunCallback = async (
       inputIdx: number,
-      output: string,
+      result: CodeRunResult,
     ) => {
-      const expectedOutput = expectedOutputs[inputIdx];
-      if (output === expectedOutput) {
-        submissionRunVerdicts.set(inputIdx, SubmissionVerdict.ACCEPTED);
-        return true;
-      } else {
-        submissionRunVerdicts.set(inputIdx, SubmissionVerdict.WRONG_ANSWER);
-        return false;
-      }
-    };
-
-    const afterAllInputRunCallback = async () => {
-      console.log('afterAllInputRunCallback is called!');
+      console.log({
+        inputIdx,
+        result,
+      });
     };
 
     try {
-      await this.codeRunnerService.runCode(
+      const codeRunResultMap = await this.codeRunnerService.runCode(
         submission.programmingLanguage,
         submission.code,
         inputs,
-        {
-          afterOneInputRunCallback,
-          afterAllInputRunCallback,
-        },
+        { afterOneInputRunCallback },
       );
 
-      const isAccepted = Array.from(submissionRunVerdicts.values()).every(
-        (verdict) => verdict === SubmissionVerdict.ACCEPTED,
+      const submissionVerdict = getSubmissionVerdict(
+        codeRunResultMap,
+        expectedOutputs,
       );
-
-      console.log({ isAccepted });
+      console.log({ submissionVerdict });
     } catch (e) {
       switch (e.constructor) {
         case CompilationError:
           console.log('Compile error!');
-          break;
-        case TimeLimitExceededError:
-          console.log('Time limit exceeded!');
-          break;
-        case RunTimeError:
-          console.log('Run time error!');
           break;
         default:
           throw e;

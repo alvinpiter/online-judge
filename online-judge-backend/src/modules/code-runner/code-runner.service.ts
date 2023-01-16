@@ -6,7 +6,7 @@ import { ProgrammingLanguage } from 'src/constants/programming-languages';
 import { RunnableCodeFactory } from './runnable-code.factory';
 import { CodeCompiler } from './helpers/code-compiler';
 import { CodeRunner } from './helpers/code-runner';
-import { CodeRunCallback, CodeRunOptions } from './interfaces';
+import { CodeRunCallback, CodeRunOptions, CodeRunResult } from './interfaces';
 
 const WORKING_DIRECTORY_DELETION_DELAY = 10 * 60 * 1000; // 10 minutes
 
@@ -18,7 +18,10 @@ export class CodeRunnerService {
     inputs: string[],
     codeRunCallback?: CodeRunCallback,
     codeRunOptions?: CodeRunOptions,
-  ) {
+  ): Promise<Map<number, CodeRunResult>> {
+    const { afterOneInputRunCallback, afterAllInputRunCallback } =
+      codeRunCallback;
+
     const runnableCodeId = uuidv4();
     const runnableCode = RunnableCodeFactory.create(
       runnableCodeId,
@@ -44,8 +47,7 @@ export class CodeRunnerService {
 
     await CodeCompiler.compile(workingDirectory, runnableCode);
 
-    const { afterOneInputRunCallback, afterAllInputRunCallback } =
-      codeRunCallback;
+    const codeRunResult = new Map<number, CodeRunResult>();
 
     for (let inputIdx = 0; inputIdx < inputs.length; inputIdx++) {
       const inputFileName = `${inputIdx + 1}.txt`;
@@ -53,22 +55,20 @@ export class CodeRunnerService {
 
       fs.writeFileSync(inputFilePath, inputs[inputIdx]);
 
-      const output = await CodeRunner.run(
+      const result = await CodeRunner.run(
         workingDirectory,
         runnableCode,
         inputFileName,
         codeRunOptions,
       );
 
-      const shouldRunNextInput =
-        afterOneInputRunCallback &&
-        (await afterOneInputRunCallback(inputIdx, output));
-
-      if (!shouldRunNextInput) {
-        break;
-      }
+      codeRunResult.set(inputIdx, result);
+      afterOneInputRunCallback &&
+        (await afterOneInputRunCallback(inputIdx, result));
     }
 
-    afterAllInputRunCallback && afterAllInputRunCallback();
+    afterAllInputRunCallback && (await afterAllInputRunCallback());
+
+    return codeRunResult;
   }
 }
