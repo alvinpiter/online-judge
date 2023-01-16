@@ -4,6 +4,7 @@ import { Readable } from 'stream';
 import { Repository } from 'typeorm';
 import { ObjectStorageService } from '../../object-storage/object-storage.service';
 import { ProblemTestCase } from '../entities/problem-test-case.entity';
+import { ProblemTestCaseWithContent } from '../interfaces/problem-test-case-with-content';
 
 @Injectable()
 export class ProblemTestCasesService {
@@ -65,5 +66,22 @@ export class ProblemTestCasesService {
 
   async getTestCases(problemId: number) {
     return this.problemTestCasesRepository.findBy({ problemId });
+  }
+
+  async getTestCasesWithContent(
+    problemId: number,
+  ): Promise<ProblemTestCaseWithContent[]> {
+    const testCases = await this.getTestCases(problemId);
+    return Promise.all(
+      testCases.map(async (testCase) => ({
+        id: testCase.id,
+        input: await this.objectStorageService.getObjectContentAsString(
+          testCase.inputFileKey,
+        ),
+        output: await this.objectStorageService.getObjectContentAsString(
+          testCase.outputFileKey,
+        ),
+      })),
+    );
   }
 }

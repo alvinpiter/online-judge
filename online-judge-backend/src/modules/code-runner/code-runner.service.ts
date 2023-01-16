@@ -18,7 +18,7 @@ export class CodeRunnerService {
     inputs: string[],
     codeRunCallback?: CodeRunCallback,
     codeRunOptions?: CodeRunOptions,
-  ): Promise<Map<number, CodeRunResult>> {
+  ): Promise<CodeRunResult[]> {
     const { afterOneInputRunCallback, afterAllInputRunCallback } =
       codeRunCallback;
 
@@ -47,7 +47,7 @@ export class CodeRunnerService {
 
     await CodeCompiler.compile(workingDirectory, runnableCode);
 
-    const codeRunResult = new Map<number, CodeRunResult>();
+    const codeRunResults: CodeRunResult[] = [];
 
     for (let inputIdx = 0; inputIdx < inputs.length; inputIdx++) {
       const inputFileName = `${inputIdx + 1}.txt`;
@@ -62,13 +62,14 @@ export class CodeRunnerService {
         codeRunOptions,
       );
 
-      codeRunResult.set(inputIdx, result);
+      codeRunResults.push(result);
+
       afterOneInputRunCallback &&
         (await afterOneInputRunCallback(inputIdx, result));
     }
 
     afterAllInputRunCallback && (await afterAllInputRunCallback());
 
-    return codeRunResult;
+    return codeRunResults;
   }
 }

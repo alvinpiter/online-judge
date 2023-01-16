@@ -5,7 +5,6 @@ import { CodeRunnerService } from '../code-runner/code-runner.service';
 import { CompilationError } from '../code-runner/errors/compilation-error';
 import { CodeRunResult } from '../code-runner/interfaces';
 import { JobQueueItem } from '../job/interfaces';
-import { ObjectStorageService } from '../object-storage/object-storage.service';
 // import { JobService } from '../job/job.service';
 import { TypeORMPaginatedQueryBuilderAdapter } from '../pagination/adapters/TypeORMPaginatedQueryBuilderAdapter';
 import { OffsetPaginationService } from '../pagination/offset-pagination.service';
@@ -13,9 +12,10 @@ import { ProblemTestCasesService } from '../problems/services/problem-test-cases
 import { SubmissionCreationDto } from './data-transfer-objects/submission-creation.dto';
 import { SubmissionsGetDto } from './data-transfer-objects/submissions-get.dto';
 import { SubmissionCompilationDetail } from './entities/submission-compilation-detail.entity';
+import { SubmissionRunDetail } from './entities/submission-run-detail.entity';
 import { Submission, SubmissionVerdict } from './entities/submission.entity';
-import { getSubmissionVerdict } from './get-submission-verdict';
 import { SubmissionsSelectQueryBuilder } from './helpers/submissions-select.query-builder';
+import { summarizeCodeRunResult } from './helpers/summarize-code-run-result';
 import { SubmissionWithResolvedProperty } from './interfaces/submission-with-resolved-property';
 import {
   SubmissionsJudgementQueue,
@@ -32,12 +32,13 @@ export class SubmissionsService {
     private readonly submissionsRepository: Repository<Submission>,
     @InjectRepository(SubmissionCompilationDetail)
     private readonly submissionCompilationDetailsRepository: Repository<SubmissionCompilationDetail>,
+    @InjectRepository(SubmissionRunDetail)
+    private readonly submissionRunDetailsRepository: Repository<SubmissionRunDetail>,
     private readonly submissionsJudgementQueue: SubmissionsJudgementQueue,
     // private readonly jobService: JobService,
     private readonly offsetPaginationService: OffsetPaginationService,
     private readonly codeRunnerService: CodeRunnerService,
     private readonly problemTestCasesService: ProblemTestCasesService,
-    private readonly objectStorageService: ObjectStorageService,
   ) {
     this.submissionsJudgementQueue.setConsumer((item) => this.judge(item));
   }
@@ -112,29 +113,13 @@ export class SubmissionsService {
   async judge(
     submissionQueueItem: JobQueueItem<SubmissionsJudgementQueueItem>,
   ) {
-    // const jobId = submissionQueueItem.jobId;
     const submissionId = submissionQueueItem.item.submissionId;
-
     const submission = await this.getSubmission(submissionId);
-    const problemTestCases = await this.problemTestCasesService.getTestCases(
-      submission.problemId,
-    );
 
-    const inputs = await Promise.all(
-      problemTestCases.map((problemTestCase) =>
-        this.objectStorageService.getObjectContentAsString(
-          problemTestCase.inputFileKey,
-        ),
-      ),
-    );
-
-    const expectedOutputs = await Promise.all(
-      problemTestCases.map((problemTestCase) =>
-        this.objectStorageService.getObjectContentAsString(
-          problemTestCase.outputFileKey,
-        ),
-      ),
-    );
+    const testCases =
+      await this.problemTestCasesService.getTestCasesWithContent(
+        submission.problemId,
+      );
 
     const afterOneInputRunCallback = async (
       inputIdx: number,
@@ -147,18 +132,25 @@ export class SubmissionsService {
     };
 
     try {
-      const codeRunResultMap = await this.codeRunnerService.runCode(
+      const codeRunResults = await this.codeRunnerService.runCode(
         submission.programmingLanguage,
         submission.code,
-        inputs,
+        testCases.map((testCase) => testCase.input),
         { afterOneInputRunCallback },
       );
 
-      const submissionVerdict = getSubmissionVerdict(
-        codeRunResultMap,
-        expectedOutputs,
+      const { verdict, submissionRunDetails } = summarizeCodeRunResult(
+        submissionId,
+        testCases,
+        codeRunResults,
       );
-      console.log({ submissionVerdict });
+
+      await this.setSubmissionVerdict(submissionId, verdict);
+      await Promise.all(
+        submissionRunDetails.map((submissionRunDetail) =>
+          this.submissionRunDetailsRepository.save(submissionRunDetail),
+        ),
+      );
     } catch (e) {
       switch (e.constructor) {
         case CompilationError:
