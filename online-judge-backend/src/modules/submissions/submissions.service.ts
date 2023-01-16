@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
+import { CodeRunnerService } from '../code-runner/code-runner.service';
 import { JobQueueItem } from '../job/interfaces';
 import { JobService } from '../job/job.service';
 import { TypeORMPaginatedQueryBuilderAdapter } from '../pagination/adapters/TypeORMPaginatedQueryBuilderAdapter';
@@ -30,6 +31,7 @@ export class SubmissionsService {
     private readonly globalSubmissionsStatisticsUpdateQueue: GlobalSubmissionsStatisticsUpdateQueue,
     private readonly jobService: JobService,
     private readonly offsetPaginationService: OffsetPaginationService,
+    private readonly codeRunnerService: CodeRunnerService,
   ) {
     this.submissionsJudgementQueue.setConsumer((item) => this.judge(item));
   }
@@ -95,6 +97,50 @@ export class SubmissionsService {
       data: populatedSubmissions,
       meta,
     };
+  }
+
+  async postRunCallback(jobId: string, inputIdx: number, output: string) {
+    console.log(
+      `postRunCallback is called! Result: ${JSON.stringify({
+        jobId,
+        inputIdx,
+        output,
+      })}`,
+    );
+  }
+
+  async afterOneInputRunCallback(
+    jobId: string,
+    inputIdx: number,
+    output: string,
+  ) {
+    console.log(
+      `afterOneInputRunCallback is called! Result: ${JSON.stringify({
+        jobId,
+        inputIdx,
+        output,
+      })}`,
+    );
+
+    return true;
+  }
+
+  async afterAllInputRunCallback() {
+    console.log(`afterAllInputRunCallback is called!`);
+  }
+
+  async runCodeForSubmission(submissionId: number) {
+    const submission = await this.getSubmission(submissionId);
+    return this.codeRunnerService.runCode(
+      submission.programmingLanguage,
+      submission.code,
+      ['1 2\n', '3 4\n', '5 6\n'],
+      {
+        afterOneInputRunCallback: (inputIdx: number, output: string) =>
+          this.afterOneInputRunCallback('jobId', inputIdx, output),
+        afterAllInputRunCallback: () => this.afterAllInputRunCallback(),
+      },
+    );
   }
 
   async judge(

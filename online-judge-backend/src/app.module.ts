@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigKey, ConfigSchema } from './config';
 import { GlobalErrorFilter } from './errors/GlobalErrorFilter';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
+import { CodeRunnerModule } from './modules/code-runner/code-runner.module';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
 import { JobModule } from './modules/job/job.module';
 import { ObjectStorageModule } from './modules/object-storage/object-storage.module';
@@ -48,6 +49,7 @@ import { SubmissionsModule } from './modules/submissions/submissions.module';
     ProblemsModule,
     SubmissionsModule,
     StatisticsModule,
+    CodeRunnerModule,
   ],
 })
 export class AppModule {}
