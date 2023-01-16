@@ -12,7 +12,8 @@ import { OffsetPaginationService } from '../pagination/offset-pagination.service
 import { ProblemTestCasesService } from '../problems/services/problem-test-cases.service';
 import { SubmissionCreationDto } from './data-transfer-objects/submission-creation.dto';
 import { SubmissionsGetDto } from './data-transfer-objects/submissions-get.dto';
-import { Submission } from './entities/submission.entity';
+import { SubmissionCompilationDetail } from './entities/submission-compilation-detail.entity';
+import { Submission, SubmissionVerdict } from './entities/submission.entity';
 import { getSubmissionVerdict } from './get-submission-verdict';
 import { SubmissionsSelectQueryBuilder } from './helpers/submissions-select.query-builder';
 import { SubmissionWithResolvedProperty } from './interfaces/submission-with-resolved-property';
@@ -29,6 +30,8 @@ export class SubmissionsService {
   constructor(
     @InjectRepository(Submission)
     private readonly submissionsRepository: Repository<Submission>,
+    @InjectRepository(SubmissionCompilationDetail)
+    private readonly submissionCompilationDetailsRepository: Repository<SubmissionCompilationDetail>,
     private readonly submissionsJudgementQueue: SubmissionsJudgementQueue,
     // private readonly jobService: JobService,
     private readonly offsetPaginationService: OffsetPaginationService,
@@ -159,11 +162,38 @@ export class SubmissionsService {
     } catch (e) {
       switch (e.constructor) {
         case CompilationError:
-          console.log('Compile error!');
+          await this.saveSubmissionCompilationErrorDetail(
+            submissionId,
+            e.message,
+          );
+          await this.setSubmissionVerdict(
+            submissionId,
+            SubmissionVerdict.COMPILE_ERROR,
+          );
           break;
         default:
           throw e;
       }
     }
+  }
+
+  private async saveSubmissionCompilationErrorDetail(
+    submissionId: number,
+    message: string,
+  ) {
+    const submissionCompilationDetail = new SubmissionCompilationDetail();
+    submissionCompilationDetail.submissionId = submissionId;
+    submissionCompilationDetail.message = message;
+
+    return this.submissionCompilationDetailsRepository.save(
+      submissionCompilationDetail,
+    );
+  }
+
+  private setSubmissionVerdict(
+    submissionId: number,
+    verdict: SubmissionVerdict,
+  ) {
+    return this.submissionsRepository.update(submissionId, { verdict });
   }
 }

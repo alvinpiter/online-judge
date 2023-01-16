@@ -6,6 +6,7 @@ import { ObjectStorageModule } from '../object-storage/object-storage.module';
 import { PaginationModule } from '../pagination/pagination.module';
 import { ProblemsModule } from '../problems/problems.module';
 import { UsersModule } from '../users/users.module';
+import { SubmissionCompilationDetail } from './entities/submission-compilation-detail.entity';
 import { Submission } from './entities/submission.entity';
 import { SubmissionFormatter } from './formatters/submission.formatter';
 import { GlobalSubmissionsStatisticsUpdateQueue } from './queues/global-submissions-statistics-update.queue';
@@ -17,7 +18,7 @@ import { SubmissionsService } from './submissions.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Submission]),
+    TypeOrmModule.forFeature([Submission, SubmissionCompilationDetail]),
     UsersModule,
     ProblemsModule,
     JobModule,
