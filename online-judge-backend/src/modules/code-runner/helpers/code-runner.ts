@@ -1,6 +1,4 @@
 import { exec } from 'child_process';
-import * as fs from 'fs';
-import * as path from 'path';
 import { RunTimeError } from '../errors/run-time-error';
 import { TimeLimitExceededError } from '../errors/time-limit-exceeded-error';
 import { CodeRunOptions } from '../interfaces';
@@ -12,18 +10,12 @@ export class CodeRunner {
   static async run(
     workingDirectory: string,
     runnableCode: RunnableCode,
-    input: string,
+    inputFileName: string,
     codeRunOptions?: CodeRunOptions,
   ): Promise<string> {
-    const inputFileName = 'input.txt';
-    const inputFilePath = path.join(workingDirectory, inputFileName);
-
-    fs.writeFileSync(inputFilePath, input);
-
     const timeLimitInMilliseconds =
-      codeRunOptions && codeRunOptions.timeLimitInMilliseconds
-        ? codeRunOptions.timeLimitInMilliseconds
-        : DEFAULT_TIME_LIMIT_IN_MILLISECONDS;
+      codeRunOptions?.timeLimitInMilliseconds ||
+      DEFAULT_TIME_LIMIT_IN_MILLISECONDS;
 
     const command = `${runnableCode.runCommand()} < ${inputFileName}`;
 

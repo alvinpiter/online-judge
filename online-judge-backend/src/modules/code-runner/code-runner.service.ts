@@ -6,14 +6,9 @@ import { ProgrammingLanguage } from 'src/constants/programming-languages';
 import { RunnableCodeFactory } from './runnable-code.factory';
 import { CodeCompiler } from './helpers/code-compiler';
 import { CodeRunner } from './helpers/code-runner';
-import { CodeRunOptions } from './interfaces';
+import { CodeRunCallback, CodeRunOptions } from './interfaces';
 
 const WORKING_DIRECTORY_DELETION_DELAY = 10 * 60 * 1000; // 10 minutes
-
-type PostRunCallback = (
-  inputIdx: number,
-  output: string,
-) => Promise<void> | void;
 
 @Injectable()
 export class CodeRunnerService {
@@ -21,7 +16,7 @@ export class CodeRunnerService {
     programmingLanguage: ProgrammingLanguage,
     sourceCode: string,
     inputs: string[],
-    postRunCallback?: PostRunCallback,
+    codeRunCallback?: CodeRunCallback,
     codeRunOptions?: CodeRunOptions,
   ) {
     const runnableCodeId = uuidv4();
@@ -49,21 +44,31 @@ export class CodeRunnerService {
 
     await CodeCompiler.compile(workingDirectory, runnableCode);
 
-    let result = '';
+    const { afterOneInputRunCallback, afterAllInputRunCallback } =
+      codeRunCallback;
+
     for (let inputIdx = 0; inputIdx < inputs.length; inputIdx++) {
-      const input = inputs[inputIdx];
+      const inputFileName = `${inputIdx + 1}.txt`;
+      const inputFilePath = path.join(workingDirectory, inputFileName);
+
+      fs.writeFileSync(inputFilePath, inputs[inputIdx]);
+
       const output = await CodeRunner.run(
         workingDirectory,
         runnableCode,
-        input,
+        inputFileName,
         codeRunOptions,
       );
 
-      postRunCallback && postRunCallback(inputIdx, output);
+      const shouldRunNextInput =
+        afterOneInputRunCallback &&
+        (await afterOneInputRunCallback(inputIdx, output));
 
-      result += output;
+      if (!shouldRunNextInput) {
+        break;
+      }
     }
 
-    return result;
+    afterAllInputRunCallback && afterAllInputRunCallback();
   }
 }
