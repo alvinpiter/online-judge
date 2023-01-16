@@ -2,21 +2,24 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { CodeRunnerService } from '../code-runner/code-runner.service';
+import { CompilationError } from '../code-runner/errors/compilation-error';
+import { RunTimeError } from '../code-runner/errors/run-time-error';
+import { TimeLimitExceededError } from '../code-runner/errors/time-limit-exceeded-error';
 import { JobQueueItem } from '../job/interfaces';
-import { JobService } from '../job/job.service';
+import { ObjectStorageService } from '../object-storage/object-storage.service';
+// import { JobService } from '../job/job.service';
 import { TypeORMPaginatedQueryBuilderAdapter } from '../pagination/adapters/TypeORMPaginatedQueryBuilderAdapter';
 import { OffsetPaginationService } from '../pagination/offset-pagination.service';
+import { ProblemTestCasesService } from '../problems/services/problem-test-cases.service';
 import { SubmissionCreationDto } from './data-transfer-objects/submission-creation.dto';
 import { SubmissionsGetDto } from './data-transfer-objects/submissions-get.dto';
-import { Submission } from './entities/submission.entity';
+import { Submission, SubmissionVerdict } from './entities/submission.entity';
 import { SubmissionsSelectQueryBuilder } from './helpers/submissions-select.query-builder';
 import { SubmissionWithResolvedProperty } from './interfaces/submission-with-resolved-property';
-import { GlobalSubmissionsStatisticsUpdateQueue } from './queues/global-submissions-statistics-update.queue';
 import {
   SubmissionsJudgementQueue,
   SubmissionsJudgementQueueItem,
 } from './queues/submissions-judgement.queue';
-import { UserSubmissionsStatisticsUpdateQueue } from './queues/user-submissions-statistics-update.queue';
 
 const SUBMISSIONS_DEFAULT_OFFSET = 0;
 const SUBMISSIONS_DEFAULT_LIMIT = 10;
@@ -27,11 +30,11 @@ export class SubmissionsService {
     @InjectRepository(Submission)
     private readonly submissionsRepository: Repository<Submission>,
     private readonly submissionsJudgementQueue: SubmissionsJudgementQueue,
-    private readonly userSubmissionsStatisticsUpdateQueue: UserSubmissionsStatisticsUpdateQueue,
-    private readonly globalSubmissionsStatisticsUpdateQueue: GlobalSubmissionsStatisticsUpdateQueue,
-    private readonly jobService: JobService,
+    // private readonly jobService: JobService,
     private readonly offsetPaginationService: OffsetPaginationService,
     private readonly codeRunnerService: CodeRunnerService,
+    private readonly problemTestCasesService: ProblemTestCasesService,
+    private readonly objectStorageService: ObjectStorageService,
   ) {
     this.submissionsJudgementQueue.setConsumer((item) => this.judge(item));
   }
@@ -47,6 +50,10 @@ export class SubmissionsService {
     submission.code = submissionCreationDto.code;
 
     const savedSubmission = await this.submissionsRepository.save(submission);
+
+    await this.submissionsJudgementQueue.enqueue({
+      submissionId: savedSubmission.id,
+    });
 
     return this.getSubmission(savedSubmission.id);
   }
@@ -99,74 +106,86 @@ export class SubmissionsService {
     };
   }
 
-  async postRunCallback(jobId: string, inputIdx: number, output: string) {
-    console.log(
-      `postRunCallback is called! Result: ${JSON.stringify({
-        jobId,
-        inputIdx,
-        output,
-      })}`,
-    );
-  }
-
-  async afterOneInputRunCallback(
-    jobId: string,
-    inputIdx: number,
-    output: string,
-  ) {
-    console.log(
-      `afterOneInputRunCallback is called! Result: ${JSON.stringify({
-        jobId,
-        inputIdx,
-        output,
-      })}`,
-    );
-
-    return true;
-  }
-
-  async afterAllInputRunCallback() {
-    console.log(`afterAllInputRunCallback is called!`);
-  }
-
-  async runCodeForSubmission(submissionId: number) {
-    const submission = await this.getSubmission(submissionId);
-    return this.codeRunnerService.runCode(
-      submission.programmingLanguage,
-      submission.code,
-      ['1 2\n', '3 4\n', '5 6\n'],
-      {
-        afterOneInputRunCallback: (inputIdx: number, output: string) =>
-          this.afterOneInputRunCallback('jobId', inputIdx, output),
-        afterAllInputRunCallback: () => this.afterAllInputRunCallback(),
-      },
-    );
-  }
-
   async judge(
     submissionQueueItem: JobQueueItem<SubmissionsJudgementQueueItem>,
   ) {
-    const jobId = submissionQueueItem.jobId;
+    // const jobId = submissionQueueItem.jobId;
     const submissionId = submissionQueueItem.item.submissionId;
 
-    console.log(`Judging user's submission with ID ${submissionId}...`);
+    const submission = await this.getSubmission(submissionId);
+    const problemTestCases = await this.problemTestCasesService.getTestCases(
+      submission.problemId,
+    );
 
-    const numberOfTestCases = 10;
-    for (let tc = 1; tc <= numberOfTestCases; tc++) {
-      console.log(`Running testcase ${tc}...`);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      await this.jobService.updateProgress(jobId, tc / numberOfTestCases);
+    const inputs = await Promise.all(
+      problemTestCases.map((problemTestCase) =>
+        this.objectStorageService.getObjectContentAsString(
+          problemTestCase.inputFileKey,
+        ),
+      ),
+    );
+
+    const expectedOutputs = await Promise.all(
+      problemTestCases.map((problemTestCase) =>
+        this.objectStorageService.getObjectContentAsString(
+          problemTestCase.outputFileKey,
+        ),
+      ),
+    );
+
+    const submissionRunVerdicts = new Map<
+      number,
+      SubmissionVerdict | undefined
+    >(inputs.map((_, idx) => [idx, undefined]));
+
+    const afterOneInputRunCallback = async (
+      inputIdx: number,
+      output: string,
+    ) => {
+      const expectedOutput = expectedOutputs[inputIdx];
+      if (output === expectedOutput) {
+        submissionRunVerdicts.set(inputIdx, SubmissionVerdict.ACCEPTED);
+        return true;
+      } else {
+        submissionRunVerdicts.set(inputIdx, SubmissionVerdict.WRONG_ANSWER);
+        return false;
+      }
+    };
+
+    const afterAllInputRunCallback = async () => {
+      console.log('afterAllInputRunCallback is called!');
+    };
+
+    try {
+      await this.codeRunnerService.runCode(
+        submission.programmingLanguage,
+        submission.code,
+        inputs,
+        {
+          afterOneInputRunCallback,
+          afterAllInputRunCallback,
+        },
+      );
+
+      const isAccepted = Array.from(submissionRunVerdicts.values()).every(
+        (verdict) => verdict === SubmissionVerdict.ACCEPTED,
+      );
+
+      console.log({ isAccepted });
+    } catch (e) {
+      switch (e.constructor) {
+        case CompilationError:
+          console.log('Compile error!');
+          break;
+        case TimeLimitExceededError:
+          console.log('Time limit exceeded!');
+          break;
+        case RunTimeError:
+          console.log('Run time error!');
+          break;
+        default:
+          throw e;
+      }
     }
-
-    await this.jobService.finishSuccessfully(jobId, 'All good!');
-
-    console.log(`Done judging user's submission with ID ${submissionId}!`);
-
-    this.userSubmissionsStatisticsUpdateQueue.enqueue({
-      submissionId,
-    });
-    this.globalSubmissionsStatisticsUpdateQueue.enqueue({
-      submissionId,
-    });
   }
 }

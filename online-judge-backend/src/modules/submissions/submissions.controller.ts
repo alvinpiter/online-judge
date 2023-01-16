@@ -2,8 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Param,
-  ParseIntPipe,
   Post,
   Query,
   Request,
@@ -49,10 +47,5 @@ export class SubmissionsController {
       ),
       meta,
     };
-  }
-
-  @Get('submissions/:submissionId/output')
-  runCode(@Param('submissionId', ParseIntPipe) submissionId: number) {
-    return this.submissionsService.runCodeForSubmission(submissionId);
   }
 }
