@@ -5,6 +5,7 @@ import { CodeRunnerService } from '../code-runner/code-runner.service';
 import { CompilationError } from '../code-runner/errors/compilation-error';
 import { CodeRunResult } from '../code-runner/interfaces';
 import { JobQueueItem } from '../job/interfaces';
+import { JobService } from '../job/job.service';
 // import { JobService } from '../job/job.service';
 import { TypeORMPaginatedQueryBuilderAdapter } from '../pagination/adapters/TypeORMPaginatedQueryBuilderAdapter';
 import { OffsetPaginationService } from '../pagination/offset-pagination.service';
@@ -21,6 +22,7 @@ import {
   SubmissionsJudgementQueue,
   SubmissionsJudgementQueueItem,
 } from './queues/submissions-judgement.queue';
+import { SubmissionJobsService } from './submission-jobs.service';
 
 const SUBMISSIONS_DEFAULT_OFFSET = 0;
 const SUBMISSIONS_DEFAULT_LIMIT = 10;
@@ -39,6 +41,8 @@ export class SubmissionsService {
     private readonly offsetPaginationService: OffsetPaginationService,
     private readonly codeRunnerService: CodeRunnerService,
     private readonly problemTestCasesService: ProblemTestCasesService,
+    private readonly submissionJobsService: SubmissionJobsService,
+    private readonly jobService: JobService,
   ) {
     this.submissionsJudgementQueue.setConsumer((item) => this.judge(item));
   }
@@ -55,9 +59,13 @@ export class SubmissionsService {
 
     const savedSubmission = await this.submissionsRepository.save(submission);
 
-    await this.submissionsJudgementQueue.enqueue({
+    const jobId = await this.submissionsJudgementQueue.enqueue({
       submissionId: savedSubmission.id,
     });
+    await this.submissionJobsService.setSubmissionJobId(
+      savedSubmission.id,
+      jobId,
+    );
 
     return this.getSubmission(savedSubmission.id);
   }
@@ -113,6 +121,8 @@ export class SubmissionsService {
   async judge(
     submissionQueueItem: JobQueueItem<SubmissionsJudgementQueueItem>,
   ) {
+    const jobId = submissionQueueItem.jobId;
+
     const submissionId = submissionQueueItem.item.submissionId;
     const submission = await this.getSubmission(submissionId);
 
@@ -125,10 +135,8 @@ export class SubmissionsService {
       inputIdx: number,
       result: CodeRunResult,
     ) => {
-      console.log({
-        inputIdx,
-        result,
-      });
+      const progress = (inputIdx + 1) / testCases.length;
+      await this.jobService.updateProgress(jobId, progress);
     };
 
     try {
@@ -166,6 +174,8 @@ export class SubmissionsService {
         default:
           throw e;
       }
+    } finally {
+      this.jobService.finishSuccessfully(jobId);
     }
   }
 

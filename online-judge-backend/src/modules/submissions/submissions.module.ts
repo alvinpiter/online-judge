@@ -14,6 +14,7 @@ import { GlobalSubmissionsStatisticsUpdateQueue } from './queues/global-submissi
 import { SubmissionsJudgementQueue } from './queues/submissions-judgement.queue';
 import { UserSubmissionsStatisticsUpdateQueue } from './queues/user-submissions-statistics-update.queue';
 import { SubmissionEventsController } from './submission-events.controller';
+import { SubmissionJobsService } from './submission-jobs.service';
 import { SubmissionsController } from './submissions.controller';
 import { SubmissionsService } from './submissions.service';
 
@@ -33,6 +34,7 @@ import { SubmissionsService } from './submissions.service';
   ],
   providers: [
     SubmissionsService,
+    SubmissionJobsService,
     SubmissionsJudgementQueue,
     UserSubmissionsStatisticsUpdateQueue,
     GlobalSubmissionsStatisticsUpdateQueue,
