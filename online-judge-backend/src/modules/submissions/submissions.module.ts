@@ -11,6 +11,7 @@ import { GlobalSubmissionsStatisticsUpdateQueue } from './queues/global-submissi
 import { SubmissionsJudgementQueue } from './queues/submissions-judgement.queue';
 import { UserSubmissionsStatisticsUpdateQueue } from './queues/user-submissions-statistics-update.queue';
 import { SubmissionEventsController } from './submission-events.controller';
+import { SubmissionsEventSubscriber } from './submissions-event.subscriber';
 import { SubmissionsController } from './submissions.controller';
 import { SubmissionsService } from './submissions.service';
 
@@ -29,6 +30,7 @@ import { SubmissionsService } from './submissions.service';
     UserSubmissionsStatisticsUpdateQueue,
     GlobalSubmissionsStatisticsUpdateQueue,
     SubmissionFormatter,
+    SubmissionsEventSubscriber,
   ],
   controllers: [SubmissionsController, SubmissionEventsController],
   exports: [
