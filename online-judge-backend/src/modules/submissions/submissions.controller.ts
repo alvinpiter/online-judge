@@ -53,6 +53,15 @@ export class SubmissionsController {
     };
   }
 
+  @Get('submissions/:submissionId')
+  async getSubmission(
+    @Param('submissionId', ParseIntPipe) submissionId: number,
+  ) {
+    return this.submissionFormatter.formatSubmissionWithDetails(
+      await this.submissionsService.getSubmissionWithDetails(submissionId),
+    );
+  }
+
   @Get('submissions/:submissionId/progress')
   async getSubmissionJobProgress(
     @Param('submissionId', ParseIntPipe) submissionId: number,

@@ -5,9 +5,13 @@ import { TypeORMPaginatedQueryBuilderAdapter } from '../pagination/adapters/Type
 import { OffsetPaginationService } from '../pagination/offset-pagination.service';
 import { SubmissionCreationDto } from './data-transfer-objects/submission-creation.dto';
 import { SubmissionsGetDto } from './data-transfer-objects/submissions-get.dto';
+import { SubmissionCompilationDetail } from './entities/submission-compilation-detail.entity';
+import { SubmissionRunDetail } from './entities/submission-run-detail.entity';
 import { Submission } from './entities/submission.entity';
 import { SubmissionsSelectQueryBuilder } from './helpers/submissions-select.query-builder';
+import { SubmissionRunDetailWithTestCase } from './interfaces/submission-run-detail-with-test-case';
 import { SubmissionWithResolvedProperty } from './interfaces/submission-with-resolved-property';
+import { SubmissionWithDetails } from './interfaces/submition-with-details';
 import { SubmissionsJudgementQueue } from './queues/submissions-judgement.queue';
 import { SubmissionJobsService } from './submission-jobs.service';
 
@@ -19,6 +23,10 @@ export class SubmissionsService {
   constructor(
     @InjectRepository(Submission)
     private readonly submissionsRepository: Repository<Submission>,
+    @InjectRepository(SubmissionCompilationDetail)
+    private readonly submissionCompilationDetailsRepository: Repository<SubmissionCompilationDetail>,
+    @InjectRepository(SubmissionRunDetail)
+    private readonly submissionRunDetailsRepository: Repository<SubmissionRunDetail>,
     private readonly submissionsJudgementQueue: SubmissionsJudgementQueue,
     private readonly offsetPaginationService: OffsetPaginationService,
     private readonly submissionJobsService: SubmissionJobsService,
@@ -49,11 +57,35 @@ export class SubmissionsService {
 
   async getSubmission(
     submissionId: number,
+    relations = ['user', 'problem'],
   ): Promise<SubmissionWithResolvedProperty> {
     return this.submissionsRepository.findOneOrFail({
       where: { id: submissionId },
-      relations: ['user', 'problem'],
+      relations,
     });
+  }
+
+  async getSubmissionWithDetails(
+    submissionId: number,
+  ): Promise<SubmissionWithDetails> {
+    const submission = await this.getSubmission(submissionId);
+
+    const compilationDetail =
+      await this.submissionCompilationDetailsRepository.findOneBy({
+        submissionId,
+      });
+
+    const runDetails = (await this.submissionRunDetailsRepository.find({
+      where: { submissionId },
+      relations: ['testCase'],
+      order: { testCaseId: 'ASC' },
+    })) as SubmissionRunDetailWithTestCase[];
+
+    return {
+      ...submission,
+      compilationDetail,
+      runDetails,
+    };
   }
 
   async getSubmissions(submissionsGetDto: SubmissionsGetDto) {

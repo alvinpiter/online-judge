@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ProblemTestCase } from 'src/modules/problems/entities/problem-test-case.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { SubmissionVerdict } from './submission.entity';
 
 @Entity('submission_run_details')
@@ -11,6 +18,10 @@ export class SubmissionRunDetail {
 
   @Column()
   testCaseId: number;
+
+  @ManyToOne(() => ProblemTestCase)
+  @JoinColumn({ name: 'testCaseId' })
+  testCase: ProblemTestCase;
 
   @Column()
   output: string;
