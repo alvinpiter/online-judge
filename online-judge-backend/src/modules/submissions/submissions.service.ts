@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Observable } from 'src/lib/Observable';
 import { In, Repository } from 'typeorm';
 import { TypeORMPaginatedQueryBuilderAdapter } from '../pagination/adapters/TypeORMPaginatedQueryBuilderAdapter';
 import { OffsetPaginationService } from '../pagination/offset-pagination.service';
@@ -15,11 +16,15 @@ import { SubmissionWithDetails } from './interfaces/submition-with-details';
 import { SubmissionsJudgementQueue } from './queues/submissions-judgement.queue';
 import { SubmissionJobsService } from './submission-jobs.service';
 
+export interface SubmissionsServiceEvent {
+  submissionCreated: (submission: Submission) => Promise<void>;
+}
+
 const SUBMISSIONS_DEFAULT_OFFSET = 0;
 const SUBMISSIONS_DEFAULT_LIMIT = 10;
 
 @Injectable()
-export class SubmissionsService {
+export class SubmissionsService extends Observable<SubmissionsServiceEvent> {
   constructor(
     @InjectRepository(Submission)
     private readonly submissionsRepository: Repository<Submission>,
@@ -30,7 +35,9 @@ export class SubmissionsService {
     private readonly submissionsJudgementQueue: SubmissionsJudgementQueue,
     private readonly offsetPaginationService: OffsetPaginationService,
     private readonly submissionJobsService: SubmissionJobsService,
-  ) {}
+  ) {
+    super();
+  }
 
   async createSubmission(
     userId: number,
@@ -50,6 +57,9 @@ export class SubmissionsService {
     await this.submissionJobsService.setSubmissionJobId(
       savedSubmission.id,
       jobId,
+    );
+    this.publishEvent('submissionCreated', (subscriber) =>
+      subscriber(savedSubmission),
     );
 
     return this.getSubmission(savedSubmission.id);

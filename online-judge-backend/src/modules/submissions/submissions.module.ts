@@ -21,6 +21,7 @@ import { SubmissionJudgmentService } from './services/submission-judgment.servic
 import { SubmissionProcessorService } from './services/submission-processor.service';
 import { SubmissionEventsController } from './submission-events.controller';
 import { SubmissionJobsService } from './submission-jobs.service';
+import { SubmissionsEventSubscriber } from './submissions-event.subscriber';
 import { SubmissionsController } from './submissions.controller';
 import { SubmissionsService } from './submissions.service';
 
@@ -51,6 +52,7 @@ import { SubmissionsService } from './submissions.service';
     UserSubmissionsStatisticsUpdateQueue,
     GlobalSubmissionsStatisticsUpdateQueue,
     SubmissionFormatter,
+    SubmissionsEventSubscriber,
   ],
   controllers: [SubmissionsController, SubmissionEventsController],
   exports: [
