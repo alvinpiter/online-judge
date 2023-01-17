@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Observable } from 'src/lib/Observable';
 import { In, Repository } from 'typeorm';
 import { CodeRunnerService } from '../code-runner/code-runner.service';
 import { JobQueueItem } from '../job/interfaces';
@@ -18,11 +19,15 @@ import {
 } from './queues/submissions-judgement.queue';
 import { UserSubmissionsStatisticsUpdateQueue } from './queues/user-submissions-statistics-update.queue';
 
+export interface SubmissionsServiceEvent {
+  submissionCreated: (submission: Submission) => Promise<void>;
+}
+
 const SUBMISSIONS_DEFAULT_OFFSET = 0;
 const SUBMISSIONS_DEFAULT_LIMIT = 10;
 
 @Injectable()
-export class SubmissionsService {
+export class SubmissionsService extends Observable<SubmissionsServiceEvent> {
   constructor(
     @InjectRepository(Submission)
     private readonly submissionsRepository: Repository<Submission>,
@@ -33,6 +38,7 @@ export class SubmissionsService {
     private readonly offsetPaginationService: OffsetPaginationService,
     private readonly codeRunnerService: CodeRunnerService,
   ) {
+    super();
     this.submissionsJudgementQueue.setConsumer((item) => this.judge(item));
   }
 
@@ -47,6 +53,10 @@ export class SubmissionsService {
     submission.code = submissionCreationDto.code;
 
     const savedSubmission = await this.submissionsRepository.save(submission);
+
+    this.publishEvent('submissionCreated', (subscriber) =>
+      subscriber(savedSubmission),
+    );
 
     return this.getSubmission(savedSubmission.id);
   }
