@@ -1,27 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { CodeRunnerService } from '../code-runner/code-runner.service';
-import { CompilationError } from '../code-runner/errors/compilation-error';
-import { CodeRunResult } from '../code-runner/interfaces';
-import { JobQueueItem } from '../job/interfaces';
-import { JobService } from '../job/job.service';
-// import { JobService } from '../job/job.service';
 import { TypeORMPaginatedQueryBuilderAdapter } from '../pagination/adapters/TypeORMPaginatedQueryBuilderAdapter';
 import { OffsetPaginationService } from '../pagination/offset-pagination.service';
-import { ProblemTestCasesService } from '../problems/services/problem-test-cases.service';
 import { SubmissionCreationDto } from './data-transfer-objects/submission-creation.dto';
 import { SubmissionsGetDto } from './data-transfer-objects/submissions-get.dto';
-import { SubmissionCompilationDetail } from './entities/submission-compilation-detail.entity';
-import { SubmissionRunDetail } from './entities/submission-run-detail.entity';
-import { Submission, SubmissionVerdict } from './entities/submission.entity';
+import { Submission } from './entities/submission.entity';
 import { SubmissionsSelectQueryBuilder } from './helpers/submissions-select.query-builder';
-import { summarizeCodeRunResult } from './helpers/summarize-code-run-result';
 import { SubmissionWithResolvedProperty } from './interfaces/submission-with-resolved-property';
-import {
-  SubmissionsJudgementQueue,
-  SubmissionsJudgementQueueItem,
-} from './queues/submissions-judgement.queue';
+import { SubmissionsJudgementQueue } from './queues/submissions-judgement.queue';
 import { SubmissionJobsService } from './submission-jobs.service';
 
 const SUBMISSIONS_DEFAULT_OFFSET = 0;
@@ -32,20 +19,10 @@ export class SubmissionsService {
   constructor(
     @InjectRepository(Submission)
     private readonly submissionsRepository: Repository<Submission>,
-    @InjectRepository(SubmissionCompilationDetail)
-    private readonly submissionCompilationDetailsRepository: Repository<SubmissionCompilationDetail>,
-    @InjectRepository(SubmissionRunDetail)
-    private readonly submissionRunDetailsRepository: Repository<SubmissionRunDetail>,
     private readonly submissionsJudgementQueue: SubmissionsJudgementQueue,
-    // private readonly jobService: JobService,
     private readonly offsetPaginationService: OffsetPaginationService,
-    private readonly codeRunnerService: CodeRunnerService,
-    private readonly problemTestCasesService: ProblemTestCasesService,
     private readonly submissionJobsService: SubmissionJobsService,
-    private readonly jobService: JobService,
-  ) {
-    this.submissionsJudgementQueue.setConsumer((item) => this.judge(item));
-  }
+  ) {}
 
   async createSubmission(
     userId: number,
@@ -116,86 +93,5 @@ export class SubmissionsService {
       data: populatedSubmissions,
       meta,
     };
-  }
-
-  async judge(
-    submissionQueueItem: JobQueueItem<SubmissionsJudgementQueueItem>,
-  ) {
-    const jobId = submissionQueueItem.jobId;
-
-    const submissionId = submissionQueueItem.item.submissionId;
-    const submission = await this.getSubmission(submissionId);
-
-    const testCases =
-      await this.problemTestCasesService.getTestCasesWithContent(
-        submission.problemId,
-      );
-
-    const afterOneInputRunCallback = async (
-      inputIdx: number,
-      result: CodeRunResult,
-    ) => {
-      const progress = (inputIdx + 1) / testCases.length;
-      await this.jobService.updateProgress(jobId, progress);
-    };
-
-    try {
-      const codeRunResults = await this.codeRunnerService.runCode(
-        submission.programmingLanguage,
-        submission.code,
-        testCases.map((testCase) => testCase.input),
-        { afterOneInputRunCallback },
-      );
-
-      const { verdict, submissionRunDetails } = summarizeCodeRunResult(
-        submissionId,
-        testCases,
-        codeRunResults,
-      );
-
-      await this.setSubmissionVerdict(submissionId, verdict);
-      await Promise.all(
-        submissionRunDetails.map((submissionRunDetail) =>
-          this.submissionRunDetailsRepository.save(submissionRunDetail),
-        ),
-      );
-    } catch (e) {
-      switch (e.constructor) {
-        case CompilationError:
-          await this.saveSubmissionCompilationErrorDetail(
-            submissionId,
-            e.message,
-          );
-          await this.setSubmissionVerdict(
-            submissionId,
-            SubmissionVerdict.COMPILE_ERROR,
-          );
-          break;
-        default:
-          throw e;
-      }
-    } finally {
-      this.jobService.finishSuccessfully(jobId);
-    }
-  }
-
-  private async saveSubmissionCompilationErrorDetail(
-    submissionId: number,
-    message: string,
-  ) {
-    const submissionCompilationDetail = new SubmissionCompilationDetail();
-    submissionCompilationDetail.submissionId = submissionId;
-    submissionCompilationDetail.message = message;
-
-    return this.submissionCompilationDetailsRepository.save(
-      submissionCompilationDetail,
-    );
-  }
-
-  private setSubmissionVerdict(
-    submissionId: number,
-    verdict: SubmissionVerdict,
-  ) {
-    return this.submissionsRepository.update(submissionId, { verdict });
   }
 }

@@ -16,7 +16,7 @@ export class CodeRunnerService {
     programmingLanguage: ProgrammingLanguage,
     sourceCode: string,
     inputs: string[],
-    codeRunCallback?: CodeRunCallback,
+    codeRunCallback: CodeRunCallback = {},
     codeRunOptions?: CodeRunOptions,
   ): Promise<CodeRunResult[]> {
     const { afterOneInputRunCallback, afterAllInputRunCallback } =
