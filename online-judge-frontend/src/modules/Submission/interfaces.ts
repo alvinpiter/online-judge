@@ -1,4 +1,4 @@
-import { Problem, ProgrammingLanguage } from "../Problem/interfaces";
+import { Problem, ProgrammingLanguage, TestCase } from "../Problem/interfaces";
 import { User } from "../User/interface";
 
 export enum SubmissionVerdict {
@@ -17,6 +17,25 @@ export interface Submission {
   code: string;
   submittedAt: string;
   verdict: SubmissionVerdict;
+}
+
+export interface SubmissionWithDetails extends Submission {
+  compilationDetail?: SubmissionCompilationDetail;
+  runDetails: SubmissionRunDetail[];
+}
+
+export interface SubmissionCompilationDetail {
+  id: number;
+  message: string;
+}
+
+export interface SubmissionRunDetail {
+  id: number;
+  runTimeInMilliseconds: number;
+  memoryUsageInKilobytes: number;
+  output?: string;
+  verdict: SubmissionVerdict;
+  testCase: TestCase;
 }
 
 export interface SubmissionsFilter {

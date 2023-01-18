@@ -51,7 +51,7 @@ export class SubmissionJudgmentService {
       submissionRunDetail.submissionId = submissionId;
       submissionRunDetail.testCaseId = testCases[idx].id;
       submissionRunDetail.runTimeInMilliseconds = runTimeInMilliseconds;
-      submissionRunDetail.memoryUsageInKiloBytes = memoryUsageInKilobytes;
+      submissionRunDetail.memoryUsageInKilobytes = memoryUsageInKilobytes;
       submissionRunDetail.output = output;
       submissionRunDetail.verdict =
         await this.submissionCodeOutputCheckerService.check(

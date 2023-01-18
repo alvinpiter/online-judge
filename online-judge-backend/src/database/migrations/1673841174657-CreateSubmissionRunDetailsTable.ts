@@ -34,7 +34,7 @@ export class CreateSubmissionRunDetailsTable1673841174657
         isNullable: false,
       },
       {
-        name: 'memoryUsageInKiloBytes',
+        name: 'memoryUsageInKilobytes',
         type: 'int',
         isNullable: false,
       },

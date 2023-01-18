@@ -30,7 +30,7 @@ export class SubmissionRunDetail {
   runTimeInMilliseconds: number;
 
   @Column()
-  memoryUsageInKiloBytes: number;
+  memoryUsageInKilobytes: number;
 
   @Column()
   verdict: SubmissionVerdict;

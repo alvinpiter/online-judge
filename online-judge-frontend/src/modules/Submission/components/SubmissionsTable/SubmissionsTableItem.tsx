@@ -38,7 +38,13 @@ export const SubmissionsTableItem: FC<SubmissionsTableItemProps> = ({
       <TableCell> {submission.verdict} </TableCell>
       <TableCell>{moment(submission.submittedAt).fromNow()}</TableCell>
       <TableCell>
-        <Link href="#"> Detail </Link>
+        <Link
+          href={ROUTES.SUBMISSION_ROUTE.generatePath({
+            submissionId: submission.id.toString(),
+          })}
+        >
+          Detail
+        </Link>
       </TableCell>
     </TableRow>
   );
