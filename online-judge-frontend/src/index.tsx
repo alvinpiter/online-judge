@@ -22,6 +22,7 @@ import { SubmissionsPage } from "./pages/SubmissionsPage";
 import { ProblemSubmissionsPage } from "./pages/ProblemSubmissionsPage";
 import { UserSubmissionsPage } from "./pages/UserSubmissionsPage";
 import { UserProfilePage } from "./pages/UserProfilePage";
+import { SubmissionPage } from "./pages/SubmissionPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -47,6 +48,7 @@ const router = createBrowserRouter(
         path={ROUTES.SUBMISSIONS_ROUTE.path}
         element={<SubmissionsPage />}
       />
+      <Route path={ROUTES.SUBMISSION_ROUTE.path} element={<SubmissionPage />} />
       <Route
         path={ROUTES.PROBLEM_SUBMISSIONS_ROUTE.path}
         element={<ProblemSubmissionsPage />}

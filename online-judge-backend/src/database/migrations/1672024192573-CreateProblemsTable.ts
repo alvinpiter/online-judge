@@ -34,6 +34,6 @@ export class CreateProblemsTable1672024192573 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.createTable(this.problemsTable, true);
+    await queryRunner.dropTable(this.problemsTable, true, true);
   }
 }

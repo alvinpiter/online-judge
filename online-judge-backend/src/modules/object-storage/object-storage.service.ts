@@ -46,6 +46,20 @@ export class ObjectStorageService {
     }
   }
 
+  async getObjectContentAsString(key: string) {
+    try {
+      const response = await this.client.send(
+        new GetObjectCommand({
+          Bucket: this.bucketName,
+          Key: key,
+        }),
+      );
+      return response.Body.transformToString();
+    } catch (e) {
+      throw new GetObjectError(e.message);
+    }
+  }
+
   async getSignedUrl(key: string) {
     try {
       return getSignedUrl(

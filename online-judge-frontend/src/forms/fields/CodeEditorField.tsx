@@ -2,17 +2,12 @@ import { FC } from "react";
 import Editor from "@monaco-editor/react";
 import { useField } from "formik";
 import { ProgrammingLanguage } from "../../modules/Problem/interfaces";
+import { CODE_EDITOR_PROGRAMMING_LANGUAGE_MAPPER } from "../../constants/CodeEditorProgrammingLanguageMapper";
 
 interface CodeEditorFieldProps {
   name: string;
   programmingLanguage?: ProgrammingLanguage;
 }
-
-const PROGRAMMING_LANGUAGE_MAPPER = new Map<ProgrammingLanguage, string>([
-  [ProgrammingLanguage.JAVASCRIPT, "javascript"],
-  [ProgrammingLanguage.PYTHON_3, "python"],
-  [ProgrammingLanguage.CPP_11, "cpp"],
-]);
 
 export const CodeEditorField: FC<CodeEditorFieldProps> = ({
   name,
@@ -27,7 +22,7 @@ export const CodeEditorField: FC<CodeEditorFieldProps> = ({
       defaultLanguage="javascript"
       language={
         programmingLanguage &&
-        PROGRAMMING_LANGUAGE_MAPPER.get(programmingLanguage)
+        CODE_EDITOR_PROGRAMMING_LANGUAGE_MAPPER.get(programmingLanguage)
       }
       value={field.value}
       onChange={(value) => helper.setValue(value)}

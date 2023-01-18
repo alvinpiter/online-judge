@@ -14,12 +14,14 @@ import { User } from '../users/user.entity';
 import { SubmissionCreationDto } from './data-transfer-objects/submission-creation.dto';
 import { SubmissionsGetDto } from './data-transfer-objects/submissions-get.dto';
 import { SubmissionFormatter } from './formatters/submission.formatter';
+import { SubmissionJobsService } from './submission-jobs.service';
 import { SubmissionsService } from './submissions.service';
 
 @Controller('api')
 export class SubmissionsController {
   constructor(
     private readonly submissionsService: SubmissionsService,
+    private readonly submissionJobsService: SubmissionJobsService,
     private readonly submissionFormatter: SubmissionFormatter,
   ) {}
 
@@ -51,8 +53,19 @@ export class SubmissionsController {
     };
   }
 
-  @Get('submissions/:submissionId/output')
-  runCode(@Param('submissionId', ParseIntPipe) submissionId: number) {
-    return this.submissionsService.runCodeForSubmission(submissionId);
+  @Get('submissions/:submissionId')
+  async getSubmission(
+    @Param('submissionId', ParseIntPipe) submissionId: number,
+  ) {
+    return this.submissionFormatter.formatSubmissionWithDetails(
+      await this.submissionsService.getSubmissionWithDetails(submissionId),
+    );
+  }
+
+  @Get('submissions/:submissionId/progress')
+  async getSubmissionJobProgress(
+    @Param('submissionId', ParseIntPipe) submissionId: number,
+  ) {
+    return this.submissionJobsService.getSubmissionJob(submissionId);
   }
 }

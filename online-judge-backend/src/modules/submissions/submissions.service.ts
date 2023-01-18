@@ -2,22 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Observable } from 'src/lib/Observable';
 import { In, Repository } from 'typeorm';
-import { CodeRunnerService } from '../code-runner/code-runner.service';
-import { JobQueueItem } from '../job/interfaces';
-import { JobService } from '../job/job.service';
 import { TypeORMPaginatedQueryBuilderAdapter } from '../pagination/adapters/TypeORMPaginatedQueryBuilderAdapter';
 import { OffsetPaginationService } from '../pagination/offset-pagination.service';
 import { SubmissionCreationDto } from './data-transfer-objects/submission-creation.dto';
 import { SubmissionsGetDto } from './data-transfer-objects/submissions-get.dto';
+import { SubmissionCompilationDetail } from './entities/submission-compilation-detail.entity';
+import { SubmissionRunDetail } from './entities/submission-run-detail.entity';
 import { Submission } from './entities/submission.entity';
 import { SubmissionsSelectQueryBuilder } from './helpers/submissions-select.query-builder';
+import { SubmissionRunDetailWithTestCase } from './interfaces/submission-run-detail-with-test-case';
 import { SubmissionWithResolvedProperty } from './interfaces/submission-with-resolved-property';
-import { GlobalSubmissionsStatisticsUpdateQueue } from './queues/global-submissions-statistics-update.queue';
-import {
-  SubmissionsJudgementQueue,
-  SubmissionsJudgementQueueItem,
-} from './queues/submissions-judgement.queue';
-import { UserSubmissionsStatisticsUpdateQueue } from './queues/user-submissions-statistics-update.queue';
+import { SubmissionWithDetails } from './interfaces/submition-with-details';
+import { SubmissionsJudgementQueue } from './queues/submissions-judgement.queue';
+import { SubmissionJobsService } from './submission-jobs.service';
 
 export interface SubmissionsServiceEvent {
   submissionCreated: (submission: Submission) => Promise<void>;
@@ -31,15 +28,15 @@ export class SubmissionsService extends Observable<SubmissionsServiceEvent> {
   constructor(
     @InjectRepository(Submission)
     private readonly submissionsRepository: Repository<Submission>,
+    @InjectRepository(SubmissionCompilationDetail)
+    private readonly submissionCompilationDetailsRepository: Repository<SubmissionCompilationDetail>,
+    @InjectRepository(SubmissionRunDetail)
+    private readonly submissionRunDetailsRepository: Repository<SubmissionRunDetail>,
     private readonly submissionsJudgementQueue: SubmissionsJudgementQueue,
-    private readonly userSubmissionsStatisticsUpdateQueue: UserSubmissionsStatisticsUpdateQueue,
-    private readonly globalSubmissionsStatisticsUpdateQueue: GlobalSubmissionsStatisticsUpdateQueue,
-    private readonly jobService: JobService,
     private readonly offsetPaginationService: OffsetPaginationService,
-    private readonly codeRunnerService: CodeRunnerService,
+    private readonly submissionJobsService: SubmissionJobsService,
   ) {
     super();
-    this.submissionsJudgementQueue.setConsumer((item) => this.judge(item));
   }
 
   async createSubmission(
@@ -54,6 +51,13 @@ export class SubmissionsService extends Observable<SubmissionsServiceEvent> {
 
     const savedSubmission = await this.submissionsRepository.save(submission);
 
+    const jobId = await this.submissionsJudgementQueue.enqueue({
+      submissionId: savedSubmission.id,
+    });
+    await this.submissionJobsService.setSubmissionJobId(
+      savedSubmission.id,
+      jobId,
+    );
     this.publishEvent('submissionCreated', (subscriber) =>
       subscriber(savedSubmission),
     );
@@ -63,11 +67,35 @@ export class SubmissionsService extends Observable<SubmissionsServiceEvent> {
 
   async getSubmission(
     submissionId: number,
+    relations = ['user', 'problem'],
   ): Promise<SubmissionWithResolvedProperty> {
     return this.submissionsRepository.findOneOrFail({
       where: { id: submissionId },
-      relations: ['user', 'problem'],
+      relations,
     });
+  }
+
+  async getSubmissionWithDetails(
+    submissionId: number,
+  ): Promise<SubmissionWithDetails> {
+    const submission = await this.getSubmission(submissionId);
+
+    const compilationDetail =
+      await this.submissionCompilationDetailsRepository.findOneBy({
+        submissionId,
+      });
+
+    const runDetails = (await this.submissionRunDetailsRepository.find({
+      where: { submissionId },
+      relations: ['testCase'],
+      order: { testCaseId: 'ASC' },
+    })) as SubmissionRunDetailWithTestCase[];
+
+    return {
+      ...submission,
+      compilationDetail,
+      runDetails,
+    };
   }
 
   async getSubmissions(submissionsGetDto: SubmissionsGetDto) {
@@ -107,76 +135,5 @@ export class SubmissionsService extends Observable<SubmissionsServiceEvent> {
       data: populatedSubmissions,
       meta,
     };
-  }
-
-  async postRunCallback(jobId: string, inputIdx: number, output: string) {
-    console.log(
-      `postRunCallback is called! Result: ${JSON.stringify({
-        jobId,
-        inputIdx,
-        output,
-      })}`,
-    );
-  }
-
-  async afterOneInputRunCallback(
-    jobId: string,
-    inputIdx: number,
-    output: string,
-  ) {
-    console.log(
-      `afterOneInputRunCallback is called! Result: ${JSON.stringify({
-        jobId,
-        inputIdx,
-        output,
-      })}`,
-    );
-
-    return true;
-  }
-
-  async afterAllInputRunCallback() {
-    console.log(`afterAllInputRunCallback is called!`);
-  }
-
-  async runCodeForSubmission(submissionId: number) {
-    const submission = await this.getSubmission(submissionId);
-    return this.codeRunnerService.runCode(
-      submission.programmingLanguage,
-      submission.code,
-      ['1 2\n', '3 4\n', '5 6\n'],
-      {
-        afterOneInputRunCallback: (inputIdx: number, output: string) =>
-          this.afterOneInputRunCallback('jobId', inputIdx, output),
-        afterAllInputRunCallback: () => this.afterAllInputRunCallback(),
-      },
-    );
-  }
-
-  async judge(
-    submissionQueueItem: JobQueueItem<SubmissionsJudgementQueueItem>,
-  ) {
-    const jobId = submissionQueueItem.jobId;
-    const submissionId = submissionQueueItem.item.submissionId;
-
-    console.log(`Judging user's submission with ID ${submissionId}...`);
-
-    const numberOfTestCases = 10;
-    for (let tc = 1; tc <= numberOfTestCases; tc++) {
-      console.log(`Running testcase ${tc}...`);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      await this.jobService.updateProgress(jobId, tc / numberOfTestCases);
-    }
-
-    await this.jobService.finishSuccessfully(jobId, 'All good!');
-
-    console.log(`Done judging user's submission with ID ${submissionId}!`);
-
-    this.userSubmissionsStatisticsUpdateQueue.enqueue({
-      submissionId,
-    });
-    this.globalSubmissionsStatisticsUpdateQueue.enqueue({
-      submissionId,
-    });
   }
 }
