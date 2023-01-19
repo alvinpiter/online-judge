@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheModule } from '../cache/cache.module';
+import { Problem } from '../problems/entities/problem.entity';
 import { Submission } from '../submissions/entities/submission.entity';
 import { SubmissionsModule } from '../submissions/submissions.module';
 import { GlobalStatisticsService } from './services/global-statistics.service';
@@ -10,7 +11,7 @@ import { StatisticsService } from './statistics.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Submission]),
+    TypeOrmModule.forFeature([Problem, Submission]),
     SubmissionsModule,
     CacheModule,
   ],

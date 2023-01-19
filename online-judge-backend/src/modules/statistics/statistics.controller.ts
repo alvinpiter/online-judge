@@ -9,6 +9,6 @@ export class StatisticsController {
 
   @Get('statistics/global')
   async getGlobalStatistics() {
-    return this.globalStatisticsService.getSubmissionsCount();
+    return this.globalStatisticsService.getPublishedProblemsCount();
   }
 }
