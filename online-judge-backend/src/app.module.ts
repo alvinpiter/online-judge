@@ -2,6 +2,8 @@ import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { addTransactionalDataSource } from 'typeorm-transactional';
 import { ConfigKey, ConfigSchema } from './config';
 import { GlobalErrorFilter } from './errors/GlobalErrorFilter';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
@@ -39,6 +41,9 @@ import { SubmissionsModule } from './modules/submissions/submissions.module';
         autoLoadEntities: true,
         bigNumberStrings: false,
       }),
+      dataSourceFactory: async (options) => {
+        return addTransactionalDataSource(new DataSource(options));
+      },
       inject: [ConfigService],
     }),
     CacheModule.register({ isGlobal: true }),

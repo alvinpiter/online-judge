@@ -6,8 +6,11 @@ import { AppModule } from './app.module';
 import { TransformationAndValidationPipe } from './pipes/transformation-and-validation.pipe';
 import { ConfigKey } from './config';
 import { getRmqOptions } from './modules/job/helpers';
+import { initializeTransactionalContext } from 'typeorm-transactional';
 
 async function bootstrap() {
+  initializeTransactionalContext();
+
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
