@@ -1,5 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+const zero = 0;
+
 @Entity('user_problem_attempts')
 export class UserProblemAttempt {
   @PrimaryGeneratedColumn()
@@ -12,8 +14,8 @@ export class UserProblemAttempt {
   problemId: number;
 
   @Column()
-  numberOfAttempts: number;
+  numberOfAttempts: number = zero;
 
   @Column({ type: 'datetime', nullable: true })
-  firstSolvedAt: Date;
+  firstSolvedAt: Date = null;
 }
