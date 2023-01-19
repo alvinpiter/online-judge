@@ -14,6 +14,7 @@ import { ObjectStorageModule } from './modules/object-storage/object-storage.mod
 import { ProblemsModule } from './modules/problems/problems.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
 import { SubmissionsModule } from './modules/submissions/submissions.module';
+import { CacheModule as AppCacheModule } from './modules/cache/cache.module';
 
 @Module({
   providers: [
@@ -47,6 +48,7 @@ import { SubmissionsModule } from './modules/submissions/submissions.module';
       inject: [ConfigService],
     }),
     CacheModule.register({ isGlobal: true }),
+    AppCacheModule,
     JobModule,
     HealthCheckModule,
     AuthenticationModule,

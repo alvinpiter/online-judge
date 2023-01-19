@@ -29,7 +29,10 @@ export class SubmissionJobsService {
     return `${this.CACHE_KEY_PREFIX}:${submissionId}`;
   }
 
-  private async getJobId(submissionId: number) {
-    return this.cacheManager.get(this.getCacheKey(submissionId)) || '';
+  private async getJobId(submissionId: number): Promise<string> {
+    return (
+      (await this.cacheManager.get<string>(this.getCacheKey(submissionId))) ||
+      ''
+    );
   }
 }

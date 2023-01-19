@@ -4,9 +4,28 @@ import { FC, useState } from "react";
 import { CodeEditorField } from "../forms/fields/CodeEditorField";
 import { WysiwygEditorField } from "../forms/fields/WysiwygEditorField";
 import Editor from "@monaco-editor/react";
+import { useGetGlobalStatisticsRequest } from "../modules/Statistics/hooks/useGetGlobalStatisticsRequest";
 
 export const PlaygroundPage: FC = () => {
-  return <CodeEditorDemo />;
+  const { result: globalStatistics } = useGetGlobalStatisticsRequest();
+
+  if (!globalStatistics) {
+    return null;
+  }
+
+  return (
+    <>
+      <Typography variant="h5">
+        Number of users: {globalStatistics.numberOfUsers}{" "}
+      </Typography>
+      <Typography variant="h5">
+        Number of problems: {globalStatistics.numberOfProblems}{" "}
+      </Typography>
+      <Typography variant="h5">
+        Number of submissions: {globalStatistics.numberOfSubmissions}{" "}
+      </Typography>
+    </>
+  );
 };
 
 interface CodeEditorFormData {
