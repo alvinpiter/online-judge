@@ -50,6 +50,8 @@ export enum ProblemsOrderOption {
   BY_ID_DESC = "BY_ID_DESC",
   BY_RATING_ASC = "BY_RATING_ASC",
   BY_RATING_DESC = "BY_RATING_DESC",
+  BY_SOLVER_COUNT_ASC = "BY_SOLVER_COUNT_ASC",
+  BY_SOLVER_COUNT_DESC = "BY_SOLVER_COUNT_DESC",
 }
 
 export interface SolutionTemplate {

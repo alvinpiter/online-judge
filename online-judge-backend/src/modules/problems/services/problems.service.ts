@@ -10,6 +10,7 @@ import { ProblemsGetDto } from '../data-transfer-objects/problems-get.dto';
 import { ProblemsSelectQueryBuilder } from '../helpers/problems-select.query-builder';
 import { User } from 'src/modules/users/user.entity';
 import { UserProblemAttemptDecoratorService } from './user-problem-attempt-decorator.service';
+import { orderEntitiesById } from 'src/lib/orderEntitiesById';
 
 const DEFAULT_OFFSET = 0;
 const DEFAULT_LIMIT = 10;
@@ -83,13 +84,18 @@ export class ProblemsService {
       relations: ['problemStatistics'],
     });
 
+    const orderedPopulatedProblems = orderEntitiesById(
+      problemIds,
+      populatedProblems,
+    );
+
     return {
       data: user
         ? await this.userProblemAttemptDecoratorService.addUserAttemptTypeToProblems(
-            populatedProblems,
+            orderedPopulatedProblems,
             user,
           )
-        : populatedProblems,
+        : orderedPopulatedProblems,
       meta,
     };
   }
