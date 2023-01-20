@@ -1,7 +1,11 @@
 import { FC, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../constants/Routes";
-import { ProblemsFilter, ProblemsOrderOption, Problem } from "../../interfaces";
+import {
+  ProblemsFilter,
+  ProblemsOrderOption,
+  ProblemWithDetail,
+} from "../../interfaces";
 import { useGetAdminProblemsRequest } from "../../hooks/useGetAdminProblemsRequest";
 import { ProblemsPageQueryStringObjectBuilder } from "../../helpers/ProblemsPageQueryStringObjectBuilder";
 import { AdminProblemsContext } from "./context";
@@ -24,7 +28,7 @@ export const AdminProblemsContextProvider: FC<
 
   return (
     <OffsetPaginationContextProvider<
-      Problem,
+      ProblemWithDetail,
       ProblemsFilter,
       ProblemsOrderOption
     >

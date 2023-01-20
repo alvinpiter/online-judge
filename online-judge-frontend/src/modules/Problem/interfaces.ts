@@ -21,6 +21,16 @@ export interface Problem {
   rating: number;
 }
 
+export interface ProblemWithDetail extends Problem {
+  userAttemptType: UserProblemAttemptType;
+}
+
+export enum UserProblemAttemptType {
+  SOLVED = "SOLVED",
+  ATTEMPTED = "ATTEMPTED",
+  NOT_ATTEMPTED = "NOT_ATTEMPTED",
+}
+
 /*
 TODO:
 `state` is only applicable for admin's request, but this interface is also

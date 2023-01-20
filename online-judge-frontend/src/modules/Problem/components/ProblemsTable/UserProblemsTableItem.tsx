@@ -1,10 +1,10 @@
 import { Link, TableCell, TableRow } from "@mui/material";
 import { FC } from "react";
 import { ROUTES } from "../../../../constants/Routes";
-import { Problem } from "../../interfaces";
+import { ProblemWithDetail } from "../../interfaces";
 
 interface UserProblemsTableItemProps {
-  problem: Problem;
+  problem: ProblemWithDetail;
 }
 
 export const UserProblemsTableItem: FC<UserProblemsTableItemProps> = ({
@@ -23,6 +23,7 @@ export const UserProblemsTableItem: FC<UserProblemsTableItemProps> = ({
         </Link>
       </TableCell>
       <TableCell> {problem.rating} </TableCell>
+      <TableCell> {problem.userAttemptType} </TableCell>
     </TableRow>
   );
 };

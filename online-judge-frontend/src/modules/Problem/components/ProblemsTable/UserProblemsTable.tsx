@@ -8,11 +8,11 @@ import {
   TableRow,
 } from "@mui/material";
 import { FC } from "react";
-import { Problem } from "../../interfaces";
+import { ProblemWithDetail } from "../../interfaces";
 import { UserProblemsTableItem } from "./UserProblemsTableItem";
 
 interface UserProblemsTableProps {
-  problems: Problem[];
+  problems: ProblemWithDetail[];
 }
 
 export const UserProblemsTable: FC<UserProblemsTableProps> = ({ problems }) => {
@@ -24,6 +24,7 @@ export const UserProblemsTable: FC<UserProblemsTableProps> = ({ problems }) => {
             <TableCell> ID </TableCell>
             <TableCell> Name </TableCell>
             <TableCell> Rating </TableCell>
+            <TableCell> Attempt type </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

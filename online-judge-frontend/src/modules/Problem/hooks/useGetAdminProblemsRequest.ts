@@ -2,7 +2,11 @@ import { config } from "../../../config";
 import { useHTTPGetRequest } from "../../../lib/http/useHTTPGetRequest";
 import { constructPaginationQueryString } from "../../Pagination/helpers";
 import { OffsetPaginationResult } from "../../Pagination/interfaces";
-import { ProblemsFilter, ProblemsOrderOption, Problem } from "../interfaces";
+import {
+  ProblemsFilter,
+  ProblemsOrderOption,
+  ProblemWithDetail,
+} from "../interfaces";
 
 export function useGetAdminProblemsRequest(
   numberOfProblemsPerPage: number,
@@ -18,5 +22,5 @@ export function useGetAdminProblemsRequest(
   );
   const apiUrl = `${config.backendAPIURL}/admin/problems${queryString}`;
 
-  return useHTTPGetRequest<OffsetPaginationResult<Problem>>(apiUrl);
+  return useHTTPGetRequest<OffsetPaginationResult<ProblemWithDetail>>(apiUrl);
 }

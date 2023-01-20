@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { UserProblemAttempt } from '../entities/user-problem-attempt.entity';
 
 @Injectable()
@@ -26,6 +26,16 @@ export class UserProblemAttemptsService {
 
       return userProblemAttempt;
     }
+  }
+
+  async getUserProblemAttempts(
+    userId: number,
+    problemIds: number[],
+  ): Promise<UserProblemAttempt[]> {
+    return this.userProblemAttemptsRepository.findBy({
+      userId,
+      problemId: In(problemIds),
+    });
   }
 
   async increaseNumberOfAttemptsAndSave(

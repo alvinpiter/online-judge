@@ -8,6 +8,9 @@ import { ProblemCreationDto } from '../data-transfer-objects/problem-creation.dt
 import { ProblemUpdateDto } from '../data-transfer-objects/problem-update.dto';
 import { ProblemsGetDto } from '../data-transfer-objects/problems-get.dto';
 import { ProblemsSelectQueryBuilder } from '../helpers/problems-select.query-builder';
+import { User } from 'src/modules/users/user.entity';
+import { UserProblemAttemptType } from '../entities/user-problem-attempt.entity';
+import { UserProblemAttemptsService } from './user-problem-attempts.service';
 
 const DEFAULT_OFFSET = 0;
 const DEFAULT_LIMIT = 10;
@@ -18,15 +21,16 @@ export class ProblemsService {
     @InjectRepository(Problem)
     private readonly problemsRepository: Repository<Problem>,
     private readonly offsetPaginationService: OffsetPaginationService,
+    private readonly userProblemAttemptsService: UserProblemAttemptsService,
   ) {}
 
   async getAdminProblems(problemsGetDto: ProblemsGetDto) {
     return this.doGetProblems(problemsGetDto);
   }
 
-  async getProblems(problemsGetDto: ProblemsGetDto) {
+  async getProblems(problemsGetDto: ProblemsGetDto, user?: User) {
     problemsGetDto.state = ProblemState.PUBLISHED;
-    return this.doGetProblems(problemsGetDto);
+    return this.doGetProblems(problemsGetDto, user);
   }
 
   async createProblem(problemCreationDto: ProblemCreationDto) {
@@ -58,18 +62,49 @@ export class ProblemsService {
     return this.problemsRepository.save(problem);
   }
 
-  private async doGetProblems(problemsGetDto: ProblemsGetDto) {
+  private async doGetProblems(problemsGetDto: ProblemsGetDto, user?: User) {
     const qb = ProblemsSelectQueryBuilder.build(
       this.problemsRepository,
       problemsGetDto,
     );
 
-    return this.offsetPaginationService.paginate<Problem>(
-      new TypeORMPaginatedQueryBuilderAdapter(qb),
-      {
-        offset: problemsGetDto.offset || DEFAULT_OFFSET,
-        limit: problemsGetDto.limit || DEFAULT_LIMIT,
-      },
-    );
+    const { data: problems, meta } =
+      await this.offsetPaginationService.paginate<Problem>(
+        new TypeORMPaginatedQueryBuilderAdapter(qb),
+        {
+          offset: problemsGetDto.offset || DEFAULT_OFFSET,
+          limit: problemsGetDto.limit || DEFAULT_LIMIT,
+        },
+      );
+
+    // Maps problem id to user's UserProblemAttemptType
+    const userAttemptTypesMap = new Map<number, UserProblemAttemptType>();
+    if (user) {
+      const userProblemAttempts =
+        await this.userProblemAttemptsService.getUserProblemAttempts(
+          user.id,
+          problems.map((problem) => problem.id),
+        );
+
+      userProblemAttempts.forEach((userProblemAttempt) =>
+        userAttemptTypesMap.set(
+          userProblemAttempt.problemId,
+          userProblemAttempt.getAttemptType(),
+        ),
+      );
+    }
+
+    const problemsWithUserAttemptType = problems.map((problem) => {
+      const userAttemptType =
+        userAttemptTypesMap.get(problem.id) ||
+        UserProblemAttemptType.NOT_ATTEMPTED;
+
+      return { ...problem, userAttemptType };
+    });
+
+    return {
+      data: problemsWithUserAttemptType,
+      meta,
+    };
   }
 }
