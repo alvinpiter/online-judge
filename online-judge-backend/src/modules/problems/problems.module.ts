@@ -17,11 +17,13 @@ import { ProblemSolutionTemplatesController } from './controllers/problem-soluti
 import { UserProblemAttemptsService } from './services/user-problem-attempts.service';
 import { UserProblemAttempt } from './entities/user-problem-attempt.entity';
 import { UserProblemAttemptDecoratorService } from './services/user-problem-attempt-decorator.service';
+import { ProblemStatistics } from './entities/problem-statistics.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       Problem,
+      ProblemStatistics,
       ProblemTestCase,
       ProblemSolutionTemplate,
       UserProblemAttempt,

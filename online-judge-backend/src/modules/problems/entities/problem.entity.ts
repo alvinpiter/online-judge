@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ProblemStatistics } from './problem-statistics.entity';
 
 export enum ProblemState {
   DRAFT = 'DRAFT',
@@ -32,4 +33,10 @@ export class Problem {
 
   @Column({ default: 0 })
   rating: number;
+
+  @OneToOne(
+    () => ProblemStatistics,
+    (problemStatistics) => problemStatistics.problem,
+  )
+  problemStatistics: ProblemStatistics;
 }
