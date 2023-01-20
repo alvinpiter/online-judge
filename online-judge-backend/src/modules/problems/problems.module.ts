@@ -18,6 +18,7 @@ import { UserProblemAttemptsService } from './services/user-problem-attempts.ser
 import { UserProblemAttempt } from './entities/user-problem-attempt.entity';
 import { UserProblemAttemptDecoratorService } from './services/user-problem-attempt-decorator.service';
 import { ProblemStatistics } from './entities/problem-statistics.entity';
+import { ProblemStatisticsService } from './services/problem-statistics.service';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ProblemStatistics } from './entities/problem-statistics.entity';
   ],
   providers: [
     ProblemsService,
+    ProblemStatisticsService,
     ProblemTestCasesService,
     ProblemTestCasesFormatter,
     ProblemSolutionTemplatesService,
@@ -48,6 +50,7 @@ import { ProblemStatistics } from './entities/problem-statistics.entity';
   ],
   exports: [
     ProblemsService,
+    ProblemStatisticsService,
     ProblemTestCasesService,
     ProblemTestCasesFormatter,
     UserProblemAttemptsService,
