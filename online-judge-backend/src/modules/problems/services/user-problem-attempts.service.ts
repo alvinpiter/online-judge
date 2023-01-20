@@ -10,7 +10,7 @@ export class UserProblemAttemptsService {
     private readonly userProblemAttemptsRepository: Repository<UserProblemAttempt>,
   ) {}
 
-  async getOrInitializeUserAttempt(userId: number, problemId: number) {
+  async getOrInitializeUserProblemAttempt(userId: number, problemId: number) {
     const existingUserProblemAttempt =
       await this.userProblemAttemptsRepository.findOneBy({
         userId,
@@ -39,7 +39,7 @@ export class UserProblemAttemptsService {
   }
 
   async increaseNumberOfAttemptsAndSave(userId: number, problemId: number) {
-    const userProblemAttempt = await this.getOrInitializeUserAttempt(
+    const userProblemAttempt = await this.getOrInitializeUserProblemAttempt(
       userId,
       problemId,
     );
@@ -50,7 +50,7 @@ export class UserProblemAttemptsService {
   }
 
   async setFirstSolvedAtAndSave(userId: number, problemId: number) {
-    const userProblemAttempt = await this.getOrInitializeUserAttempt(
+    const userProblemAttempt = await this.getOrInitializeUserProblemAttempt(
       userId,
       problemId,
     );

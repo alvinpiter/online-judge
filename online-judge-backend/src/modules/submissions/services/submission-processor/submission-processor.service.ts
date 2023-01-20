@@ -43,7 +43,7 @@ export class SubmissionProcessorService extends PluggableService<
     const { userId, problemId } = submission;
 
     const userProblemAttempt =
-      await this.userProblemAttemptsService.getOrInitializeUserAttempt(
+      await this.userProblemAttemptsService.getOrInitializeUserProblemAttempt(
         userId,
         problemId,
       );
