@@ -14,6 +14,9 @@ import { AdminProblemTestCasesController } from './controllers/admin-problem-tes
 import { AdminProblemSolutionTemplatesController } from './controllers/admin-problem-solution-templates.controller';
 import { ProblemsController } from './controllers/problems.controller';
 import { ProblemSolutionTemplatesController } from './controllers/problem-solution-templates.controller';
+import { UserProblemAttemptsService } from './services/user-problem-attempts.service';
+import { UserProblemAttempt } from './entities/user-problem-attempt.entity';
+import { UserProblemAttemptDecoratorService } from './services/user-problem-attempt-decorator.service';
 
 @Module({
   imports: [
@@ -21,6 +24,7 @@ import { ProblemSolutionTemplatesController } from './controllers/problem-soluti
       Problem,
       ProblemTestCase,
       ProblemSolutionTemplate,
+      UserProblemAttempt,
     ]),
     ObjectStorageModule,
     PaginationModule,
@@ -30,6 +34,8 @@ import { ProblemSolutionTemplatesController } from './controllers/problem-soluti
     ProblemTestCasesService,
     ProblemTestCasesFormatter,
     ProblemSolutionTemplatesService,
+    UserProblemAttemptsService,
+    UserProblemAttemptDecoratorService,
   ],
   controllers: [
     AdminProblemsController,
@@ -42,6 +48,7 @@ import { ProblemSolutionTemplatesController } from './controllers/problem-soluti
     ProblemsService,
     ProblemTestCasesService,
     ProblemTestCasesFormatter,
+    UserProblemAttemptsService,
   ],
 })
 export class ProblemsModule {}

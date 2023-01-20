@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { ProblemsPageQueryStringObjectBuilder } from "../../helpers/ProblemsPageQueryStringObjectBuilder";
 import { OffsetPaginationContextProvider } from "../../../../lib/contexts/OffsetPaginationContext";
 import { useCurrentQueryString } from "../../../../lib/general/useCurrentQueryString";
-import { Problem, ProblemsFilter, ProblemsOrderOption } from "../../interfaces";
+import {
+  ProblemsFilter,
+  ProblemsOrderOption,
+  ProblemWithDetail,
+} from "../../interfaces";
 import { UserProblemsContext } from "./context";
 import { ROUTES } from "../../../../constants/Routes";
 import { useGetProblemsRequest } from "../../hooks/useGetProblemsRequest";
@@ -24,7 +28,7 @@ export const UserProblemsContextProvider: FC<
 
   return (
     <OffsetPaginationContextProvider<
-      Problem,
+      ProblemWithDetail,
       ProblemsFilter,
       ProblemsOrderOption
     >

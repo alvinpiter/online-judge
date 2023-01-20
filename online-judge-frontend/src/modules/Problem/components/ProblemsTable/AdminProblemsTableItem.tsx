@@ -1,10 +1,10 @@
 import { Button, TableCell, TableRow } from "@mui/material";
 import { FC } from "react";
 import { ROUTES } from "../../../../constants/Routes";
-import { Problem } from "../../interfaces";
+import { ProblemWithDetail } from "../../interfaces";
 
 interface AdminProblemsTableItemProps {
-  problem: Problem;
+  problem: ProblemWithDetail;
 }
 
 export const AdminProblemsTableItem: FC<AdminProblemsTableItemProps> = ({
