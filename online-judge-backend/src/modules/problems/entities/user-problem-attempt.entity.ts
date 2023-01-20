@@ -29,7 +29,11 @@ export class UserProblemAttempt {
     if (this.firstSolvedAt !== null) {
       return UserProblemAttemptType.SOLVED;
     } else {
-      return UserProblemAttemptType.ATTEMPTED;
+      if (this.numberOfAttempts === 0) {
+        return UserProblemAttemptType.NOT_ATTEMPTED;
+      } else {
+        return UserProblemAttemptType.ATTEMPTED;
+      }
     }
   }
 
