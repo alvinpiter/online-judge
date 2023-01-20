@@ -9,8 +9,7 @@ import { ProblemUpdateDto } from '../data-transfer-objects/problem-update.dto';
 import { ProblemsGetDto } from '../data-transfer-objects/problems-get.dto';
 import { ProblemsSelectQueryBuilder } from '../helpers/problems-select.query-builder';
 import { User } from 'src/modules/users/user.entity';
-import { UserProblemAttemptType } from '../entities/user-problem-attempt.entity';
-import { UserProblemAttemptsService } from './user-problem-attempts.service';
+import { UserProblemAttemptDecoratorService } from './user-problem-attempt-decorator.service';
 
 const DEFAULT_OFFSET = 0;
 const DEFAULT_LIMIT = 10;
@@ -21,7 +20,7 @@ export class ProblemsService {
     @InjectRepository(Problem)
     private readonly problemsRepository: Repository<Problem>,
     private readonly offsetPaginationService: OffsetPaginationService,
-    private readonly userProblemAttemptsService: UserProblemAttemptsService,
+    private readonly userProblemAttemptDecoratorService: UserProblemAttemptDecoratorService,
   ) {}
 
   async getAdminProblems(problemsGetDto: ProblemsGetDto) {
@@ -77,33 +76,13 @@ export class ProblemsService {
         },
       );
 
-    // Maps problem id to user's UserProblemAttemptType
-    const userAttemptTypesMap = new Map<number, UserProblemAttemptType>();
-    if (user) {
-      const userProblemAttempts =
-        await this.userProblemAttemptsService.getUserProblemAttempts(
-          user.id,
-          problems.map((problem) => problem.id),
-        );
-
-      userProblemAttempts.forEach((userProblemAttempt) =>
-        userAttemptTypesMap.set(
-          userProblemAttempt.problemId,
-          userProblemAttempt.getAttemptType(),
-        ),
-      );
-    }
-
-    const problemsWithUserAttemptType = problems.map((problem) => {
-      const userAttemptType =
-        userAttemptTypesMap.get(problem.id) ||
-        UserProblemAttemptType.NOT_ATTEMPTED;
-
-      return { ...problem, userAttemptType };
-    });
-
     return {
-      data: problemsWithUserAttemptType,
+      data: user
+        ? await this.userProblemAttemptDecoratorService.addUserAttemptTypeToProblems(
+            problems,
+            user,
+          )
+        : problems,
       meta,
     };
   }

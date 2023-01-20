@@ -16,6 +16,7 @@ import { ProblemsController } from './controllers/problems.controller';
 import { ProblemSolutionTemplatesController } from './controllers/problem-solution-templates.controller';
 import { UserProblemAttemptsService } from './services/user-problem-attempts.service';
 import { UserProblemAttempt } from './entities/user-problem-attempt.entity';
+import { UserProblemAttemptDecoratorService } from './services/user-problem-attempt-decorator.service';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { UserProblemAttempt } from './entities/user-problem-attempt.entity';
     ProblemTestCasesFormatter,
     ProblemSolutionTemplatesService,
     UserProblemAttemptsService,
+    UserProblemAttemptDecoratorService,
   ],
   controllers: [
     AdminProblemsController,
