@@ -42,15 +42,15 @@ export class SubmissionProcessorService extends PluggableService<
     const submission = await this.submissionService.getSubmission(submissionId);
     const { userId, problemId } = submission;
 
+    const userProblemAttempt =
+      await this.userProblemAttemptsService.getOrInitializeUserAttempt(
+        userId,
+        problemId,
+      );
+
     try {
       const { overallVerdict, submissionRunDetails } =
         await this.submissionJudgmentService.judge(submissionQueueItem);
-
-      const userProblemAttempt =
-        await this.userProblemAttemptsService.getOrInitializeUserAttempt(
-          userId,
-          problemId,
-        );
 
       const processor = this.pluggedServices.get(
         this.decideProcessingStrategy(overallVerdict, userProblemAttempt),
@@ -60,6 +60,7 @@ export class SubmissionProcessorService extends PluggableService<
         submission,
         verdict: overallVerdict,
         submissionRunDetails,
+        previousAttempt: userProblemAttempt,
       });
     } catch (e) {
       switch (e.constructor) {
@@ -71,6 +72,7 @@ export class SubmissionProcessorService extends PluggableService<
             submission,
             verdict: SubmissionVerdict.COMPILE_ERROR,
             compilationMessage: e.message,
+            previousAttempt: userProblemAttempt,
           });
         default:
           throw e;

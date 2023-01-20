@@ -1,3 +1,4 @@
+import { UserProblemAttempt } from 'src/modules/problems/entities/user-problem-attempt.entity';
 import { SubmissionRunDetailWithoutId } from '../../entities/submission-run-detail.entity';
 import {
   Submission,
@@ -14,6 +15,7 @@ export enum SubmissionProcessingStrategy {
 export interface SubmissionProcessingContext {
   submission: Submission;
   verdict: SubmissionVerdict;
+  previousAttempt: UserProblemAttempt;
   submissionRunDetails?: SubmissionRunDetailWithoutId[];
   compilationMessage?: string;
 }

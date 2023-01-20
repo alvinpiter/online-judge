@@ -37,9 +37,11 @@ export class NotAcceptedSubmissionProcessingStrategy
       context.submissionRunDetails,
     );
 
-    await this.userProblemAttemptsService.increaseNumberOfAttemptsAndSave(
-      context.submission.userId,
-      context.submission.problemId,
-    );
+    if (!context.previousAttempt.alreadySolved()) {
+      await this.userProblemAttemptsService.increaseNumberOfAttemptsAndSave(
+        context.submission.userId,
+        context.submission.problemId,
+      );
+    }
   }
 }
