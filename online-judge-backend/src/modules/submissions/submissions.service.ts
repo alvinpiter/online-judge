@@ -9,7 +9,7 @@ import { SubmissionCreationDto } from './data-transfer-objects/submission-creati
 import { SubmissionsGetDto } from './data-transfer-objects/submissions-get.dto';
 import { SubmissionCompilationDetail } from './entities/submission-compilation-detail.entity';
 import { SubmissionRunDetail } from './entities/submission-run-detail.entity';
-import { Submission } from './entities/submission.entity';
+import { Submission, SubmissionVerdict } from './entities/submission.entity';
 import { SubmissionsSelectQueryBuilder } from './helpers/submissions-select.query-builder';
 import { SubmissionRunDetailWithTestCase } from './interfaces/submission-run-detail-with-test-case';
 import { SubmissionWithResolvedProperty } from './interfaces/submission-with-resolved-property';
@@ -140,5 +140,9 @@ export class SubmissionsService extends Observable<SubmissionsServiceEvent> {
       data: orderedPopulatedSubmissions,
       meta,
     };
+  }
+
+  async setSubmissionVerdict(submissionId: number, verdict: SubmissionVerdict) {
+    return this.submissionsRepository.update(submissionId, { verdict });
   }
 }

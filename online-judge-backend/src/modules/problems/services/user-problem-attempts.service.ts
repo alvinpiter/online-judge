@@ -38,15 +38,25 @@ export class UserProblemAttemptsService {
     });
   }
 
-  async increaseNumberOfAttemptsAndSave(
-    userProblemAttempt: UserProblemAttempt,
-  ) {
+  async increaseNumberOfAttemptsAndSave(userId: number, problemId: number) {
+    const userProblemAttempt = await this.getOrInitializeUserAttempt(
+      userId,
+      problemId,
+    );
+
     userProblemAttempt.numberOfAttempts += 1;
-    this.userProblemAttemptsRepository.save(userProblemAttempt);
+
+    return this.userProblemAttemptsRepository.save(userProblemAttempt);
   }
 
-  async setFirstSolvedAtAndSave(userProblemAttempt: UserProblemAttempt) {
+  async setFirstSolvedAtAndSave(userId: number, problemId: number) {
+    const userProblemAttempt = await this.getOrInitializeUserAttempt(
+      userId,
+      problemId,
+    );
+
     userProblemAttempt.firstSolvedAt = new Date();
-    this.userProblemAttemptsRepository.save(userProblemAttempt);
+
+    return this.userProblemAttemptsRepository.save(userProblemAttempt);
   }
 }

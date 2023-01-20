@@ -32,4 +32,8 @@ export class UserProblemAttempt {
       return UserProblemAttemptType.ATTEMPTED;
     }
   }
+
+  alreadySolved() {
+    return this.firstSolvedAt !== null;
+  }
 }

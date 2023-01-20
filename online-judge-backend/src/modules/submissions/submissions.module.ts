@@ -16,8 +16,14 @@ import { SubmissionCodeOutputExactMatchCheckingStrategy } from './services/submi
 import { SubmissionCodeOutputCheckerService } from './services/submission-code-output-checker/submission-code-output-checker.service';
 import { SubmissionCodeIORunningStrategy } from './services/submission-code-runner/strategies/submission-code-io-running.strategy';
 import { SubmissionCodeRunnerService } from './services/submission-code-runner/submission-code-runner.service';
+import { SubmissionCompilationDetailsService } from './services/submission-compilation-details.service';
 import { SubmissionJudgmentService } from './services/submission-judgment.service';
-import { SubmissionProcessorService } from './services/submission-processor.service';
+import { CompileErrorSubmissionProcessingStrategy } from './services/submission-processor/strategies/compile-error-submission-processing.strategy';
+import { FirstTimeAcceptedSubmissionProcessingStrategy } from './services/submission-processor/strategies/first-time-accepted-submission-processing.strategy';
+import { NotAcceptedSubmissionProcessingStrategy } from './services/submission-processor/strategies/not-accepted-submission-processing.strategy';
+import { NthTimeAcceptedSubmissionProcessor } from './services/submission-processor/strategies/nth-time-accepted-submission-processing.strategy';
+import { SubmissionProcessorService } from './services/submission-processor/submission-processor.service';
+import { SubmissionRunDetailsService } from './services/submission-run-details.service';
 import { SubmissionEventsController } from './submission-events.controller';
 import { SubmissionJobsService } from './submission-jobs.service';
 import { SubmissionsEventSubscriber } from './submissions-event.subscriber';
@@ -40,6 +46,10 @@ import { SubmissionsService } from './submissions.service';
   providers: [
     SubmissionsService,
     SubmissionProcessorService,
+    CompileErrorSubmissionProcessingStrategy,
+    NotAcceptedSubmissionProcessingStrategy,
+    FirstTimeAcceptedSubmissionProcessingStrategy,
+    NthTimeAcceptedSubmissionProcessor,
     SubmissionJudgmentService,
     SubmissionCodeRunnerService,
     SubmissionCodeIORunningStrategy,
@@ -51,6 +61,8 @@ import { SubmissionsService } from './submissions.service';
     GlobalSubmissionsStatisticsUpdateQueue,
     SubmissionFormatter,
     SubmissionsEventSubscriber,
+    SubmissionRunDetailsService,
+    SubmissionCompilationDetailsService,
   ],
   controllers: [SubmissionsController, SubmissionEventsController],
   exports: [
