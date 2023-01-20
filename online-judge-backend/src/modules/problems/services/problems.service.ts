@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { TypeORMPaginatedQueryBuilderAdapter } from '../../pagination/adapters/TypeORMPaginatedQueryBuilderAdapter';
 import { OffsetPaginationService } from '../../pagination/offset-pagination.service';
 import { Problem, ProblemState } from '../entities/problem.entity';
@@ -76,13 +76,20 @@ export class ProblemsService {
         },
       );
 
+    const problemIds = problems.map((problem) => problem.id);
+
+    const populatedProblems = await this.problemsRepository.find({
+      where: { id: In(problemIds) },
+      relations: ['problemStatistics'],
+    });
+
     return {
       data: user
         ? await this.userProblemAttemptDecoratorService.addUserAttemptTypeToProblems(
-            problems,
+            populatedProblems,
             user,
           )
-        : problems,
+        : populatedProblems,
       meta,
     };
   }

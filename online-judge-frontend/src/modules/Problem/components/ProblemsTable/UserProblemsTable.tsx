@@ -24,6 +24,7 @@ export const UserProblemsTable: FC<UserProblemsTableProps> = ({ problems }) => {
             <TableCell> ID </TableCell>
             <TableCell> Name </TableCell>
             <TableCell> Rating </TableCell>
+            <TableCell> Solved by </TableCell>
             <TableCell> Attempt type </TableCell>
           </TableRow>
         </TableHead>

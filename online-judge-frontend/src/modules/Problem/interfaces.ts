@@ -23,6 +23,9 @@ export interface Problem {
 
 export interface ProblemWithDetail extends Problem {
   userAttemptType: UserProblemAttemptType;
+  problemStatistics?: {
+    solverCount: number;
+  };
 }
 
 export enum UserProblemAttemptType {

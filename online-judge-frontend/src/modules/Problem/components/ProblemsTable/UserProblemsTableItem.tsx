@@ -23,6 +23,17 @@ export const UserProblemsTableItem: FC<UserProblemsTableItemProps> = ({
         </Link>
       </TableCell>
       <TableCell> {problem.rating} </TableCell>
+
+      <TableCell>
+        <Link
+          href={ROUTES.SUBMISSIONS_ROUTE.generatePath(
+            {},
+            { problemId: problem.id.toString() }
+          )}
+        >
+          {problem.problemStatistics?.solverCount || 0}
+        </Link>
+      </TableCell>
       <TableCell> {problem.userAttemptType} </TableCell>
     </TableRow>
   );
