@@ -77,26 +77,28 @@ export class ProblemsService {
         },
       );
 
-    const problemIds = problems.map((problem) => problem.id);
-
-    const populatedProblems = await this.problemsRepository.find({
-      where: { id: In(problemIds) },
-      relations: ['problemStatistics'],
-    });
-
-    const orderedPopulatedProblems = orderEntitiesById(
-      problemIds,
-      populatedProblems,
+    const problemsWithStatistics = await this.getProblemsByIds(
+      problems.map((problem) => problem.id),
+      ['problemStatistics'],
     );
 
     return {
       data: user
         ? await this.userProblemAttemptDecoratorService.addUserAttemptTypeToProblems(
-            orderedPopulatedProblems,
+            problemsWithStatistics,
             user,
           )
-        : orderedPopulatedProblems,
+        : problemsWithStatistics,
       meta,
     };
+  }
+
+  private async getProblemsByIds(ids: number[], relations: string[]) {
+    const problems = await this.problemsRepository.find({
+      where: { id: In(ids) },
+      relations,
+    });
+
+    return orderEntitiesById(ids, problems);
   }
 }

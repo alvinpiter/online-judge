@@ -114,8 +114,22 @@ export class SubmissionsService extends Observable<SubmissionsServiceEvent> {
         },
       );
 
-    const submissionIds = submissions.map((submission) => submission.id);
+    const populatedSubmissions = await this.getSubmissionsByIds(
+      submissions.map((submission) => submission.id),
+      ['user', 'problem'],
+    );
 
+    return {
+      data: populatedSubmissions,
+      meta,
+    };
+  }
+
+  async setSubmissionVerdict(submissionId: number, verdict: SubmissionVerdict) {
+    return this.submissionsRepository.update(submissionId, { verdict });
+  }
+
+  private async getSubmissionsByIds(ids: number[], relations: string[]) {
     /*
     TODO:
     Select * where in (...) doesn't guarantee the rows are returned in
@@ -126,23 +140,11 @@ export class SubmissionsService extends Observable<SubmissionsServiceEvent> {
     * https://stackoverflow.com/a/3799966
     * https://github.com/typeorm/typeorm/issues/5544#issuecomment-602110571
      */
-    const populatedSubmissions = (await this.submissionsRepository.find({
-      where: { id: In(submissionIds) },
-      relations: ['user', 'problem'],
-    })) as SubmissionWithResolvedProperty[];
+    const submissions = await this.submissionsRepository.find({
+      where: { id: In(ids) },
+      relations,
+    });
 
-    const orderedPopulatedSubmissions = orderEntitiesById(
-      submissionIds,
-      populatedSubmissions,
-    );
-
-    return {
-      data: orderedPopulatedSubmissions,
-      meta,
-    };
-  }
-
-  async setSubmissionVerdict(submissionId: number, verdict: SubmissionVerdict) {
-    return this.submissionsRepository.update(submissionId, { verdict });
+    return orderEntitiesById(ids, submissions);
   }
 }
