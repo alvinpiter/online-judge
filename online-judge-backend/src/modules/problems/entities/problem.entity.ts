@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ProblemStatistics } from './problem-statistics.entity';
 
 export enum ProblemState {
   DRAFT = 'DRAFT',
@@ -14,6 +15,8 @@ export enum ProblemsOrderOption {
   BY_ID_DESC = 'BY_ID_DESC',
   BY_RATING_ASC = 'BY_RATING_ASC',
   BY_RATING_DESC = 'BY_RATING_DESC',
+  BY_SOLVER_COUNT_ASC = 'BY_SOLVER_COUNT_ASC',
+  BY_SOLVER_COUNT_DESC = 'BY_SOLVER_COUNT_DESC',
 }
 
 @Entity('problems')
@@ -32,4 +35,10 @@ export class Problem {
 
   @Column({ default: 0 })
   rating: number;
+
+  @OneToOne(
+    () => ProblemStatistics,
+    (problemStatistics) => problemStatistics.problem,
+  )
+  problemStatistics: ProblemStatistics;
 }

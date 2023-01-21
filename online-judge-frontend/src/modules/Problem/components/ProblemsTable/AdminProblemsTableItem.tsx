@@ -15,6 +15,7 @@ export const AdminProblemsTableItem: FC<AdminProblemsTableItemProps> = ({
       <TableCell> {problem.id} </TableCell>
       <TableCell> {problem.name} </TableCell>
       <TableCell> {problem.rating} </TableCell>
+      <TableCell> {problem.problemStatistics?.solverCount || 0} </TableCell>
       <TableCell> {problem.state} </TableCell>
       <TableCell>
         <Button

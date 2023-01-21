@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { TypeORMPaginatedQueryBuilderAdapter } from '../../pagination/adapters/TypeORMPaginatedQueryBuilderAdapter';
 import { OffsetPaginationService } from '../../pagination/offset-pagination.service';
 import { Problem, ProblemState } from '../entities/problem.entity';
@@ -10,6 +10,7 @@ import { ProblemsGetDto } from '../data-transfer-objects/problems-get.dto';
 import { ProblemsSelectQueryBuilder } from '../helpers/problems-select.query-builder';
 import { User } from 'src/modules/users/user.entity';
 import { UserProblemAttemptDecoratorService } from './user-problem-attempt-decorator.service';
+import { orderEntitiesById } from 'src/lib/orderEntitiesById';
 
 const DEFAULT_OFFSET = 0;
 const DEFAULT_LIMIT = 10;
@@ -76,14 +77,28 @@ export class ProblemsService {
         },
       );
 
+    const problemsWithStatistics = await this.getProblemsByIds(
+      problems.map((problem) => problem.id),
+      ['problemStatistics'],
+    );
+
     return {
       data: user
         ? await this.userProblemAttemptDecoratorService.addUserAttemptTypeToProblems(
-            problems,
+            problemsWithStatistics,
             user,
           )
-        : problems,
+        : problemsWithStatistics,
       meta,
     };
+  }
+
+  private async getProblemsByIds(ids: number[], relations: string[]) {
+    const problems = await this.problemsRepository.find({
+      where: { id: In(ids) },
+      relations,
+    });
+
+    return orderEntitiesById(ids, problems);
   }
 }

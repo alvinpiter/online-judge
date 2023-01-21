@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ProblemStatisticsService } from 'src/modules/problems/services/problem-statistics.service';
 import { UserProblemAttemptsService } from 'src/modules/problems/services/user-problem-attempts.service';
 import { SubmissionsService } from 'src/modules/submissions/submissions.service';
 import { Transactional } from 'typeorm-transactional';
@@ -19,6 +20,7 @@ export class FirstTimeAcceptedSubmissionProcessingStrategy
     private readonly submissionsService: SubmissionsService,
     private readonly submissionRunDetailsService: SubmissionRunDetailsService,
     private readonly userProblemAttemptsService: UserProblemAttemptsService,
+    private readonly problemStatisticsService: ProblemStatisticsService,
   ) {
     submissionProcessorService.plugService(
       SubmissionProcessingStrategy.FIRST_TIME_ACCEPTED,
@@ -39,6 +41,10 @@ export class FirstTimeAcceptedSubmissionProcessingStrategy
 
     await this.userProblemAttemptsService.setFirstSolvedAtAndSave(
       context.submission.userId,
+      context.submission.problemId,
+    );
+
+    await this.problemStatisticsService.increaseSolverCount(
       context.submission.problemId,
     );
   }

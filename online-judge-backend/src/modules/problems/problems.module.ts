@@ -17,11 +17,14 @@ import { ProblemSolutionTemplatesController } from './controllers/problem-soluti
 import { UserProblemAttemptsService } from './services/user-problem-attempts.service';
 import { UserProblemAttempt } from './entities/user-problem-attempt.entity';
 import { UserProblemAttemptDecoratorService } from './services/user-problem-attempt-decorator.service';
+import { ProblemStatistics } from './entities/problem-statistics.entity';
+import { ProblemStatisticsService } from './services/problem-statistics.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       Problem,
+      ProblemStatistics,
       ProblemTestCase,
       ProblemSolutionTemplate,
       UserProblemAttempt,
@@ -31,6 +34,7 @@ import { UserProblemAttemptDecoratorService } from './services/user-problem-atte
   ],
   providers: [
     ProblemsService,
+    ProblemStatisticsService,
     ProblemTestCasesService,
     ProblemTestCasesFormatter,
     ProblemSolutionTemplatesService,
@@ -46,6 +50,7 @@ import { UserProblemAttemptDecoratorService } from './services/user-problem-atte
   ],
   exports: [
     ProblemsService,
+    ProblemStatisticsService,
     ProblemTestCasesService,
     ProblemTestCasesFormatter,
     UserProblemAttemptsService,
