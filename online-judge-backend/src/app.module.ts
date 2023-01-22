@@ -15,6 +15,7 @@ import { ProblemsModule } from './modules/problems/problems.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
 import { SubmissionsModule } from './modules/submissions/submissions.module';
 import { CacheModule as AppCacheModule } from './modules/cache/cache.module';
+import { ScoreboardModule } from './modules/scoreboard/scoreboard.module';
 
 @Module({
   providers: [
@@ -57,6 +58,7 @@ import { CacheModule as AppCacheModule } from './modules/cache/cache.module';
     SubmissionsModule,
     StatisticsModule,
     CodeRunnerModule,
+    ScoreboardModule,
   ],
 })
 export class AppModule {}

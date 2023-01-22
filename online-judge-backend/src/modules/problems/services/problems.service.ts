@@ -33,6 +33,13 @@ export class ProblemsService {
     return this.doGetProblems(problemsGetDto, user);
   }
 
+  async getAllPublishedProblemsOrderedById() {
+    return this.problemsRepository.find({
+      where: { state: ProblemState.PUBLISHED },
+      order: { id: 'ASC' },
+    });
+  }
+
   async createProblem(problemCreationDto: ProblemCreationDto) {
     const problem = new Problem();
     problem.name = problemCreationDto.name;
