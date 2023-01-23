@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { OffsetPaginationResult } from '../pagination/offset-pagination.interface';
 import { ProblemsService } from '../problems/services/problems.service';
 import { UserProblemAttemptsService } from '../problems/services/user-problem-attempts.service';
 import { UsersService } from '../users/users.service';
-import { Scoreboard } from './interfaces/scoreboard-row';
+import { ScoreboardRow } from './interfaces/scoreboard-row';
 
 @Injectable()
 export class ScoreboardService {
@@ -12,7 +13,7 @@ export class ScoreboardService {
     private readonly userProblemAttemptsService: UserProblemAttemptsService,
   ) {}
 
-  async getScoreboard(): Promise<Scoreboard> {
+  async getScoreboard(): Promise<OffsetPaginationResult<ScoreboardRow>> {
     // Temporary implementation
     const users = await this.usersService.getUsersByIds([1, 2]);
 
@@ -35,7 +36,6 @@ export class ScoreboardService {
     );
 
     return {
-      problems,
       data: scoreboardRows,
       meta: {
         offset: 0,
@@ -43,5 +43,9 @@ export class ScoreboardService {
         total: 100,
       },
     };
+  }
+
+  async getScoreboardProblems() {
+    return this.problemsService.getAllPublishedProblemsOrderedById();
   }
 }

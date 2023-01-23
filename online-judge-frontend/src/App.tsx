@@ -9,6 +9,7 @@ import { UserRole } from "./modules/User/interface";
 const UserNavigations: Array<{ text: string; path: string }> = [
   { text: "Problems", path: ROUTES.USER_PROBLEMS_ROUTE.generatePath() },
   { text: "Submissions", path: ROUTES.SUBMISSIONS_ROUTE.generatePath() },
+  { text: "Scoreboard", path: ROUTES.SCOREBOARD_ROUTE.generatePath() },
 ];
 
 const AdminNavigations: Array<{ text: string; path: string }> = [

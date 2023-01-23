@@ -73,5 +73,13 @@ export interface TestCase {
   };
 }
 
+export interface UserProblemAttempt {
+  id: number;
+  userId: number;
+  problemId: number;
+  numberOfAttempts: number;
+  firstSolvedAt?: string;
+}
+
 export const MIN_PROBLEM_RATING = 0;
 export const MAX_PROBLEM_RATING = 3000;

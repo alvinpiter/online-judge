@@ -19,4 +19,9 @@ export class ScoreboardController {
       ),
     };
   }
+
+  @Get('scoreboard/problems')
+  async getScoreboardProblems() {
+    return this.scoreboardService.getScoreboardProblems();
+  }
 }

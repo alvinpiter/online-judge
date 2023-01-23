@@ -26,4 +26,6 @@ export const ROUTES = {
     "/users/:userId/submissions"
   ),
   USER_PROFILE_ROUTE: new Route<{ userId: string }, {}>("/users/:userId"),
+
+  SCOREBOARD_ROUTE: new Route<{}, {}>("/scoreboard"),
 };
