@@ -27,7 +27,7 @@ export class SortedSetService {
     minRank: number,
     maxRank: number,
   ): Promise<string[]> {
-    return this.redisClient.zrange(this.sortedSetKey, minRank, maxRank);
+    return this.redisClient.zrevrange(this.sortedSetKey, minRank, maxRank);
   }
 
   async getSize(): Promise<number> {

@@ -16,6 +16,7 @@ import { StatisticsModule } from './modules/statistics/statistics.module';
 import { SubmissionsModule } from './modules/submissions/submissions.module';
 import { CacheModule } from './modules/cache/cache.module';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { ScoreboardModule } from './modules/scoreboard/scoreboard.module';
 
 @Module({
   providers: [
@@ -69,6 +70,7 @@ import { RedisModule } from '@liaoliaots/nestjs-redis';
     SubmissionsModule,
     StatisticsModule,
     CodeRunnerModule,
+    ScoreboardModule,
   ],
 })
 export class AppModule {}
