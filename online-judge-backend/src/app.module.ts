@@ -15,6 +15,7 @@ import { ProblemsModule } from './modules/problems/problems.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
 import { SubmissionsModule } from './modules/submissions/submissions.module';
 import { CacheModule as AppCacheModule } from './modules/cache/cache.module';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 
 @Module({
   providers: [
@@ -31,6 +32,7 @@ import { CacheModule as AppCacheModule } from './modules/cache/cache.module';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'mysql',
         host: configService.get<string>(ConfigKey.DATABASE_HOST),
@@ -45,9 +47,20 @@ import { CacheModule as AppCacheModule } from './modules/cache/cache.module';
       dataSourceFactory: async (options) => {
         return addTransactionalDataSource(new DataSource(options));
       },
-      inject: [ConfigService],
     }),
     CacheModule.register({ isGlobal: true }),
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        return {
+          config: {
+            host: configService.get<string>(ConfigKey.REDIS_HOST),
+            port: configService.get<number>(ConfigKey.REDIS_PORT),
+          },
+        };
+      },
+    }),
     AppCacheModule,
     JobModule,
     HealthCheckModule,

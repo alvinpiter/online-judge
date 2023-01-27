@@ -26,6 +26,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.231.0",
     "@aws-sdk/s3-request-presigner": "^3.234.0",
+    "@liaoliaots/nestjs-redis": "^8.2.2",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^8.0.0",
@@ -40,6 +41,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",
+    "ioredis": "^5.3.0",
     "joi": "^17.7.0",
     "mysql2": "^2.3.3",
     "passport": "^0.6.0",
