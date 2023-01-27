@@ -1,5 +1,6 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { InjectRedis } from '@liaoliaots/nestjs-redis';
+import { Injectable } from '@nestjs/common';
+import { Redis } from 'ioredis';
 import { v4 as uuidv4 } from 'uuid';
 import { ExpiredJobError } from './errors/ExpiredJobError';
 import { JobMaxRetryCountReachedError } from './errors/JobMaxRetryCountReachedError';
@@ -9,7 +10,7 @@ const DEFAULT_JOB_EXPIRATION_TIME_IN_SECONDS = 600; // 10 minutes
 
 @Injectable()
 export class JobService {
-  constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {}
+  constructor(@InjectRedis() private readonly redisClient: Redis) {}
 
   async create(
     identifier: string,
@@ -24,7 +25,12 @@ export class JobService {
       maxRetryCount: maxRetryCount,
     };
 
-    await this.cacheManager.set(job.id, job, expirationTimeInSeconds);
+    await this.redisClient.set(
+      job.id,
+      JSON.stringify(job),
+      'EX',
+      expirationTimeInSeconds,
+    );
 
     return job;
   }
@@ -48,7 +54,12 @@ export class JobService {
       result: undefined,
     };
 
-    await this.cacheManager.set(job.id, newJob, expirationTimeInSeconds);
+    await this.redisClient.set(
+      job.id,
+      JSON.stringify(newJob),
+      'EX',
+      expirationTimeInSeconds,
+    );
 
     return newJob;
   }
@@ -65,7 +76,12 @@ export class JobService {
       progress,
     };
 
-    await this.cacheManager.set(job.id, newJob, expirationTimeInSeconds);
+    await this.redisClient.set(
+      job.id,
+      JSON.stringify(newJob),
+      'EX',
+      expirationTimeInSeconds,
+    );
 
     return newJob;
   }
@@ -84,7 +100,12 @@ export class JobService {
       result,
     };
 
-    await this.cacheManager.set(job.id, newJob, expirationTimeInSeconds);
+    await this.redisClient.set(
+      job.id,
+      JSON.stringify(newJob),
+      'EX',
+      expirationTimeInSeconds,
+    );
 
     return newJob;
   }
@@ -102,17 +123,22 @@ export class JobService {
       error,
     };
 
-    await this.cacheManager.set(job.id, newJob, expirationTimeInSeconds);
+    await this.redisClient.set(
+      job.id,
+      JSON.stringify(newJob),
+      'EX',
+      expirationTimeInSeconds,
+    );
 
     return newJob;
   }
 
   async get(jobId: string) {
-    const job = await this.cacheManager.get<Job>(jobId);
-    if (!job) {
+    const jobAsString = await this.redisClient.get(jobId);
+    if (!jobAsString) {
       throw new ExpiredJobError();
     }
 
-    return job;
+    return JSON.parse(jobAsString) as Job;
   }
 }

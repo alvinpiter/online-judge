@@ -1,5 +1,6 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { InjectRedis } from '@liaoliaots/nestjs-redis';
+import { Injectable } from '@nestjs/common';
+import { Redis } from 'ioredis';
 import { Job } from '../job/interfaces';
 import { JobService } from '../job/job.service';
 
@@ -9,14 +10,15 @@ export class SubmissionJobsService {
   private readonly CACHE_EXPIRATION_TIME_IN_SECONDS = 600; // 10 minutes
 
   constructor(
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+    @InjectRedis() private readonly redisClient: Redis,
     private readonly jobService: JobService,
   ) {}
 
   async setSubmissionJobId(submissionId: number, jobId: string) {
-    this.cacheManager.set(
+    this.redisClient.set(
       this.getCacheKey(submissionId),
       jobId,
+      'EX',
       this.CACHE_EXPIRATION_TIME_IN_SECONDS,
     );
   }
@@ -30,9 +32,6 @@ export class SubmissionJobsService {
   }
 
   private async getJobId(submissionId: number): Promise<string> {
-    return (
-      (await this.cacheManager.get<string>(this.getCacheKey(submissionId))) ||
-      ''
-    );
+    return (await this.redisClient.get(this.getCacheKey(submissionId))) || '';
   }
 }
