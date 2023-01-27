@@ -12,15 +12,12 @@ export class SortedSetService {
     private readonly sortedSetKey: string,
   ) {}
 
-  async upsertMemberScore(
-    memberIdentifier: string,
-    score: number,
-  ): Promise<number> {
-    return this.redisClient.zadd(this.sortedSetKey, score, memberIdentifier);
+  async upsertMemberScore(member: string, score: number): Promise<number> {
+    return this.redisClient.zadd(this.sortedSetKey, score, member);
   }
 
-  async getMemberRank(memberIdentifier: string): Promise<number | null> {
-    return this.redisClient.zrevrank(this.sortedSetKey, memberIdentifier);
+  async getMemberRank(member: string): Promise<number | null> {
+    return this.redisClient.zrevrank(this.sortedSetKey, member);
   }
 
   async getMembersByRankRange(
