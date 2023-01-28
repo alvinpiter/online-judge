@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import { GlobalScoreboardScoreCalculationQueue } from './queues/global-scoreboard-score-calculation.queue';
+import { UsersService } from '../../users/users.service';
+import { GlobalScoreboardScoreCalculationQueue } from '../queues/global-scoreboard-score-calculation.queue';
 
 @Controller('api')
 export class ScoreboardController {

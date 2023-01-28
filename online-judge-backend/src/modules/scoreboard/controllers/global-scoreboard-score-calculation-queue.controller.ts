@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
 import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
-import { JobQueueItem } from '../job/interfaces';
+import { JobQueueItem } from '../../job/interfaces';
 import {
   GlobalScoreboardScoreCalculationQueue,
   GlobalScoreboardScoreCalculationQueueItem,
-} from './queues/global-scoreboard-score-calculation.queue';
+} from '../queues/global-scoreboard-score-calculation.queue';
 
 @Controller()
 export class GlobalScoreboardScoreCalculationQueueController {

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { SubmissionVerdict } from '../submissions/entities/submission.entity';
-import { SubmissionProcessorService } from '../submissions/services/submission-processor/submission-processor.service';
-import { SubmissionsService } from '../submissions/submissions.service';
-import { GlobalScoreboardScoreCalculationQueue } from './queues/global-scoreboard-score-calculation.queue';
+import { SubmissionVerdict } from '../../submissions/entities/submission.entity';
+import { SubmissionProcessorService } from '../../submissions/services/submission-processor/submission-processor.service';
+import { SubmissionsService } from '../../submissions/submissions.service';
+import { GlobalScoreboardScoreCalculationQueue } from '../queues/global-scoreboard-score-calculation.queue';
 
 @Injectable()
-export class ScoreboardEventSubscriber {
+export class SubmissionJudgedEventSubscriber {
   constructor(
     submissionProcessorService: SubmissionProcessorService,
     private readonly submissionsService: SubmissionsService,
