@@ -67,6 +67,7 @@ import { SubmissionsService } from './submissions.service';
   controllers: [SubmissionsController, SubmissionEventsController],
   exports: [
     SubmissionsService,
+    SubmissionProcessorService,
     UserSubmissionsStatisticsUpdateQueue,
     GlobalSubmissionsStatisticsUpdateQueue,
   ],
