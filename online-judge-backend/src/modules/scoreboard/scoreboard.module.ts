@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JobModule } from '../job/job.module';
 import { ProblemsModule } from '../problems/problems.module';
 import { SubmissionsModule } from '../submissions/submissions.module';
+import { UsersModule } from '../users/users.module';
 import { GlobalScoreboardScoreCalculationQueueController } from './global-scoreboard-score-calculation-queue.controller';
 import { GlobalScoreboardScoreCalculationQueue } from './queues/global-scoreboard-score-calculation.queue';
 import { ScoreboardEventSubscriber } from './scoreboard-event.subscriber';
@@ -12,7 +13,7 @@ import { BySolveCountAndLastAcceptedTimeStrategy } from './services/global-score
 import { GlobalScoreboardSortedSetService } from './services/global-scoreboard-sorted-set.service';
 
 @Module({
-  imports: [JobModule, ProblemsModule, SubmissionsModule],
+  imports: [JobModule, ProblemsModule, UsersModule, SubmissionsModule],
   providers: [
     GlobalScoreboardSortedSetService,
     GlobalScoreboardScoreCalculatorService,
