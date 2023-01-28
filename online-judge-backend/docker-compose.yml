@@ -11,6 +11,13 @@ services:
     volumes:
       - online_judge_mysql_data:/var/lib/mysql
 
+  redis:
+    image: redis:7.0
+    ports:
+      - 6379:6379
+    volumes:
+      - online_judge_redis_data:/data
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
@@ -34,3 +41,4 @@ services:
 
 volumes:
   online_judge_mysql_data:
+  online_judge_redis_data:

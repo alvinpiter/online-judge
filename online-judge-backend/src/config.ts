@@ -9,6 +9,9 @@ export enum ConfigKey {
   DATABASE_USERNAME = 'DATABASE_USERNAME',
   DATABASE_PASSWORD = 'DATABASE_PASSWORD',
 
+  REDIS_HOST = 'REDIS_HOST',
+  REDIS_PORT = 'REDIS_PORT',
+
   AWS_S3_ACCESS_KEY_ID = 'AWS_S3_ACCESS_KEY_ID',
   AWS_S3_SECRET_ACCESS_KEY = 'AWS_S3_SECRET_ACCESS_KEY',
   AWS_S3_BUCKET_NAME = 'AWS_S3_BUCKET_NAME',
@@ -28,6 +31,9 @@ export const ConfigSchemaMap: Record<ConfigKey, Joi.Schema> = {
   DATABASE_NAME: Joi.string().required(),
   DATABASE_USERNAME: Joi.string().required(),
   DATABASE_PASSWORD: Joi.string().required(),
+
+  REDIS_HOST: Joi.string().required(),
+  REDIS_PORT: Joi.number().required(),
 
   AWS_S3_ACCESS_KEY_ID: Joi.string().required(),
   AWS_S3_SECRET_ACCESS_KEY: Joi.string().required(),

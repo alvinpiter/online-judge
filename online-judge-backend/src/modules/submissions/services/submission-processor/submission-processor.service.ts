@@ -9,19 +9,25 @@ import {
 } from '../../queues/submissions-judgement.queue';
 import { SubmissionJudgmentService } from '../submission-judgment.service';
 import { UserProblemAttemptsService } from 'src/modules/problems/services/user-problem-attempts.service';
-import { PluggableService } from 'src/lib/PluggableService';
 import {
   SubmissionProcessingStrategy,
   SubmissionProcessor,
 } from './interfaces';
 import { SubmissionsService } from '../../submissions.service';
 import { UserProblemAttempt } from 'src/modules/problems/entities/user-problem-attempt.entity';
+import { Observable } from 'src/lib/Observable';
+
+export interface SubmissionProcessorServiceEvent {
+  submissionJudged: (submissionId: number) => Promise<void>;
+}
 
 @Injectable()
-export class SubmissionProcessorService extends PluggableService<
-  SubmissionProcessingStrategy,
-  SubmissionProcessor
-> {
+export class SubmissionProcessorService extends Observable<SubmissionProcessorServiceEvent> {
+  private pluggedServices = new Map<
+    SubmissionProcessingStrategy,
+    SubmissionProcessor
+  >();
+
   constructor(
     private readonly submissionService: SubmissionsService,
     private readonly submissionsJudgementQueue: SubmissionsJudgementQueue,
@@ -31,6 +37,10 @@ export class SubmissionProcessorService extends PluggableService<
   ) {
     super();
     this.submissionsJudgementQueue.setConsumer((item) => this.process(item));
+  }
+
+  plugService(key: SubmissionProcessingStrategy, service: SubmissionProcessor) {
+    this.pluggedServices.set(key, service);
   }
 
   async process(
@@ -62,6 +72,10 @@ export class SubmissionProcessorService extends PluggableService<
         submissionRunDetails,
         previousAttempt: userProblemAttempt,
       });
+
+      this.publishEvent('submissionJudged', (subscriber) =>
+        subscriber(submission.id),
+      );
     } catch (e) {
       switch (e.constructor) {
         case CompilationError:

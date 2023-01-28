@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { OffsetPaginationResult } from '../pagination/offset-pagination.interface';
-import { ProblemsService } from '../problems/services/problems.service';
-import { UserProblemAttemptsService } from '../problems/services/user-problem-attempts.service';
-import { UsersService } from '../users/users.service';
-import { ScoreboardRow } from './interfaces/scoreboard-row';
+import { OffsetPaginationResult } from '../../pagination/offset-pagination.interface';
+import { ProblemsService } from '../../problems/services/problems.service';
+import { UserProblemAttemptsService } from '../../problems/services/user-problem-attempts.service';
+import { UsersService } from '../../users/users.service';
+import { ScoreboardRow } from '../interfaces/scoreboard-row';
 
 @Injectable()
 export class ScoreboardService {

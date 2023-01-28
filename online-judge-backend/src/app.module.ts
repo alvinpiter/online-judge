@@ -1,4 +1,4 @@
-import { CacheModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -14,8 +14,9 @@ import { ObjectStorageModule } from './modules/object-storage/object-storage.mod
 import { ProblemsModule } from './modules/problems/problems.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
 import { SubmissionsModule } from './modules/submissions/submissions.module';
-import { CacheModule as AppCacheModule } from './modules/cache/cache.module';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { ScoreboardModule } from './modules/scoreboard/scoreboard.module';
+import { CacheModule } from './modules/cache/cache.module';
 
 @Module({
   providers: [
@@ -32,6 +33,7 @@ import { ScoreboardModule } from './modules/scoreboard/scoreboard.module';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'mysql',
         host: configService.get<string>(ConfigKey.DATABASE_HOST),
@@ -46,10 +48,20 @@ import { ScoreboardModule } from './modules/scoreboard/scoreboard.module';
       dataSourceFactory: async (options) => {
         return addTransactionalDataSource(new DataSource(options));
       },
-      inject: [ConfigService],
     }),
-    CacheModule.register({ isGlobal: true }),
-    AppCacheModule,
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        return {
+          config: {
+            host: configService.get<string>(ConfigKey.REDIS_HOST),
+            port: configService.get<number>(ConfigKey.REDIS_PORT),
+          },
+        };
+      },
+    }),
+    CacheModule,
     JobModule,
     HealthCheckModule,
     AuthenticationModule,
