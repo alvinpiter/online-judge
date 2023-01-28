@@ -38,6 +38,12 @@ export class UserProblemAttemptsService {
     });
   }
 
+  async getAllUserProblemAttempts(
+    userId: number,
+  ): Promise<UserProblemAttempt[]> {
+    return this.userProblemAttemptsRepository.findBy({ userId });
+  }
+
   async increaseNumberOfAttemptsAndSave(userId: number, problemId: number) {
     const userProblemAttempt = await this.getOrInitializeUserProblemAttempt(
       userId,

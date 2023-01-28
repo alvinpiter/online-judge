@@ -1,17 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
-import { GlobalScoreboardSortedSetService } from './services/global-scoreboard-sorted-set.service';
+import { GlobalScoreboardScoreCalculatorService } from './services/global-scoreboard-score-calculator/global-scoreboard-score-calculator.service';
 
 @Controller('api')
 export class ScoreboardController {
   constructor(
-    private readonly globalScoreboardSortedSetService: GlobalScoreboardSortedSetService,
+    private readonly globalScoreboardScoreCalculatorService: GlobalScoreboardScoreCalculatorService,
   ) {}
 
   @Get('scoreboard/playground')
   async playground() {
-    await this.globalScoreboardSortedSetService.upsertMemberScore('alvin', 5);
-    await this.globalScoreboardSortedSetService.upsertMemberScore('dono', 1);
-
-    return this.globalScoreboardSortedSetService.getMembersByRankRange(0, 1);
+    return this.globalScoreboardScoreCalculatorService.calculateScore(1);
   }
 }
