@@ -1,25 +1,19 @@
 import { Controller, Get } from '@nestjs/common';
-import { UsersService } from '../../users/users.service';
 import { ScoreboardRowFormatter } from '../formatters/scoreboard-row.formatter';
-import { GlobalScoreboardScoreCalculationQueue } from '../queues/global-scoreboard-score-calculation.queue';
+import { GlobalScoreboardSortedSetService } from '../services/global-scoreboard-sorted-set.service';
 import { ScoreboardService } from '../services/scoreboard.service';
 
 @Controller('api')
 export class ScoreboardController {
   constructor(
-    private readonly usersService: UsersService,
     private readonly scoreboardService: ScoreboardService,
     private readonly scoreboardRowFormatter: ScoreboardRowFormatter,
-    private readonly queue: GlobalScoreboardScoreCalculationQueue,
+    private readonly globalScoreboardSortedSetService: GlobalScoreboardSortedSetService,
   ) {}
 
   @Get('scoreboard/playground')
   async playground() {
-    const users = await this.usersService.getAllUsers();
-    for (const user of users) {
-      this.queue.enqueue({ userId: user.id });
-    }
-
+    await this.globalScoreboardSortedSetService.getMembers(['admin', 'fakhri']);
     return 'ok';
   }
 
