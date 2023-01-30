@@ -13,8 +13,7 @@ export class ScoreboardController {
 
   @Get('scoreboard/playground')
   async playground() {
-    await this.globalScoreboardSortedSetService.getMembers(['admin', 'fakhri']);
-    return 'ok';
+    return this.globalScoreboardSortedSetService.getMembersByRank(3, 5);
   }
 
   @Get('scoreboard')

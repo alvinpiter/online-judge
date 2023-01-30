@@ -47,6 +47,33 @@ export class SortedSetService {
     });
   }
 
+  async getMembersByRank(
+    minRank: number,
+    maxRank: number,
+  ): Promise<RedisSortedSetData[]> {
+    const membersAndScores = await this.redisClient.zrevrange(
+      this.sortedSetKey,
+      minRank,
+      maxRank,
+      'WITHSCORES',
+    );
+
+    const result: RedisSortedSetData[] = [];
+    for (
+      let idx = 0, currentRank = minRank;
+      idx < membersAndScores.length;
+      idx += 2, currentRank += 1
+    ) {
+      result.push({
+        member: membersAndScores[idx],
+        score: parseInt(membersAndScores[idx + 1]),
+        rank: currentRank,
+      });
+    }
+
+    return result;
+  }
+
   async getMembersByRankRange(
     minRank: number,
     maxRank: number,
