@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { leftShift } from 'src/lib/leftShift';
+import { rightShift } from 'src/lib/rightShift';
 import { UserProblemAttemptsService } from 'src/modules/problems/services/user-problem-attempts.service';
 import { GlobalScoreboardScoreCalculatorService } from '../global-scoreboard-score-calculator.service';
 import {
@@ -7,10 +8,15 @@ import {
   GlobalScoreboardScoreCalculator,
 } from '../interfaces';
 
-const NUMBER_OF_LEFT_SHIFTS = 32;
+const NUMBER_OF_SHIFTS = 42;
+
+export interface BySolveCountAndLastSolveTimeScoringSchema {
+  solveCount: number;
+  lastSolveTimeInMilliseconds: number;
+}
 
 @Injectable()
-export class BySolveCountAndLastAcceptedTimeStrategy
+export class BySolveCountAndLastSolveTimeStrategy
   implements GlobalScoreboardScoreCalculator
 {
   constructor(
@@ -28,21 +34,21 @@ export class BySolveCountAndLastAcceptedTimeStrategy
       await this.userProblemAttemptsService.getAllUserProblemAttempts(userId);
 
     let solveCount = 0;
-    let lastSolveAtInSeconds = 0;
+    let lastSolveTimeInMilliseconds = 0;
     for (const userProblemAttempt of userProblemAttempts) {
       if (userProblemAttempt.alreadySolved()) {
         solveCount += 1;
-        lastSolveAtInSeconds = Math.max(
-          lastSolveAtInSeconds,
-          Math.floor(userProblemAttempt.firstSolvedAt.getTime() / 1000),
+        lastSolveTimeInMilliseconds = Math.max(
+          lastSolveTimeInMilliseconds,
+          userProblemAttempt.firstSolvedAt.getTime(),
         );
       }
     }
 
     /*
-    At the time this app is build, lastSolveAtInSeconds's value is around 1.6 billion (< 2^32).
+    At the time this app is build, lastSolveAtInSeconds's value is around 1.6 trillion (< 2^42).
     We will encode the score as the following:
-    (solveCount << 32) + ((1 << 32) - 1) - lastSolveAtInSeconds
+    (solveCount << 37) + ((1 << 37) - 1) - lastSolveAtInSeconds
 
     This way, we can ensure that:
     * If the solveCount are different, the larger one will have larger score
@@ -50,9 +56,24 @@ export class BySolveCountAndLastAcceptedTimeStrategy
      */
 
     return (
-      leftShift(solveCount, NUMBER_OF_LEFT_SHIFTS) +
-      (leftShift(1, NUMBER_OF_LEFT_SHIFTS) - 1) -
-      lastSolveAtInSeconds
+      leftShift(solveCount, NUMBER_OF_SHIFTS) +
+      (leftShift(1, NUMBER_OF_SHIFTS) - 1) -
+      lastSolveTimeInMilliseconds
     );
+  }
+
+  async decodeScore(
+    score: number,
+  ): Promise<BySolveCountAndLastSolveTimeScoringSchema> {
+    const solveCount = rightShift(score, NUMBER_OF_SHIFTS);
+    const lastSolveTimeInMilliseconds =
+      leftShift(solveCount, NUMBER_OF_SHIFTS) +
+      (leftShift(1, NUMBER_OF_SHIFTS) - 1) -
+      score;
+
+    return {
+      solveCount,
+      lastSolveTimeInMilliseconds,
+    };
   }
 }

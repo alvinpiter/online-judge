@@ -9,7 +9,7 @@ import { SubmissionJudgedEventSubscriber } from './services/submission-judged-ev
 import { ScoreboardController } from './controllers/scoreboard.controller';
 import { GlobalScoreboardScoreCalculationQueueConsumer } from './services/global-scoreboard-score-calculation-queue.consumer';
 import { GlobalScoreboardScoreCalculatorService } from './services/global-scoreboard-score-calculator/global-scoreboard-score-calculator.service';
-import { BySolveCountAndLastAcceptedTimeStrategy } from './services/global-scoreboard-score-calculator/strategies/by-solve-count-and-last-accepted-time.strategy';
+import { BySolveCountAndLastSolveTimeStrategy } from './services/global-scoreboard-score-calculator/strategies/by-solve-count-and-last-solve-time.strategy';
 import { GlobalScoreboardSortedSetService } from './services/global-scoreboard-sorted-set.service';
 import { ScoreboardService } from './services/scoreboard.service';
 import { ScoreboardRowFormatter } from './formatters/scoreboard-row.formatter';
@@ -20,7 +20,7 @@ import { ScoreboardRowFormatter } from './formatters/scoreboard-row.formatter';
     ScoreboardService,
     GlobalScoreboardSortedSetService,
     GlobalScoreboardScoreCalculatorService,
-    BySolveCountAndLastAcceptedTimeStrategy,
+    BySolveCountAndLastSolveTimeStrategy,
     SubmissionJudgedEventSubscriber,
     GlobalScoreboardScoreCalculationQueue,
     GlobalScoreboardScoreCalculationQueueConsumer,

@@ -4,4 +4,5 @@ export enum GlobalScoreboardScoreCalculationStrategy {
 
 export interface GlobalScoreboardScoreCalculator {
   calculateScore: (userId: number) => Promise<number>;
+  decodeScore: (score: number) => Promise<unknown>;
 }

@@ -1,4 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
+import { SortedSetPaginatedQueryBuilder } from 'src/modules/cache/sorted-set/sorted-set-paginated-query-builder';
 import { ScoreboardRowFormatter } from '../formatters/scoreboard-row.formatter';
 import { GlobalScoreboardSortedSetService } from '../services/global-scoreboard-sorted-set.service';
 import { ScoreboardService } from '../services/scoreboard.service';
@@ -13,7 +14,15 @@ export class ScoreboardController {
 
   @Get('scoreboard/playground')
   async playground() {
-    return this.globalScoreboardSortedSetService.getMembersByRank(3, 5);
+    const qb = new SortedSetPaginatedQueryBuilder(
+      this.globalScoreboardSortedSetService,
+    );
+
+    qb.addMemberFilter('admin');
+    qb.offset(20);
+    qb.limit(5);
+
+    return qb.getDataAndTotalCount();
   }
 
   @Get('scoreboard')
