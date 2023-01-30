@@ -1,6 +1,6 @@
 import { SortedSetService } from './sorted-set.service';
 import { Redis } from 'ioredis';
-import { RedisSortedSetData } from './interfaces';
+import { SortedSetData } from './interfaces';
 
 describe(SortedSetService.name, () => {
   const redisClient = Redis.prototype;
@@ -13,7 +13,7 @@ describe(SortedSetService.name, () => {
 
   describe('getMembers', () => {
     const members = ['user:1', 'user:2', 'user:3'];
-    const expectedResult: RedisSortedSetData[] = [
+    const expectedResult: SortedSetData[] = [
       { member: 'user:1', score: null, rank: null },
       { member: 'user:2', score: 2, rank: 1 },
       { member: 'user:3', score: 1, rank: 2 },

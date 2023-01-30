@@ -1,6 +1,6 @@
 import { Redis } from 'ioredis';
 import { hasValue } from 'src/lib/hasValue';
-import { RedisSortedSetData } from './interfaces';
+import { SortedSetData } from './interfaces';
 
 /*
 Maintain a set of members with its scores, where the scores are sorted
@@ -18,7 +18,7 @@ export class SortedSetService {
     return this.redisClient.zadd(this.sortedSetKey, score, member);
   }
 
-  async getMembers(members: string[]): Promise<RedisSortedSetData[]> {
+  async getMembers(members: string[]): Promise<SortedSetData[]> {
     const scores: (string | null)[] = await this.redisClient.zmscore(
       this.sortedSetKey,
       members,
@@ -50,7 +50,7 @@ export class SortedSetService {
   async getMembersByRank(
     minRank: number,
     maxRank: number,
-  ): Promise<RedisSortedSetData[]> {
+  ): Promise<SortedSetData[]> {
     const membersAndScores = await this.redisClient.zrevrange(
       this.sortedSetKey,
       minRank,
@@ -58,7 +58,7 @@ export class SortedSetService {
       'WITHSCORES',
     );
 
-    const result: RedisSortedSetData[] = [];
+    const result: SortedSetData[] = [];
     for (
       let idx = 0, currentRank = minRank;
       idx < membersAndScores.length;
