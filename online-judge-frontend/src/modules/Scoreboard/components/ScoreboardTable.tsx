@@ -28,9 +28,10 @@ export const ScoreboardTable: FC<ScoreboardTableProps> = ({
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell> # </TableCell>
+            <TableCell> Rank </TableCell>
             <TableCell> User </TableCell>
-            <TableCell> Score </TableCell>
+            <TableCell> Solve count </TableCell>
+            <TableCell> Last solve at </TableCell>
             {problems.map((problem) => (
               <TableCell>
                 <Link

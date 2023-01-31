@@ -1,4 +1,5 @@
 import { TableCell, TableRow } from "@mui/material";
+import moment from "moment";
 import { FC } from "react";
 import { Problem, UserProblemAttempt } from "../../Problem/interfaces";
 import { ScoreboardRow } from "../interfaces";
@@ -22,9 +23,14 @@ export const ScoreboardTableRow: FC<ScoreboardTableRowProps> = ({
 
   return (
     <TableRow>
-      <TableCell> rank </TableCell>
-      <TableCell>{row.user.username}</TableCell>
-      <TableCell> score </TableCell>
+      <TableCell> {row.rank === null ? "Unranked" : row.rank + 1} </TableCell>
+      <TableCell> {row.user.username} </TableCell>
+      <TableCell> {row.score === null ? 0 : row.score.solveCount} </TableCell>
+      <TableCell>
+        {row.score === null
+          ? ""
+          : moment(row.score.lastSolveTimeInMilliseconds).fromNow()}
+      </TableCell>
       {problems.map((problem) => (
         <TableCell>
           <UserProblemAttemptCellContent
