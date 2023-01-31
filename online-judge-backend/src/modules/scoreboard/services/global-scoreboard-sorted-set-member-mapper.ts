@@ -1,13 +1,11 @@
-import { Injectable } from '@nestjs/common';
 import { User } from 'src/modules/users/user.entity';
 import { UsersService } from 'src/modules/users/users.service';
 
-@Injectable()
 export class GlobalScoreboardSortedSetMemberMapper {
   constructor(private readonly usersService: UsersService) {}
 
-  toSortedSetMember(user: User) {
-    return `user:${user.id}`;
+  toSortedSetMember(userId: number) {
+    return `user:${userId}`;
   }
 
   async fromSortedSetMembers(members: string[]): Promise<User[]> {

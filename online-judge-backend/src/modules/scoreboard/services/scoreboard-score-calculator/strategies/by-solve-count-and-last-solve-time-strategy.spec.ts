@@ -2,37 +2,35 @@ import {
   BySolveCountAndLastSolveTimeScoringSchema,
   BySolveCountAndLastSolveTimeStrategy,
 } from './by-solve-count-and-last-solve-time.strategy';
-import { GlobalScoreboardScoreCalculatorService } from '../global-scoreboard-score-calculator.service';
 import { UserProblemAttemptsService } from 'src/modules/problems/services/user-problem-attempts.service';
 import { UserProblemAttempt } from 'src/modules/problems/entities/user-problem-attempt.entity';
 import { createUser } from 'src/lib/tests/createUser';
 import { createUserProblemAttempt } from 'src/lib/tests/createUserProblemAttempt';
 import { leftShift } from 'src/lib/leftShift';
-import { GlobalScoreboardScoreCalculationStrategy } from '../interfaces';
+import { ScoreboardScoreCalculatorService } from '../scoreboard-score-calculator.service';
+import { ScoreboardScoreCalculationStrategy } from '../interfaces';
 
 describe(BySolveCountAndLastSolveTimeStrategy.name, () => {
-  const globalScoreboardCalulcatorService =
-    GlobalScoreboardScoreCalculatorService.prototype;
+  const scoreboardScoreCalculatorService =
+    ScoreboardScoreCalculatorService.prototype;
   const userProblemAttemptsService = UserProblemAttemptsService.prototype;
   let service: BySolveCountAndLastSolveTimeStrategy;
 
   beforeEach(() => {
     jest
-      .spyOn(globalScoreboardCalulcatorService, 'plugService')
+      .spyOn(scoreboardScoreCalculatorService, 'plugService')
       .mockImplementation();
 
     service = new BySolveCountAndLastSolveTimeStrategy(
-      globalScoreboardCalulcatorService,
+      scoreboardScoreCalculatorService,
       userProblemAttemptsService,
     );
   });
 
   describe('constructor', () => {
-    it('registers itself to GlobalScoreboardCalculatorService', () => {
-      expect(
-        globalScoreboardCalulcatorService.plugService,
-      ).toHaveBeenCalledWith(
-        GlobalScoreboardScoreCalculationStrategy.BY_SOLVE_COUNT_AND_LAST_SOLVE_TIME,
+    it('registers itself to ScoreboardCalculatorService', () => {
+      expect(scoreboardScoreCalculatorService.plugService).toHaveBeenCalledWith(
+        ScoreboardScoreCalculationStrategy.BY_SOLVE_COUNT_AND_LAST_SOLVE_TIME,
         service,
       );
     });

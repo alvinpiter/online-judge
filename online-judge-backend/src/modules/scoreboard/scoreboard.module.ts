@@ -6,29 +6,33 @@ import { UsersModule } from '../users/users.module';
 import { GlobalScoreboardScoreCalculationQueueController } from './controllers/global-scoreboard-score-calculation-queue.controller';
 import { GlobalScoreboardScoreCalculationQueue } from './queues/global-scoreboard-score-calculation.queue';
 import { SubmissionJudgedEventSubscriber } from './services/submission-judged-event.subscriber';
-import { ScoreboardController } from './controllers/scoreboard.controller';
-import { GlobalScoreboardScoreCalculationQueueConsumer } from './services/global-scoreboard-score-calculation-queue.consumer';
-import { GlobalScoreboardScoreCalculatorService } from './services/global-scoreboard-score-calculator/global-scoreboard-score-calculator.service';
-import { BySolveCountAndLastSolveTimeStrategy } from './services/global-scoreboard-score-calculator/strategies/by-solve-count-and-last-solve-time.strategy';
-import { GlobalScoreboardSortedSetService } from './services/global-scoreboard-sorted-set.service';
-import { ScoreboardService } from './services/scoreboard.service';
+import { GlobalScoreboardController } from './controllers/global-scoreboard.controller';
+import { BySolveCountAndLastSolveTimeStrategy } from './services/scoreboard-score-calculator/strategies/by-solve-count-and-last-solve-time.strategy';
 import { ScoreboardRowFormatter } from './formatters/scoreboard-row.formatter';
+import { ScoreboardWriterService } from './services/scoreboard-service/scoreboard-writer.service';
+import { ScoreboardReaderService } from './services/scoreboard-service/scoreboard-reader.service';
+import { ScoreboardScoreCalculatorService } from './services/scoreboard-score-calculator/scoreboard-score-calculator.service';
+import { PaginationModule } from '../pagination/pagination.module';
 
 @Module({
-  imports: [JobModule, ProblemsModule, UsersModule, SubmissionsModule],
+  imports: [
+    JobModule,
+    ProblemsModule,
+    UsersModule,
+    SubmissionsModule,
+    PaginationModule,
+  ],
   providers: [
-    ScoreboardService,
-    GlobalScoreboardSortedSetService,
-    GlobalScoreboardScoreCalculatorService,
+    ScoreboardWriterService,
+    ScoreboardReaderService,
+    ScoreboardScoreCalculatorService,
     BySolveCountAndLastSolveTimeStrategy,
     SubmissionJudgedEventSubscriber,
     GlobalScoreboardScoreCalculationQueue,
-    GlobalScoreboardScoreCalculationQueueConsumer,
     ScoreboardRowFormatter,
   ],
-  exports: [GlobalScoreboardSortedSetService],
   controllers: [
-    ScoreboardController,
+    GlobalScoreboardController,
     GlobalScoreboardScoreCalculationQueueController,
   ],
 })

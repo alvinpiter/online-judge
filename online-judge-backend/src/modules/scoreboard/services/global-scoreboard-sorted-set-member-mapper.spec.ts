@@ -12,13 +12,13 @@ describe(GlobalScoreboardSortedSetMemberMapper.name, () => {
 
   describe('toSortedSetMember', () => {
     it.each([
-      [createUser(77), 'user:77'],
-      [createUser(88), 'user:88'],
-      [createUser(99), 'user:99'],
+      [77, 'user:77'],
+      [88, 'user:88'],
+      [99, 'user:99'],
     ])(
       `Member string for user %s should be %s`,
-      (user, expectedMemberString) => {
-        expect(service.toSortedSetMember(user)).toEqual(expectedMemberString);
+      (userId, expectedMemberString) => {
+        expect(service.toSortedSetMember(userId)).toEqual(expectedMemberString);
       },
     );
   });
