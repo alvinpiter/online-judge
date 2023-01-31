@@ -70,7 +70,7 @@ export class ScoreboardReaderService extends BaseScoreboardService {
           rawScoreboardRow.score,
           this.SCORE_CALCULATION_STRATEGY,
         )) as BySolveCountAndLastSolveTimeScoringSchema,
-        userProblemAttempts: userProblemAttemptsMap.get(users[idx].id),
+        userProblemAttempts: userProblemAttemptsMap.get(users[idx].id) || [],
       })),
     );
 
