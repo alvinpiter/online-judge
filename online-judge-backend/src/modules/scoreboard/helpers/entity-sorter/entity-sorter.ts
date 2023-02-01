@@ -1,4 +1,4 @@
-import { SortedSetService } from 'src/modules/cache/sorted-set.service';
+import { SortedSetService } from 'src/modules/cache/sorted-set/sorted-set.service';
 import { EntityIdentifierMapper, EntityScoreCalculator } from './interfaces';
 
 export class EntitySorterService<Entity, ScoringSchema> {

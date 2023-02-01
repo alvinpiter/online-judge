@@ -1,5 +1,5 @@
 import { createUser } from 'src/lib/tests/createUser';
-import { SortedSetService } from 'src/modules/cache/sorted-set.service';
+import { SortedSetService } from 'src/modules/cache/sorted-set/sorted-set.service';
 import { User } from 'src/modules/users/user.entity';
 import { EntitySorterService } from './entity-sorter';
 import { UserScoringSchema } from './test-mocks/interfaces';
