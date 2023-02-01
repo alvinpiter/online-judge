@@ -37,11 +37,22 @@ export class SortedSetService {
       'WITHSCORES',
     );
 
-    return chunk(membersAndScores, 2).map(([member, scoreAsString], idx) => ({
-      member,
-      score: parseInt(scoreAsString),
-      rank: minRank + idx,
-    }));
+    return this.toSortedSetData(membersAndScores, minRank);
+  }
+
+  async getDataByRanks(
+    minRank: number,
+    maxRank: number,
+  ): Promise<SortedSetData[]> {
+    // Returns the following structure: [member1, score1, member2, score2, ...]
+    const membersAndScores = await this.redisClient.zrange(
+      this.sortedSetKey,
+      minRank,
+      maxRank,
+      'WITHSCORES',
+    );
+
+    return this.toSortedSetData(membersAndScores, minRank);
   }
 
   async getMembersScores(members: string[]): Promise<(number | null)[]> {
@@ -65,5 +76,16 @@ export class SortedSetService {
 
   async getSize(): Promise<number> {
     return this.redisClient.zcard(this.sortedSetKey);
+  }
+
+  private toSortedSetData(
+    membersAndScores: string[],
+    startingRank: number,
+  ): SortedSetData[] {
+    return chunk(membersAndScores, 2).map(([member, scoreAsString], idx) => ({
+      member,
+      score: parseInt(scoreAsString),
+      rank: startingRank + idx,
+    }));
   }
 }
