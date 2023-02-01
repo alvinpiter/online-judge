@@ -3,6 +3,8 @@ import { hasValue } from 'src/lib/hasValue';
 import { SortedSetData } from './interfaces';
 import { zip, chunk } from 'lodash';
 
+type NullableNumber = number | null;
+
 // Wraps Redis' sorted set
 export class SortedSetService {
   constructor(
@@ -18,11 +20,14 @@ export class SortedSetService {
     const scores = await this.getMembersScores(members);
     const ranks = await this.getMembersRevRanks(members);
 
-    return zip(members, scores, ranks).map(([member, score, rank]) => ({
-      member,
-      score,
-      rank,
-    }));
+    return this.zipMembersScoresRanksToSortedData(members, scores, ranks);
+  }
+
+  async getDataWithRanks(members: string[]): Promise<SortedSetData[]> {
+    const scores = await this.getMembersScores(members);
+    const ranks = await this.getMembersRanks(members);
+
+    return this.zipMembersScoresRanksToSortedData(members, scores, ranks);
   }
 
   async getDataByRevRanks(
@@ -37,7 +42,7 @@ export class SortedSetService {
       'WITHSCORES',
     );
 
-    return this.toSortedSetData(membersAndScores, minRank);
+    return this.membersAndScoresToSortedData(membersAndScores, minRank);
   }
 
   async getDataByRanks(
@@ -52,10 +57,10 @@ export class SortedSetService {
       'WITHSCORES',
     );
 
-    return this.toSortedSetData(membersAndScores, minRank);
+    return this.membersAndScoresToSortedData(membersAndScores, minRank);
   }
 
-  async getMembersScores(members: string[]): Promise<(number | null)[]> {
+  async getMembersScores(members: string[]): Promise<NullableNumber[]> {
     const rawScores: (string | null)[] = await this.redisClient.zmscore(
       this.sortedSetKey,
       members,
@@ -66,10 +71,18 @@ export class SortedSetService {
     );
   }
 
-  async getMembersRevRanks(members: string[]): Promise<(number | null)[]> {
+  async getMembersRevRanks(members: string[]): Promise<NullableNumber[]> {
     return Promise.all(
       members.map((member) =>
         this.redisClient.zrevrank(this.sortedSetKey, member),
+      ),
+    );
+  }
+
+  async getMembersRanks(members: string[]): Promise<NullableNumber[]> {
+    return Promise.all(
+      members.map((member) =>
+        this.redisClient.zrank(this.sortedSetKey, member),
       ),
     );
   }
@@ -78,7 +91,7 @@ export class SortedSetService {
     return this.redisClient.zcard(this.sortedSetKey);
   }
 
-  private toSortedSetData(
+  private membersAndScoresToSortedData(
     membersAndScores: string[],
     startingRank: number,
   ): SortedSetData[] {
@@ -86,6 +99,18 @@ export class SortedSetService {
       member,
       score: parseInt(scoreAsString),
       rank: startingRank + idx,
+    }));
+  }
+
+  private zipMembersScoresRanksToSortedData(
+    members: string[],
+    scores: NullableNumber[],
+    ranks: NullableNumber[],
+  ): SortedSetData[] {
+    return zip(members, scores, ranks).map(([member, score, rank]) => ({
+      member,
+      score,
+      rank,
     }));
   }
 }

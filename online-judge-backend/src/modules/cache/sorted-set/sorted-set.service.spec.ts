@@ -11,7 +11,6 @@ describe(SortedSetService.name, () => {
     { member: 'member2', score: '2' },
   ];
 
-  // Sorted in non-increasing order of scores
   const sortedMembersWithScoresDesc = membersWithScores
     .slice(0, membersWithScores.length)
     .sort((first, second) => parseInt(second.score) - parseInt(first.score));
@@ -29,6 +28,13 @@ describe(SortedSetService.name, () => {
 
   const revRankMap = new Map<string, number>(
     sortedMembersWithScoresDesc.map((memberWithScore, idx) => [
+      memberWithScore.member,
+      idx,
+    ]),
+  );
+
+  const rankMap = new Map<string, number>(
+    sortedMembersWithScoresAsc.map((memberWithScore, idx) => [
       memberWithScore.member,
       idx,
     ]),
@@ -69,6 +75,12 @@ describe(SortedSetService.name, () => {
       );
 
     jest
+      .spyOn(redisClient, 'zrank')
+      .mockImplementation(async (_sortedSetKey, member: string) =>
+        rankMap.has(member) ? rankMap.get(member) : null,
+      );
+
+    jest
       .spyOn(redisClient, 'zrevrange')
       .mockImplementation(async (_sortedSetKey, start: number, stop: number) =>
         getRangeResult(sortedMembersWithScoresDesc, start, stop),
@@ -94,6 +106,23 @@ describe(SortedSetService.name, () => {
         { member: 'member1', score: 1, rank: 1 },
         { member: 'unknownMember', score: null, rank: null },
         { member: 'member2', score: 2, rank: 0 },
+      ]);
+    });
+  });
+
+  describe('getDataWithRanks', () => {
+    it('returns the correct result', async () => {
+      const members = ['member1', 'unknownMember', 'member2'];
+      const result = await service.getDataWithRanks(members);
+
+      expect(redisClient.zmscore).toHaveBeenCalledWith(sortedSetKey, members);
+      for (const member of members) {
+        expect(redisClient.zrank).toHaveBeenCalledWith(sortedSetKey, member);
+      }
+      expect(result).toEqual([
+        { member: 'member1', score: 1, rank: 0 },
+        { member: 'unknownMember', score: null, rank: null },
+        { member: 'member2', score: 2, rank: 1 },
       ]);
     });
   });
