@@ -1,7 +1,7 @@
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import { Injectable } from '@nestjs/common';
 import { Redis } from 'ioredis';
-import { SortedSetService } from 'src/modules/cache/sorted-set.service';
+import { SortedSetService } from 'src/modules/cache/sorted-set/sorted-set.service';
 
 const GLOBAL_SCOREBOARD_SORTED_SET_KEY = 'GlobalScoreboard';
 
