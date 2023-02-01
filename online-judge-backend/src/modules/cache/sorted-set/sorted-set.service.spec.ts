@@ -11,7 +11,8 @@ describe(SortedSetService.name, () => {
     { member: 'member2', score: '2' },
   ];
 
-  const membersWithScoresInNonIncreasingOrderOfScores = membersWithScores
+  // Sorted in non-increasing order of scores
+  const sortedMembersWithScores = membersWithScores
     .slice(0, membersWithScores.length)
     .sort((first, second) => parseInt(second.score) - parseInt(first.score));
 
@@ -23,9 +24,10 @@ describe(SortedSetService.name, () => {
   );
 
   const revRankMap = new Map<string, number>(
-    membersWithScoresInNonIncreasingOrderOfScores.map(
-      (memberWithScore, idx) => [memberWithScore.member, idx],
-    ),
+    sortedMembersWithScores.map((memberWithScore, idx) => [
+      memberWithScore.member,
+      idx,
+    ]),
   );
 
   beforeEach(() => {
@@ -52,16 +54,12 @@ describe(SortedSetService.name, () => {
           const resolvedStart = Math.max(start, 0);
           const resolvedStop = Math.min(
             stop,
-            membersWithScoresInNonIncreasingOrderOfScores.length - 1,
+            sortedMembersWithScores.length - 1,
           );
           const result = [];
           for (let idx = resolvedStart; idx <= resolvedStop; idx++) {
-            result.push(
-              membersWithScoresInNonIncreasingOrderOfScores[idx].member,
-            );
-            result.push(
-              membersWithScoresInNonIncreasingOrderOfScores[idx].score,
-            );
+            result.push(sortedMembersWithScores[idx].member);
+            result.push(sortedMembersWithScores[idx].score);
           }
 
           return result;
@@ -69,14 +67,15 @@ describe(SortedSetService.name, () => {
       );
   });
 
-  describe('getMembersWithRevRanks', () => {
+  describe('getDataWithRevRanks', () => {
     it('returns the correct result', async () => {
-      const result = await service.getMembersWithRevRanks([
-        'member1',
-        'unknownMember',
-        'member2',
-      ]);
+      const members = ['member1', 'unknownMember', 'member2'];
+      const result = await service.getDataWithRevRanks(members);
 
+      expect(redisClient.zmscore).toHaveBeenCalledWith(sortedSetKey, members);
+      for (const member of members) {
+        expect(redisClient.zrevrank).toHaveBeenCalledWith(sortedSetKey, member);
+      }
       expect(result).toEqual([
         { member: 'member1', score: 1, rank: 1 },
         { member: 'unknownMember', score: null, rank: null },
@@ -85,10 +84,16 @@ describe(SortedSetService.name, () => {
     });
   });
 
-  describe('getMembersByRevRanks', () => {
+  describe('getDataByRevRanks', () => {
     it('returns the correct result', async () => {
-      const result = await service.getMembersByRevRanks(0, 2); // Intentionally set out of range
+      const result = await service.getDataByRevRanks(0, 2); // Intentionally set out of range
 
+      expect(redisClient.zrevrange).toHaveBeenCalledWith(
+        sortedSetKey,
+        0,
+        2,
+        'WITHSCORES',
+      );
       expect(result).toEqual([
         { member: 'member2', score: 2, rank: 0 },
         { member: 'member1', score: 1, rank: 1 },

@@ -1,8 +1,9 @@
 import { Redis } from 'ioredis';
 import { hasValue } from 'src/lib/hasValue';
 import { SortedSetData } from './interfaces';
-import { zip } from 'lodash';
+import { zip, chunk } from 'lodash';
 
+// Wraps Redis' sorted set
 export class SortedSetService {
   constructor(
     private readonly redisClient: Redis,
@@ -13,7 +14,7 @@ export class SortedSetService {
     return this.redisClient.zadd(this.sortedSetKey, score, member);
   }
 
-  async getMembersWithRevRanks(members: string[]): Promise<SortedSetData[]> {
+  async getDataWithRevRanks(members: string[]): Promise<SortedSetData[]> {
     const scores = await this.getMembersScores(members);
     const ranks = await this.getMembersRevRanks(members);
 
@@ -24,10 +25,11 @@ export class SortedSetService {
     }));
   }
 
-  async getMembersByRevRanks(
+  async getDataByRevRanks(
     minRank: number,
     maxRank: number,
   ): Promise<SortedSetData[]> {
+    // Returns the following structure: [member1, score1, member2, score2, ...]
     const membersAndScores = await this.redisClient.zrevrange(
       this.sortedSetKey,
       minRank,
@@ -35,20 +37,11 @@ export class SortedSetService {
       'WITHSCORES',
     );
 
-    const result: SortedSetData[] = [];
-    for (
-      let idx = 0, currentRank = minRank;
-      idx < membersAndScores.length;
-      idx += 2, currentRank += 1
-    ) {
-      result.push({
-        member: membersAndScores[idx],
-        score: parseInt(membersAndScores[idx + 1]),
-        rank: currentRank,
-      });
-    }
-
-    return result;
+    return chunk(membersAndScores, 2).map(([member, scoreAsString], idx) => ({
+      member,
+      score: parseInt(scoreAsString),
+      rank: minRank + idx,
+    }));
   }
 
   async getMembersScores(members: string[]): Promise<(number | null)[]> {
