@@ -33,6 +33,7 @@ export class EntitySorterService<Entity, ScoringSchema> {
       this.order,
     );
 
+    // TODO: How to test this condition?
     if (parameters.entity) {
       const memberIdentifer = await this.entityIdentifierMapper.toIdentifier(
         parameters.entity,
