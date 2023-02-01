@@ -11,10 +11,13 @@ describe(SortedSetService.name, () => {
     { member: 'member2', score: '2' },
   ];
 
-  // Sorted in non-increasing order of scores
-  const sortedMembersWithScores = membersWithScores
+  const sortedMembersWithScoresDesc = membersWithScores
     .slice(0, membersWithScores.length)
     .sort((first, second) => parseInt(second.score) - parseInt(first.score));
+
+  const sortedMembersWithScoresAsc = membersWithScores
+    .slice(0, membersWithScores.length)
+    .sort((first, second) => parseInt(first.score) - parseInt(second.score));
 
   const scoreMap = new Map<string, string>(
     membersWithScores.map((memberWithScore) => [
@@ -24,11 +27,35 @@ describe(SortedSetService.name, () => {
   );
 
   const revRankMap = new Map<string, number>(
-    sortedMembersWithScores.map((memberWithScore, idx) => [
+    sortedMembersWithScoresDesc.map((memberWithScore, idx) => [
       memberWithScore.member,
       idx,
     ]),
   );
+
+  const rankMap = new Map<string, number>(
+    sortedMembersWithScoresAsc.map((memberWithScore, idx) => [
+      memberWithScore.member,
+      idx,
+    ]),
+  );
+
+  const getRangeResult = (
+    rankedData: { member: string; score: string }[],
+    minRank: number,
+    maxRank: number,
+  ): string[] => {
+    const resolvedMinRank = Math.max(0, minRank);
+    const resolvedMaxRank = Math.min(rankedData.length - 1, maxRank);
+
+    const result: string[] = [];
+    for (let idx = resolvedMinRank; idx <= resolvedMaxRank; idx++) {
+      result.push(rankedData[idx].member);
+      result.push(rankedData[idx].score);
+    }
+
+    return result;
+  };
 
   beforeEach(() => {
     service = new SortedSetService(redisClient, sortedSetKey);
@@ -48,22 +75,21 @@ describe(SortedSetService.name, () => {
       );
 
     jest
-      .spyOn(redisClient, 'zrevrange')
-      .mockImplementation(
-        async (_sortedSetKey, start: number, stop: number) => {
-          const resolvedStart = Math.max(start, 0);
-          const resolvedStop = Math.min(
-            stop,
-            sortedMembersWithScores.length - 1,
-          );
-          const result = [];
-          for (let idx = resolvedStart; idx <= resolvedStop; idx++) {
-            result.push(sortedMembersWithScores[idx].member);
-            result.push(sortedMembersWithScores[idx].score);
-          }
+      .spyOn(redisClient, 'zrank')
+      .mockImplementation(async (_sortedSetKey, member: string) =>
+        rankMap.has(member) ? rankMap.get(member) : null,
+      );
 
-          return result;
-        },
+    jest
+      .spyOn(redisClient, 'zrevrange')
+      .mockImplementation(async (_sortedSetKey, start: number, stop: number) =>
+        getRangeResult(sortedMembersWithScoresDesc, start, stop),
+      );
+
+    jest
+      .spyOn(redisClient, 'zrange')
+      .mockImplementation(async (_sortedSetKey, start: number, stop: number) =>
+        getRangeResult(sortedMembersWithScoresAsc, start, stop),
       );
   });
 
@@ -84,6 +110,23 @@ describe(SortedSetService.name, () => {
     });
   });
 
+  describe('getDataWithRanks', () => {
+    it('returns the correct result', async () => {
+      const members = ['member1', 'unknownMember', 'member2'];
+      const result = await service.getDataWithRanks(members);
+
+      expect(redisClient.zmscore).toHaveBeenCalledWith(sortedSetKey, members);
+      for (const member of members) {
+        expect(redisClient.zrank).toHaveBeenCalledWith(sortedSetKey, member);
+      }
+      expect(result).toEqual([
+        { member: 'member1', score: 1, rank: 0 },
+        { member: 'unknownMember', score: null, rank: null },
+        { member: 'member2', score: 2, rank: 1 },
+      ]);
+    });
+  });
+
   describe('getDataByRevRanks', () => {
     it('returns the correct result', async () => {
       const result = await service.getDataByRevRanks(0, 2); // Intentionally set out of range
@@ -97,6 +140,23 @@ describe(SortedSetService.name, () => {
       expect(result).toEqual([
         { member: 'member2', score: 2, rank: 0 },
         { member: 'member1', score: 1, rank: 1 },
+      ]);
+    });
+  });
+
+  describe('getDataByRanks', () => {
+    it('returns the correct result', async () => {
+      const result = await service.getDataByRanks(0, 2); // Intentionally set out of range
+
+      expect(redisClient.zrange).toHaveBeenCalledWith(
+        sortedSetKey,
+        0,
+        2,
+        'WITHSCORES',
+      );
+      expect(result).toEqual([
+        { member: 'member1', score: 1, rank: 0 },
+        { member: 'member2', score: 2, rank: 1 },
       ]);
     });
   });
