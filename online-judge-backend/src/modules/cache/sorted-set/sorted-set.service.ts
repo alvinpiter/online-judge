@@ -24,6 +24,33 @@ export class SortedSetService {
     }));
   }
 
+  async getMembersByRevRanks(
+    minRank: number,
+    maxRank: number,
+  ): Promise<SortedSetData[]> {
+    const membersAndScores = await this.redisClient.zrevrange(
+      this.sortedSetKey,
+      minRank,
+      maxRank,
+      'WITHSCORES',
+    );
+
+    const result: SortedSetData[] = [];
+    for (
+      let idx = 0, currentRank = minRank;
+      idx < membersAndScores.length;
+      idx += 2, currentRank += 1
+    ) {
+      result.push({
+        member: membersAndScores[idx],
+        score: parseInt(membersAndScores[idx + 1]),
+        rank: currentRank,
+      });
+    }
+
+    return result;
+  }
+
   async getMembersScores(members: string[]): Promise<(number | null)[]> {
     const rawScores: (string | null)[] = await this.redisClient.zmscore(
       this.sortedSetKey,
