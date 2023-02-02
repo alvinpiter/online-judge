@@ -2,15 +2,15 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { UsersService } from 'src/modules/users/users.service';
 import { ScoreboardGetDto } from '../data-transfer-objects/scoreboard-get.dto';
 import { ScoreboardRowFormatter } from '../formatters/scoreboard-row.formatter';
-import { GlobalScoreboardScoreCalculationQueue } from '../queues/global-scoreboard-score-calculation.queue';
+import { ScoreboardScoreCalculationQueue } from '../queues/scoreboard-score-calculation.queue';
 import { ScoreboardService } from '../services/scoreboard.service';
 
 @Controller('api')
-export class GlobalScoreboardController {
+export class ScoreboardController {
   constructor(
     private readonly scoreboardRowFormatter: ScoreboardRowFormatter,
     private readonly scoreboardService: ScoreboardService,
-    private readonly scoreboardScoreCalculationQueue: GlobalScoreboardScoreCalculationQueue,
+    private readonly scoreboardScoreCalculationQueue: ScoreboardScoreCalculationQueue,
     private readonly usersService: UsersService,
   ) {}
 

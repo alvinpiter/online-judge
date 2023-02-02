@@ -17,9 +17,9 @@ import { SortedEntitiesPaginationParameter } from '../helpers/entity-sorter/inte
 import { ScoreboardRow } from '../interfaces/scoreboard-row';
 import { ScoreboardScoringSchema } from '../interfaces/scoreboard-scoring-schema';
 import {
-  GlobalScoreboardScoreCalculationQueue,
-  GlobalScoreboardScoreCalculationQueueItem,
-} from '../queues/global-scoreboard-score-calculation.queue';
+  ScoreboardScoreCalculationQueue,
+  ScoreboardScoreCalculationQueueItem,
+} from '../queues/scoreboard-score-calculation.queue';
 import { ScoreboardEntityIdentifierMapper } from './scoreboard-entity-identifier-mapper';
 import { ScoreboardScoreCalculator } from './scoreboard-score-calculator';
 
@@ -38,7 +38,7 @@ export class ScoreboardService {
   >;
 
   constructor(
-    globalScoreboardScoreCalculationQueue: GlobalScoreboardScoreCalculationQueue,
+    scoreboardScoreCalculationQueue: ScoreboardScoreCalculationQueue,
     @InjectRedis() redisClient: Redis,
     private readonly scoreboardEntityIdentifierMapper: ScoreboardEntityIdentifierMapper,
     private readonly scoreboardScoreCalculator: ScoreboardScoreCalculator,
@@ -60,13 +60,13 @@ export class ScoreboardService {
       this.offsetPaginationService,
     );
 
-    globalScoreboardScoreCalculationQueue.setConsumer((item) =>
+    scoreboardScoreCalculationQueue.setConsumer((item) =>
       this.processScoreboardScoreCalculation(item),
     );
   }
 
   async processScoreboardScoreCalculation(
-    queueItem: JobQueueItem<GlobalScoreboardScoreCalculationQueueItem>,
+    queueItem: JobQueueItem<ScoreboardScoreCalculationQueueItem>,
   ) {
     const userId = queueItem.item.userId;
     const user = await this.usersService.findById(userId);

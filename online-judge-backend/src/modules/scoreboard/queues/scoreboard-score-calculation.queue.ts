@@ -4,16 +4,16 @@ import { PRIMARY_JOB_QUEUE } from 'src/modules/job/job.module';
 import { JobQueue } from 'src/modules/job/job.queue';
 import { JobService } from 'src/modules/job/job.service';
 
-export interface GlobalScoreboardScoreCalculationQueueItem {
+export interface ScoreboardScoreCalculationQueueItem {
   userId: number;
 }
 
 @Injectable()
-export class GlobalScoreboardScoreCalculationQueue extends JobQueue<GlobalScoreboardScoreCalculationQueueItem> {
+export class ScoreboardScoreCalculationQueue extends JobQueue<ScoreboardScoreCalculationQueueItem> {
   constructor(
     @Inject(PRIMARY_JOB_QUEUE) client: ClientRMQ,
     jobService: JobService,
   ) {
-    super(client, GlobalScoreboardScoreCalculationQueue.name, jobService);
+    super(client, ScoreboardScoreCalculationQueue.name, jobService);
   }
 }

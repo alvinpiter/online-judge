@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { SubmissionVerdict } from '../../submissions/entities/submission.entity';
 import { SubmissionProcessorService } from '../../submissions/services/submission-processor/submission-processor.service';
 import { SubmissionsService } from '../../submissions/submissions.service';
-import { GlobalScoreboardScoreCalculationQueue } from '../queues/global-scoreboard-score-calculation.queue';
+import { ScoreboardScoreCalculationQueue } from '../queues/scoreboard-score-calculation.queue';
 
 @Injectable()
 export class SubmissionJudgedEventSubscriber {
   constructor(
     submissionProcessorService: SubmissionProcessorService,
     private readonly submissionsService: SubmissionsService,
-    private readonly globalScoreboardScoreCalculationQueue: GlobalScoreboardScoreCalculationQueue,
+    private readonly scoreboardScoreCalculationQueue: ScoreboardScoreCalculationQueue,
   ) {
     submissionProcessorService.addSubscriber(
       'submissionJudged',
@@ -23,7 +23,7 @@ export class SubmissionJudgedEventSubscriber {
     );
 
     if (submission.verdict === SubmissionVerdict.ACCEPTED) {
-      await this.globalScoreboardScoreCalculationQueue.enqueue({
+      await this.scoreboardScoreCalculationQueue.enqueue({
         userId: submission.userId,
       });
     }
