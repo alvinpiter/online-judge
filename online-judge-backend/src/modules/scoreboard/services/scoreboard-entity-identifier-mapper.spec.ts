@@ -10,17 +10,12 @@ describe(ScoreboardEntityIdentifierMapper.name, () => {
     service = new ScoreboardEntityIdentifierMapper(usersService);
   });
 
-  describe('toIdentifer', () => {
-    it.each([
-      [createUser(77), 'user:77'],
-      [createUser(88), 'user:88'],
-      [createUser(99), 'user:99'],
-    ])(
-      `Member string for user %s should be %s`,
-      async (user, expectedMemberString) => {
-        expect(await service.toIdentifier(user)).toEqual(expectedMemberString);
-      },
-    );
+  describe('toIdentifers', () => {
+    it('returns the correct identifiers', async () => {
+      const users = [createUser(77), createUser(88), createUser(99)];
+      const result = await service.toIdentifiers(users);
+      expect(result).toEqual(['user:77', 'user:88', 'user:99']);
+    });
   });
 
   describe('fromIdentifiers', () => {

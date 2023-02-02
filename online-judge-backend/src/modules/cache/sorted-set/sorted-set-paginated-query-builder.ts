@@ -40,6 +40,8 @@ export class SortedSetPaginatedQueryBuilder
 
       const totalCount = data.length;
 
+      data.sort((first, second) => first.rank - second.rank);
+
       return [data, totalCount] as [SortedSetData[], number];
     } else {
       const minRank = this._offset;

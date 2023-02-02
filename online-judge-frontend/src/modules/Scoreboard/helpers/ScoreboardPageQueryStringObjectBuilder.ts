@@ -1,14 +1,18 @@
 import { BaseOffsetPaginationQueryStringObjectBuilder } from "../../Pagination/OffsetPaginationQueryStringObjectBuilder";
+import { ScoreboardFilter } from "../interfaces";
 
 export class ScoreboardPageQueryStringObjectBuilder extends BaseOffsetPaginationQueryStringObjectBuilder<
-  any,
+  ScoreboardFilter,
   any
 > {
-  getFilter() {
-    return {};
+  getFilter(): ScoreboardFilter {
+    return {
+      userIds: this.qsObject["userIds"] as string,
+    };
   }
 
-  setFilter(filter: any) {
+  setFilter(filter: ScoreboardFilter) {
+    this.qsObject = { ...filter };
     return this;
   }
 

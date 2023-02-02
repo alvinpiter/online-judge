@@ -5,8 +5,8 @@ import { EntityIdentifierMapper } from '../interfaces';
 export class MockedEntitiyIdentifierMapper
   implements EntityIdentifierMapper<User>
 {
-  async toIdentifier(entity: User): Promise<string> {
-    return '';
+  async toIdentifiers(users: User[]): Promise<string[]> {
+    return [];
   }
 
   async fromIdentifiers(identifiers: string[]): Promise<User[]> {

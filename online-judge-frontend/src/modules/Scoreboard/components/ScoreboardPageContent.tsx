@@ -2,6 +2,7 @@ import { Pagination } from "@mui/material";
 import { ChangeEvent, FC } from "react";
 import { useScoreboardContext } from "../contexts/ScoreboardContext/context";
 import { useScoreboardRowsPaginationContext } from "../contexts/ScoreboardRowsPaginationContext/context";
+import { ScoreboardFilterForm } from "./ScoreboardFilterForm";
 import { ScoreboardTable } from "./ScoreboardTable";
 
 export const ScoreboardPageContent: FC = () => {
@@ -11,6 +12,8 @@ export const ScoreboardPageContent: FC = () => {
     numberOfPages,
     handlePageChange,
     entities: scoreboardRows,
+    filter,
+    handleFilterChange,
   } = useScoreboardRowsPaginationContext();
 
   const handlePaginationChange = (
@@ -22,6 +25,11 @@ export const ScoreboardPageContent: FC = () => {
 
   return (
     <>
+      <ScoreboardFilterForm
+        initialFilter={filter}
+        onSubmit={handleFilterChange}
+      />
+
       <ScoreboardTable problems={problems} rows={scoreboardRows} />
       <Pagination
         page={currentPage}

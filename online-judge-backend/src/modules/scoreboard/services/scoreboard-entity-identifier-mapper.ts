@@ -9,8 +9,8 @@ export class ScoreboardEntityIdentifierMapper
 {
   constructor(private readonly usersService: UsersService) {}
 
-  async toIdentifier(user: User): Promise<string> {
-    return `user:${user.id}`;
+  async toIdentifiers(users: User[]): Promise<string[]> {
+    return users.map((user) => `user:${user.id}`);
   }
 
   async fromIdentifiers(identifiers: string[]): Promise<User[]> {

@@ -31,9 +31,9 @@ export class ScoreboardReaderService {
         limit: parameters.limit || DEFAULT_LIMIT,
       };
 
-    if (parameters.userId) {
-      const user = await this.usersService.findById(parameters.userId);
-      sortedEntitiesPaginationParameter.entity = user;
+    if (parameters.userIds?.length > 0) {
+      const users = await this.usersService.getUsersByIds(parameters.userIds);
+      sortedEntitiesPaginationParameter.entities = users;
     }
 
     const { data: rawResults, meta } =

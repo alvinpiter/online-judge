@@ -110,8 +110,8 @@ describe(EntitySorterService.name, () => {
       const entity = createUser(1);
 
       jest
-        .spyOn(entityIdentifierMapper, 'toIdentifier')
-        .mockResolvedValue('user:1');
+        .spyOn(entityIdentifierMapper, 'toIdentifiers')
+        .mockResolvedValue(['user:1']);
 
       jest
         .spyOn(entityScoreCalculator, 'getNumericScore')
@@ -121,8 +121,10 @@ describe(EntitySorterService.name, () => {
 
       await service.updateEntityScore(entity);
 
-      expect(entityIdentifierMapper.toIdentifier).toHaveBeenCalledTimes(1);
-      expect(entityIdentifierMapper.toIdentifier).toHaveBeenCalledWith(entity);
+      expect(entityIdentifierMapper.toIdentifiers).toHaveBeenCalledTimes(1);
+      expect(entityIdentifierMapper.toIdentifiers).toHaveBeenCalledWith([
+        entity,
+      ]);
 
       expect(entityScoreCalculator.getNumericScore).toHaveBeenCalledTimes(1);
       expect(entityScoreCalculator.getNumericScore).toHaveBeenCalledWith(

@@ -5,7 +5,7 @@ import { OffsetPaginationContextProvider } from "../../../../lib/contexts/Offset
 import { useCurrentQueryString } from "../../../../lib/general/useCurrentQueryString";
 import { ScoreboardPageQueryStringObjectBuilder } from "../../helpers/ScoreboardPageQueryStringObjectBuilder";
 import { useGetScoreboardRowsRequest } from "../../hooks/useGetScoreboardRowsRequest";
-import { ScoreboardRow } from "../../interfaces";
+import { ScoreboardFilter, ScoreboardRow } from "../../interfaces";
 import { ScoreboardRowsPaginationContext } from "./context";
 
 interface ScoreboardRowsContextProviderProps {
@@ -23,7 +23,7 @@ export const ScoreboardRowsPaginationContextProvider: FC<
   );
 
   return (
-    <OffsetPaginationContextProvider<ScoreboardRow, any, any>
+    <OffsetPaginationContextProvider<ScoreboardRow, ScoreboardFilter, any>
       Context={ScoreboardRowsPaginationContext}
       qsObjectBuilder={qsObjectBuilder}
       getEntitiesRequestHook={useGetScoreboardRowsRequest}

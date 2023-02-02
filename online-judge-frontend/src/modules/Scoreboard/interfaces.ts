@@ -19,3 +19,7 @@ export interface Scoreboard {
   data: ScoreboardRow[];
   meta: OffsetPaginationMeta;
 }
+
+export interface ScoreboardFilter {
+  userIds?: string; // Example: 2,3,5,7
+}
