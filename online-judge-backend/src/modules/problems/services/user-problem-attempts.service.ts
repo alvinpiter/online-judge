@@ -44,6 +44,29 @@ export class UserProblemAttemptsService {
     return this.userProblemAttemptsRepository.findBy({ userId });
   }
 
+  /*
+  Return a map of userId -> UserProblemAttempt[]
+   */
+  async getAllUsersProblemAttempts(
+    userIds: number[],
+  ): Promise<Map<number, UserProblemAttempt[]>> {
+    const allUserProblemAttempts =
+      await this.userProblemAttemptsRepository.findBy({
+        userId: In(userIds),
+      });
+
+    const result = new Map<number, UserProblemAttempt[]>();
+    for (const userProblemAttempt of allUserProblemAttempts) {
+      if (result.has(userProblemAttempt.userId)) {
+        result.get(userProblemAttempt.userId).push(userProblemAttempt);
+      } else {
+        result.set(userProblemAttempt.userId, [userProblemAttempt]);
+      }
+    }
+
+    return result;
+  }
+
   async increaseNumberOfAttemptsAndSave(userId: number, problemId: number) {
     const userProblemAttempt = await this.getOrInitializeUserProblemAttempt(
       userId,

@@ -3,29 +3,39 @@ import { JobModule } from '../job/job.module';
 import { ProblemsModule } from '../problems/problems.module';
 import { SubmissionsModule } from '../submissions/submissions.module';
 import { UsersModule } from '../users/users.module';
-import { GlobalScoreboardScoreCalculationQueueController } from './controllers/global-scoreboard-score-calculation-queue.controller';
-import { GlobalScoreboardScoreCalculationQueue } from './queues/global-scoreboard-score-calculation.queue';
 import { SubmissionJudgedEventSubscriber } from './services/submission-judged-event.subscriber';
+import { ScoreboardRowFormatter } from './formatters/scoreboard-row.formatter';
+import { PaginationModule } from '../pagination/pagination.module';
+import { ScoreboardEntityIdentifierMapper } from './services/scoreboard-entity-identifier-mapper';
+import { ScoreboardScoreCalculator } from './services/scoreboard-score-calculator';
+import { ScoreboardScoreCalculationQueue } from './queues/scoreboard-score-calculation.queue';
 import { ScoreboardController } from './controllers/scoreboard.controller';
-import { GlobalScoreboardScoreCalculationQueueConsumer } from './services/global-scoreboard-score-calculation-queue.consumer';
-import { GlobalScoreboardScoreCalculatorService } from './services/global-scoreboard-score-calculator/global-scoreboard-score-calculator.service';
-import { BySolveCountAndLastAcceptedTimeStrategy } from './services/global-scoreboard-score-calculator/strategies/by-solve-count-and-last-accepted-time.strategy';
-import { GlobalScoreboardSortedSetService } from './services/global-scoreboard-sorted-set.service';
+import { ScoreboardScoreCalculationQueueController } from './controllers/scoreboard-score-calculation-queue.controller';
+import { ScoreboardEntitySorterService } from './services/scoreboard-entity-sorter.service';
+import { ScoreboardWriterService } from './services/scoreboard-writer.service';
+import { ScoreboardReaderService } from './services/scoreboard-reader.service';
 
 @Module({
-  imports: [JobModule, ProblemsModule, UsersModule, SubmissionsModule],
-  providers: [
-    GlobalScoreboardSortedSetService,
-    GlobalScoreboardScoreCalculatorService,
-    BySolveCountAndLastAcceptedTimeStrategy,
-    SubmissionJudgedEventSubscriber,
-    GlobalScoreboardScoreCalculationQueue,
-    GlobalScoreboardScoreCalculationQueueConsumer,
+  imports: [
+    JobModule,
+    ProblemsModule,
+    UsersModule,
+    SubmissionsModule,
+    PaginationModule,
   ],
-  exports: [GlobalScoreboardSortedSetService],
+  providers: [
+    ScoreboardScoreCalculationQueue,
+    ScoreboardEntityIdentifierMapper,
+    ScoreboardScoreCalculator,
+    ScoreboardEntitySorterService,
+    ScoreboardWriterService,
+    ScoreboardReaderService,
+    SubmissionJudgedEventSubscriber,
+    ScoreboardRowFormatter,
+  ],
   controllers: [
     ScoreboardController,
-    GlobalScoreboardScoreCalculationQueueController,
+    ScoreboardScoreCalculationQueueController,
   ],
 })
 export class ScoreboardModule {}

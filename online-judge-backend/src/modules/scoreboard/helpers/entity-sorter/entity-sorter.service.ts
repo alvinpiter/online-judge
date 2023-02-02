@@ -34,11 +34,11 @@ export class EntitySorterService<Entity, ScoringSchema> {
     );
 
     // TODO: How to test this condition?
-    if (parameters.entity) {
-      const memberIdentifer = await this.entityIdentifierMapper.toIdentifier(
-        parameters.entity,
+    if (parameters.entities?.length > 0) {
+      const memberIdentifiers = await this.entityIdentifierMapper.toIdentifiers(
+        parameters.entities,
       );
-      qb.addMemberFilter(memberIdentifer);
+      memberIdentifiers.forEach((identifier) => qb.addMemberFilter(identifier));
     }
 
     const { data: rawResults, meta } =
@@ -69,11 +69,13 @@ export class EntitySorterService<Entity, ScoringSchema> {
   }
 
   async updateEntityScore(entity: Entity) {
-    const identifier = await this.entityIdentifierMapper.toIdentifier(entity);
+    const identifiers = await this.entityIdentifierMapper.toIdentifiers([
+      entity,
+    ]);
     const numericScore = await this.entityScoreCalculator.getNumericScore(
       entity,
     );
 
-    await this.sortedSetService.upsertMemberScore(identifier, numericScore);
+    await this.sortedSetService.upsertMemberScore(identifiers[0], numericScore);
   }
 }

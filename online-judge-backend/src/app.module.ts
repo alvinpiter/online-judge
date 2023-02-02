@@ -14,9 +14,9 @@ import { ObjectStorageModule } from './modules/object-storage/object-storage.mod
 import { ProblemsModule } from './modules/problems/problems.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
 import { SubmissionsModule } from './modules/submissions/submissions.module';
-import { CacheModule } from './modules/cache/cache.module';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { ScoreboardModule } from './modules/scoreboard/scoreboard.module';
+import { CacheModule } from './modules/cache/cache.module';
 
 @Module({
   providers: [

@@ -11,4 +11,4 @@ export interface OffsetPaginationContextValue<Entity, Filter, Order> {
   handleOrderChange: (newOrder: Order) => void;
 }
 
-export const DEFAULT_NUMBER_OF_ENTITIES_PER_PAGE = 5;
+export const DEFAULT_NUMBER_OF_ENTITIES_PER_PAGE = 50;

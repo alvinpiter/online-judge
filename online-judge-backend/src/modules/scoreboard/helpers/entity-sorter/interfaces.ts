@@ -1,7 +1,7 @@
 import { OffsetPaginationParameter } from 'src/modules/pagination/offset-pagination.interface';
 
 export interface EntityIdentifierMapper<Entity> {
-  toIdentifier(entity: Entity): Promise<string>;
+  toIdentifiers(entities: Entity[]): Promise<string[]>;
   fromIdentifiers(identifiers: string[]): Promise<Entity[]>;
 }
 
@@ -12,7 +12,7 @@ export interface EntityScoreCalculator<Entity, ScoringSchema> {
 
 export interface SortedEntitiesPaginationParameter<Entity>
   extends OffsetPaginationParameter {
-  entity?: Entity;
+  entities?: Entity[];
 }
 
 export interface SortedEntity<Entity, ScoringSchema> {
