@@ -25,6 +25,6 @@ export class ScoreboardWriterService {
     const userId = queueItem.item.userId;
     const user = await this.usersService.findById(userId);
 
-    this.scoreboardEntitySorterService.updateUserScore(user);
+    await this.scoreboardEntitySorterService.updateUserScore(user);
   }
 }
