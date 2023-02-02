@@ -1,13 +1,13 @@
 import { UsersService } from 'src/modules/users/users.service';
 import { createUser } from 'src/lib/tests/createUser';
-import { GlobalScoreboardEntityIdentifierMapper } from './global-scoreboard-entity-identifier-mapper';
+import { ScoreboardEntityIdentifierMapper } from './scoreboard-entity-identifier-mapper';
 
-describe(GlobalScoreboardEntityIdentifierMapper.name, () => {
+describe(ScoreboardEntityIdentifierMapper.name, () => {
   const usersService = UsersService.prototype;
-  let service: GlobalScoreboardEntityIdentifierMapper;
+  let service: ScoreboardEntityIdentifierMapper;
 
   beforeEach(() => {
-    service = new GlobalScoreboardEntityIdentifierMapper(usersService);
+    service = new ScoreboardEntityIdentifierMapper(usersService);
   });
 
   describe('toIdentifer', () => {

@@ -4,13 +4,13 @@ import { rightShift } from 'src/lib/rightShift';
 import { UserProblemAttemptsService } from 'src/modules/problems/services/user-problem-attempts.service';
 import { User } from 'src/modules/users/user.entity';
 import { EntityScoreCalculator } from '../helpers/entity-sorter/interfaces';
-import { GlobalScoreboardScoringSchema } from '../interfaces/global-scoreboard';
+import { ScoreboardScoringSchema } from '../interfaces/scoreboard-scoring-schema';
 
 const NUMBER_OF_SHIFTS = 42;
 
 @Injectable()
-export class GlobalScoreboardScoreCalculator
-  implements EntityScoreCalculator<User, GlobalScoreboardScoringSchema>
+export class ScoreboardScoreCalculator
+  implements EntityScoreCalculator<User, ScoreboardScoringSchema>
 {
   constructor(
     private readonly userProblemAttemptsService: UserProblemAttemptsService,
@@ -51,7 +51,7 @@ export class GlobalScoreboardScoreCalculator
 
   async getSchematicScore(
     numericScore: number,
-  ): Promise<GlobalScoreboardScoringSchema> {
+  ): Promise<ScoreboardScoringSchema> {
     const solveCount = rightShift(numericScore, NUMBER_OF_SHIFTS);
     const lastSolveTimeInMilliseconds =
       leftShift(solveCount, NUMBER_OF_SHIFTS) +

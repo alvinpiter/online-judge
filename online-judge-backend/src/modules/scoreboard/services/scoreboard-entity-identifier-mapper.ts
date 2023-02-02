@@ -4,7 +4,7 @@ import { UsersService } from 'src/modules/users/users.service';
 import { EntityIdentifierMapper } from '../helpers/entity-sorter/interfaces';
 
 @Injectable()
-export class GlobalScoreboardEntityIdentifierMapper
+export class ScoreboardEntityIdentifierMapper
   implements EntityIdentifierMapper<User>
 {
   constructor(private readonly usersService: UsersService) {}

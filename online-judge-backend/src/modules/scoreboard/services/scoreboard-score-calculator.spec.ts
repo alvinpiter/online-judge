@@ -3,15 +3,15 @@ import { UserProblemAttempt } from 'src/modules/problems/entities/user-problem-a
 import { createUser } from 'src/lib/tests/createUser';
 import { createUserProblemAttempt } from 'src/lib/tests/createUserProblemAttempt';
 import { leftShift } from 'src/lib/leftShift';
-import { GlobalScoreboardScoreCalculator } from './global-scoreboard-score-calculator';
-import { GlobalScoreboardScoringSchema } from '../interfaces/global-scoreboard';
+import { ScoreboardScoringSchema } from '../interfaces/scoreboard-scoring-schema';
+import { ScoreboardScoreCalculator } from './scoreboard-score-calculator';
 
-describe(GlobalScoreboardScoreCalculator.name, () => {
+describe(ScoreboardScoreCalculator.name, () => {
   const userProblemAttemptsService = UserProblemAttemptsService.prototype;
-  let service: GlobalScoreboardScoreCalculator;
+  let service: ScoreboardScoreCalculator;
 
   beforeEach(() => {
-    service = new GlobalScoreboardScoreCalculator(userProblemAttemptsService);
+    service = new ScoreboardScoreCalculator(userProblemAttemptsService);
   });
 
   describe('calculateScore', () => {
@@ -48,7 +48,7 @@ describe(GlobalScoreboardScoreCalculator.name, () => {
 
     it('returns the correct result', async () => {
       const result = await service.getSchematicScore(score);
-      const expectedResult: GlobalScoreboardScoringSchema = {
+      const expectedResult: ScoreboardScoringSchema = {
         solveCount: 12,
         lastSolveTimeInMilliseconds: new Date('2023-01-30 17:20').getTime(),
       };
