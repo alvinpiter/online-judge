@@ -14,8 +14,10 @@ import { UsersService } from 'src/modules/users/users.service';
 import { ScoreboardGetDto } from '../data-transfer-objects/scoreboard-get.dto';
 import { EntitySorterService } from '../helpers/entity-sorter/entity-sorter.service';
 import { SortedEntitiesPaginationParameter } from '../helpers/entity-sorter/interfaces';
-import { ScoreboardRow } from '../interfaces/scoreboard-row';
-import { ScoreboardScoringSchema } from '../interfaces/scoreboard-scoring-schema';
+import {
+  ScoreboardRow,
+  ScoreboardScoringSchema,
+} from '../interfaces/scoreboard';
 import {
   ScoreboardScoreCalculationQueue,
   ScoreboardScoreCalculationQueueItem,

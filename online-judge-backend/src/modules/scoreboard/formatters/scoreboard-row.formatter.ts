@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserFormatter } from 'src/modules/users/formatters/user.formatter';
-import { ScoreboardRow } from '../interfaces/scoreboard-row';
+import { ScoreboardRow } from '../interfaces/scoreboard';
 
 @Injectable()
 export class ScoreboardRowFormatter {

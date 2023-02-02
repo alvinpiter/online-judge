@@ -2,9 +2,9 @@ import { UserProblemAttemptsService } from 'src/modules/problems/services/user-p
 import { UserProblemAttempt } from 'src/modules/problems/entities/user-problem-attempt.entity';
 import { createUser } from 'src/lib/tests/createUser';
 import { createUserProblemAttempt } from 'src/lib/tests/createUserProblemAttempt';
-import { ScoreboardScoringSchema } from '../interfaces/scoreboard-scoring-schema';
 import { ScoreboardScoreCalculator } from './scoreboard-score-calculator';
 import { leftShift } from 'src/lib/math';
+import { ScoreboardScoringSchema } from '../interfaces/scoreboard';
 
 describe(ScoreboardScoreCalculator.name, () => {
   const userProblemAttemptsService = UserProblemAttemptsService.prototype;

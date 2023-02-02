@@ -3,7 +3,7 @@ import { leftShift, rightShift } from 'src/lib/math';
 import { UserProblemAttemptsService } from 'src/modules/problems/services/user-problem-attempts.service';
 import { User } from 'src/modules/users/user.entity';
 import { EntityScoreCalculator } from '../helpers/entity-sorter/interfaces';
-import { ScoreboardScoringSchema } from '../interfaces/scoreboard-scoring-schema';
+import { ScoreboardScoringSchema } from '../interfaces/scoreboard';
 
 const NUMBER_OF_SHIFTS = 42;
 

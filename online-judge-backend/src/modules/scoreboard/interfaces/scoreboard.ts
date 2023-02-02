@@ -1,6 +1,11 @@
 import { UserProblemAttempt } from 'src/modules/problems/entities/user-problem-attempt.entity';
 import { User } from 'src/modules/users/user.entity';
 
+export interface ScoreboardScoringSchema {
+  solveCount: number;
+  lastSolveTimeInMilliseconds: number;
+}
+
 // TODO: What if the user doesn't have accepted solution yet?
 export interface ScoreboardRowScore {
   solveCount: number;
