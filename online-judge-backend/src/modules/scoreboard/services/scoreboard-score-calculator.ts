@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { leftShift } from 'src/lib/leftShift';
-import { rightShift } from 'src/lib/rightShift';
+import { leftShift, rightShift } from 'src/lib/math';
 import { UserProblemAttemptsService } from 'src/modules/problems/services/user-problem-attempts.service';
 import { User } from 'src/modules/users/user.entity';
 import { EntityScoreCalculator } from '../helpers/entity-sorter/interfaces';
