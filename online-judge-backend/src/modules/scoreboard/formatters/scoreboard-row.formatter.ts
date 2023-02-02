@@ -10,7 +10,8 @@ export class ScoreboardRowFormatter {
     return {
       user: this.userFormatter.format(scoreboardRow.user),
       rank: scoreboardRow.rank,
-      score: scoreboardRow.score,
+      numericScore: scoreboardRow.numericScore,
+      schematicScore: scoreboardRow.schematicScore,
       userProblemAttempts: scoreboardRow.userProblemAttempts,
     };
   }

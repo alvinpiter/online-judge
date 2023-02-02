@@ -103,7 +103,8 @@ export class ScoreboardService {
     const results: ScoreboardRow[] = rawResults.map((rawResult) => ({
       user: rawResult.entity,
       rank: rawResult.rank,
-      score: rawResult.schematicScore,
+      numericScore: rawResult.numericScore,
+      schematicScore: rawResult.schematicScore,
       userProblemAttempts:
         usersProblemAttemptsMap.get(rawResult.entity.id) || [],
     }));

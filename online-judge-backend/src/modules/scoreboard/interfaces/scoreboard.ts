@@ -1,13 +1,8 @@
 import { UserProblemAttempt } from 'src/modules/problems/entities/user-problem-attempt.entity';
 import { User } from 'src/modules/users/user.entity';
 
-export interface ScoreboardScoringSchema {
-  solveCount: number;
-  lastSolveTimeInMilliseconds: number;
-}
-
 // TODO: What if the user doesn't have accepted solution yet?
-export interface ScoreboardRowScore {
+export interface ScoreboardScoringSchema {
   solveCount: number;
   lastSolveTimeInMilliseconds: number;
 }
@@ -15,6 +10,7 @@ export interface ScoreboardRowScore {
 export interface ScoreboardRow {
   user: User;
   rank: number | null;
-  score: ScoreboardRowScore | null;
+  numericScore: number | null;
+  schematicScore: ScoreboardScoringSchema | null;
   userProblemAttempts: UserProblemAttempt[];
 }

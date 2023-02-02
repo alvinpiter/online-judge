@@ -25,11 +25,13 @@ export const ScoreboardTableRow: FC<ScoreboardTableRowProps> = ({
     <TableRow>
       <TableCell> {row.rank === null ? "Unranked" : row.rank + 1} </TableCell>
       <TableCell> {row.user.username} </TableCell>
-      <TableCell> {row.score === null ? 0 : row.score.solveCount} </TableCell>
       <TableCell>
-        {row.score === null
+        {row.schematicScore === null ? 0 : row.schematicScore.solveCount}
+      </TableCell>
+      <TableCell>
+        {row.schematicScore === null
           ? ""
-          : moment(row.score.lastSolveTimeInMilliseconds).fromNow()}
+          : moment(row.schematicScore.lastSolveTimeInMilliseconds).fromNow()}
       </TableCell>
       {problems.map((problem) => (
         <TableCell>

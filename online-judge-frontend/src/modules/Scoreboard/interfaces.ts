@@ -2,7 +2,7 @@ import { OffsetPaginationMeta } from "../Pagination/interfaces";
 import { UserProblemAttempt } from "../Problem/interfaces";
 import { User } from "../User/interface";
 
-export interface ScoreboardRowScore {
+export interface ScoreboardScoringSchema {
   solveCount: number;
   lastSolveTimeInMilliseconds: number;
 }
@@ -10,7 +10,8 @@ export interface ScoreboardRowScore {
 export interface ScoreboardRow {
   user: User;
   rank: number | null;
-  score: ScoreboardRowScore | null;
+  numericScore: number | null;
+  schematicScore: ScoreboardScoringSchema | null;
   userProblemAttempts: UserProblemAttempt[];
 }
 
