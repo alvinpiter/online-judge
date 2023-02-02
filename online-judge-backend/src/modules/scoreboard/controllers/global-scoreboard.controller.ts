@@ -3,13 +3,13 @@ import { UsersService } from 'src/modules/users/users.service';
 import { ScoreboardGetDto } from '../data-transfer-objects/scoreboard-get.dto';
 import { ScoreboardRowFormatter } from '../formatters/scoreboard-row.formatter';
 import { GlobalScoreboardScoreCalculationQueue } from '../queues/global-scoreboard-score-calculation.queue';
-import { ScoreboardReaderService } from '../services/scoreboard-service/scoreboard-reader.service';
+import { ScoreboardService } from '../services/scoreboard.service';
 
 @Controller('api')
 export class GlobalScoreboardController {
   constructor(
     private readonly scoreboardRowFormatter: ScoreboardRowFormatter,
-    private readonly scoreboardReaderService: ScoreboardReaderService,
+    private readonly scoreboardService: ScoreboardService,
     private readonly scoreboardScoreCalculationQueue: GlobalScoreboardScoreCalculationQueue,
     private readonly usersService: UsersService,
   ) {}
@@ -25,7 +25,7 @@ export class GlobalScoreboardController {
 
   @Get('scoreboard')
   async getScoreboard(@Query() scoreboardGetDto: ScoreboardGetDto) {
-    const { data, meta } = await this.scoreboardReaderService.getScoreboard(
+    const { data, meta } = await this.scoreboardService.getScoreboard(
       scoreboardGetDto,
     );
 
@@ -37,6 +37,6 @@ export class GlobalScoreboardController {
 
   @Get('scoreboard/problems')
   async getScoreboardProblems() {
-    return this.scoreboardReaderService.getScoreboardProblems();
+    return this.scoreboardService.getScoreboardProblems();
   }
 }

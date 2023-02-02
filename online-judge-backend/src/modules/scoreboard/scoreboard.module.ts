@@ -7,10 +7,7 @@ import { GlobalScoreboardScoreCalculationQueueController } from './controllers/g
 import { GlobalScoreboardScoreCalculationQueue } from './queues/global-scoreboard-score-calculation.queue';
 import { SubmissionJudgedEventSubscriber } from './services/submission-judged-event.subscriber';
 import { GlobalScoreboardController } from './controllers/global-scoreboard.controller';
-import { BySolveCountAndLastSolveTimeStrategy } from './services/scoreboard-score-calculator/strategies/by-solve-count-and-last-solve-time.strategy';
 import { ScoreboardRowFormatter } from './formatters/scoreboard-row.formatter';
-import { ScoreboardReaderService } from './services/scoreboard-service/scoreboard-reader.service';
-import { ScoreboardScoreCalculatorService } from './services/scoreboard-score-calculator/scoreboard-score-calculator.service';
 import { PaginationModule } from '../pagination/pagination.module';
 import { ScoreboardService } from './services/scoreboard.service';
 import { ScoreboardEntityIdentifierMapper } from './services/scoreboard-entity-identifier-mapper';
@@ -28,10 +25,6 @@ import { ScoreboardScoreCalculator } from './services/scoreboard-score-calculato
     ScoreboardEntityIdentifierMapper,
     ScoreboardScoreCalculator,
     ScoreboardService,
-
-    ScoreboardReaderService,
-    ScoreboardScoreCalculatorService,
-    BySolveCountAndLastSolveTimeStrategy,
     SubmissionJudgedEventSubscriber,
     GlobalScoreboardScoreCalculationQueue,
     ScoreboardRowFormatter,
