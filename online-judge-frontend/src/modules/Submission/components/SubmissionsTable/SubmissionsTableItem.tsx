@@ -3,6 +3,7 @@ import moment from "moment";
 import { FC } from "react";
 import { ROUTES } from "../../../../constants/Routes";
 import { Submission } from "../../interfaces";
+import { FormattedSubmissionVerdict } from "../FormattedSubmissionVerdict/FormattedSubmissionVerdict";
 
 interface SubmissionsTableItemProps {
   submission: Submission;
@@ -35,7 +36,9 @@ export const SubmissionsTableItem: FC<SubmissionsTableItemProps> = ({
         </Link>
       </TableCell>
       <TableCell> {submission.programmingLanguage} </TableCell>
-      <TableCell> {submission.verdict} </TableCell>
+      <TableCell>
+        <FormattedSubmissionVerdict verdict={submission.verdict} />
+      </TableCell>
       <TableCell>{moment(submission.submittedAt).fromNow()}</TableCell>
       <TableCell>
         <Link
