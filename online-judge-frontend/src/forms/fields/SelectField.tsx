@@ -10,24 +10,17 @@ interface SelectFieldProps extends SelectProps {
 
 export const SelectField: FC<SelectFieldProps> = ({
   name,
-  label,
-  fullWidth,
   children,
+  ...props
 }) => {
   const [field, , helper] = useField<string>(name);
 
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = (event: SelectChangeEvent<any>) => {
     helper.setValue(event.target.value);
   };
 
   return (
-    <Select
-      label={label}
-      value={field.value}
-      fullWidth={fullWidth}
-      onChange={handleChange}
-      size="small"
-    >
+    <Select {...props} value={field.value} onChange={handleChange} size="small">
       {children}
     </Select>
   );
