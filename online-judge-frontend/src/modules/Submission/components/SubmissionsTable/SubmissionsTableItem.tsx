@@ -3,6 +3,7 @@ import moment from "moment";
 import { FC } from "react";
 import { ROUTES } from "../../../../constants/Routes";
 import { Submission } from "../../interfaces";
+import { FormattedProgrammingLanguage } from "../FormattedProgrammingLanguage/FormattedProgrammingLanguage";
 import { FormattedSubmissionVerdict } from "../FormattedSubmissionVerdict/FormattedSubmissionVerdict";
 
 interface SubmissionsTableItemProps {
@@ -35,7 +36,11 @@ export const SubmissionsTableItem: FC<SubmissionsTableItemProps> = ({
           {user.username}
         </Link>
       </TableCell>
-      <TableCell> {submission.programmingLanguage} </TableCell>
+      <TableCell>
+        <FormattedProgrammingLanguage
+          programmingLanguage={submission.programmingLanguage}
+        />
+      </TableCell>
       <TableCell>
         <FormattedSubmissionVerdict verdict={submission.verdict} />
       </TableCell>
