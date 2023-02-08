@@ -1,4 +1,5 @@
 import {
+  Chip,
   MenuItem,
   Paper,
   Select,
@@ -37,21 +38,29 @@ export const UserProblemsTable: FC<UserProblemsTableProps> = ({
       <Box
         sx={{
           display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
+          justifyContent: "space-between",
           mb: 1,
         }}
       >
-        <Typography variant="subtitle1" sx={{ mr: 1 }}>
-          Order by
-        </Typography>
-        <Select size="small" value={order} onChange={handleOrderChange}>
-          {Object.keys(ProblemsOrderOption).map((order) => (
-            <MenuItem key={order} value={order}>
-              {humanizeProblemsOrderOption(order as ProblemsOrderOption)}
-            </MenuItem>
-          ))}
-        </Select>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Chip sx={{ backgroundColor: "#d4edc9", ml: 1 }} />
+          <Typography sx={{ ml: 1 }}> Solved </Typography>
+          <Chip sx={{ backgroundColor: "#ffe3e3", ml: 1 }} />
+          <Typography sx={{ ml: 1 }}> Attempted </Typography>
+        </Box>
+
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Typography variant="subtitle1" sx={{ mr: 1 }}>
+            Order by
+          </Typography>
+          <Select size="small" value={order} onChange={handleOrderChange}>
+            {Object.keys(ProblemsOrderOption).map((order) => (
+              <MenuItem key={order} value={order}>
+                {humanizeProblemsOrderOption(order as ProblemsOrderOption)}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
       </Box>
       <TableContainer component={Paper}>
         <Table size="small">
@@ -61,7 +70,6 @@ export const UserProblemsTable: FC<UserProblemsTableProps> = ({
               <TableCell> Name </TableCell>
               <TableCell> Rating </TableCell>
               <TableCell> Solver count </TableCell>
-              <TableCell> Attempt type </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
