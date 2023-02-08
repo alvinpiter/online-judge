@@ -25,7 +25,7 @@ export const ScoreboardTable: FC<ScoreboardTableProps> = ({
 }) => {
   return (
     <TableContainer component={Paper}>
-      <Table>
+      <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell> Rank </TableCell>
