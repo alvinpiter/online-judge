@@ -42,7 +42,7 @@ export const UserProblemsTable: FC<UserProblemsTableProps> = ({
           mb: 1,
         }}
       >
-        <Typography variant="subtitle1" sx={{ mr: 2 }}>
+        <Typography variant="subtitle1" sx={{ mr: 1 }}>
           Order by
         </Typography>
         <Select size="small" value={order} onChange={handleOrderChange}>
