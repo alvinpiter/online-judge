@@ -1,4 +1,4 @@
-import { Button, MenuItem } from "@mui/material";
+import { Box, Button, MenuItem, Typography } from "@mui/material";
 import { Form, Formik } from "formik";
 import { FC } from "react";
 import { SelectField } from "../../../../forms/fields/SelectField";
@@ -37,7 +37,8 @@ export const ProblemsFilterForm: FC<ProblemsFilterFormProps> = ({
   };
 
   return (
-    <>
+    <Box sx={{ padding: 2 }}>
+      <Typography variant="h5"> Filters </Typography>
       <Formik<ProblemsFilterFormData>
         initialValues={{
           state: initialFilter.state || "ALL",
@@ -55,27 +56,46 @@ export const ProblemsFilterForm: FC<ProblemsFilterFormProps> = ({
         {() => (
           <Form>
             {showStateField && (
-              <SelectField label="State" name="state">
-                <MenuItem value="ALL"> All </MenuItem>
-                <MenuItem value={ProblemState.PUBLISHED}>
-                  {ProblemState.PUBLISHED}
-                </MenuItem>
-                <MenuItem value={ProblemState.DRAFT}>
-                  {ProblemState.DRAFT}
-                </MenuItem>
-              </SelectField>
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="body1"> Problem state </Typography>
+                <SelectField label="State" name="state" fullWidth>
+                  <MenuItem value="ALL"> All </MenuItem>
+                  <MenuItem value={ProblemState.PUBLISHED}>
+                    {ProblemState.PUBLISHED}
+                  </MenuItem>
+                  <MenuItem value={ProblemState.DRAFT}>
+                    {ProblemState.DRAFT}
+                  </MenuItem>
+                </SelectField>
+              </Box>
             )}
 
-            <TextField type="number" name="ratingGte" label="Min Rating" />
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="body1"> Minimum rating </Typography>
+              <TextField
+                type="number"
+                name="ratingGte"
+                label="Minimum Rating"
+                fullWidth
+              />
+            </Box>
 
-            <TextField type="number" name="ratingLte" label="Max Rating" />
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="body1"> Maximum rating </Typography>
+              <TextField
+                type="number"
+                name="ratingLte"
+                label="Maximum Rating"
+                fullWidth
+              />
+            </Box>
 
-            <Button type="submit" variant="contained" sx={{ ml: 2 }}>
+            <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
               Filter
             </Button>
           </Form>
         )}
       </Formik>
-    </>
+    </Box>
   );
 };

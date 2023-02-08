@@ -1,4 +1,4 @@
-import { Box, Button, Pagination, Typography } from "@mui/material";
+import { Box, Button, Pagination, Paper, Typography } from "@mui/material";
 import { ChangeEvent, FC } from "react";
 import { useUserProblemsContext } from "../contexts/UserProblemsContext/context";
 import { ProblemsOrderOption } from "../interfaces";
@@ -25,12 +25,37 @@ export const UserProblemsPageContent: FC = () => {
   };
 
   return (
-    <>
-      <ProblemsFilterForm
-        initialFilter={filter}
-        onSubmit={handleFilterChange}
-      />
-      <Box>
+    <Box sx={{ display: "flex", mt: 2, mb: 4 }}>
+      <Box sx={{ flexGrow: 2 }}>
+        <Paper elevation={2}>
+          <UserProblemsTable problems={problems} />
+        </Paper>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            mt: 1,
+          }}
+        >
+          <Pagination
+            page={currentPage}
+            count={numberOfPages}
+            onChange={handlePaginationChange}
+          />
+        </Box>
+      </Box>
+
+      <Box sx={{ flexGrow: 1, ml: 2 }}>
+        <Paper elevation={2}>
+          <ProblemsFilterForm
+            initialFilter={filter}
+            onSubmit={handleFilterChange}
+          />
+        </Paper>
+      </Box>
+
+      <Box sx={{ display: "none" }}>
         <Typography variant="body1"> Order by </Typography>
         {Object.keys(ProblemsOrderOption).map((order) => (
           <Button
@@ -42,12 +67,6 @@ export const UserProblemsPageContent: FC = () => {
           </Button>
         ))}
       </Box>
-      <UserProblemsTable problems={problems} />
-      <Pagination
-        page={currentPage}
-        count={numberOfPages}
-        onChange={handlePaginationChange}
-      />
-    </>
+    </Box>
   );
 };
