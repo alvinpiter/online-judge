@@ -22,7 +22,7 @@ export const SubmissionsPageContent: FC = () => {
   };
 
   return (
-    <Box sx={{ display: "flex", mt: 2 }}>
+    <Box sx={{ display: "flex", mt: 2, mb: 4 }}>
       <Box sx={{ flexGrow: 2 }}>
         <Paper elevation={2}>
           <SubmissionsTable submissions={submissions} />
@@ -32,6 +32,7 @@ export const SubmissionsPageContent: FC = () => {
           sx={{
             display: "flex",
             justifyContent: "center",
+            mt: 1,
           }}
         >
           <Pagination
