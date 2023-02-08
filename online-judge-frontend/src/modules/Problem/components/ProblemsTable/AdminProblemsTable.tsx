@@ -20,7 +20,7 @@ export const AdminProblemsTable: FC<AdminProblemsTableProps> = ({
 }) => {
   return (
     <TableContainer component={Paper}>
-      <Table>
+      <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell> ID </TableCell>

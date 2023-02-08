@@ -1,7 +1,6 @@
-import { Box, Button, Pagination, Typography } from "@mui/material";
+import { Box, Pagination, Paper } from "@mui/material";
 import { ChangeEvent, FC } from "react";
 import { useUserProblemsContext } from "../contexts/UserProblemsContext/context";
-import { ProblemsOrderOption } from "../interfaces";
 import { ProblemsFilterForm } from "./ProblemsTable/ProblemsFilterForm";
 import { UserProblemsTable } from "./ProblemsTable/UserProblemsTable";
 
@@ -11,6 +10,7 @@ export const UserProblemsPageContent: FC = () => {
     entities: problems,
     currentPage,
     filter,
+    order,
     numberOfPages,
     handlePageChange,
     handleFilterChange,
@@ -25,29 +25,39 @@ export const UserProblemsPageContent: FC = () => {
   };
 
   return (
-    <>
-      <ProblemsFilterForm
-        initialFilter={filter}
-        onSubmit={handleFilterChange}
-      />
-      <Box>
-        <Typography variant="body1"> Order by </Typography>
-        {Object.keys(ProblemsOrderOption).map((order) => (
-          <Button
-            variant="contained"
-            onClick={() => handleOrderChange(order as ProblemsOrderOption)}
-            sx={{ mr: 2 }}
-          >
-            {order}
-          </Button>
-        ))}
+    <Box sx={{ display: "flex", mt: 2, mb: 4 }}>
+      <Box sx={{ flexGrow: 2 }}>
+        <Paper elevation={2}>
+          <UserProblemsTable
+            problems={problems}
+            order={order}
+            onOrderChange={handleOrderChange}
+          />
+        </Paper>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            mt: 1,
+          }}
+        >
+          <Pagination
+            page={currentPage}
+            count={numberOfPages}
+            onChange={handlePaginationChange}
+          />
+        </Box>
       </Box>
-      <UserProblemsTable problems={problems} />
-      <Pagination
-        page={currentPage}
-        count={numberOfPages}
-        onChange={handlePaginationChange}
-      />
-    </>
+
+      <Box sx={{ flexGrow: 1, ml: 2 }}>
+        <Paper elevation={2}>
+          <ProblemsFilterForm
+            initialFilter={filter}
+            onSubmit={handleFilterChange}
+          />
+        </Paper>
+      </Box>
+    </Box>
   );
 };

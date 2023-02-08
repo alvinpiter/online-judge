@@ -6,7 +6,7 @@ import { UserProblemsContextProvider } from "../modules/Problem/contexts/UserPro
 export const UserProblemsPage: FC = () => {
   return (
     <>
-      <Typography variant="h4">User Problems</Typography>
+      <Typography variant="h4"> Problems</Typography>
       <UserProblemsContextProvider>
         <UserProblemsPageContent />
       </UserProblemsContextProvider>
