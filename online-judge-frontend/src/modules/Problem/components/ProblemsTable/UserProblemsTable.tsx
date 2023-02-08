@@ -18,7 +18,7 @@ interface UserProblemsTableProps {
 export const UserProblemsTable: FC<UserProblemsTableProps> = ({ problems }) => {
   return (
     <TableContainer component={Paper}>
-      <Table>
+      <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell> ID </TableCell>
