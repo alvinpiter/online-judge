@@ -3,7 +3,7 @@ import moment from "moment";
 import { FC } from "react";
 import { Problem, UserProblemAttempt } from "../../Problem/interfaces";
 import { ScoreboardRow } from "../interfaces";
-import { UserProblemAttemptCellContent } from "./UserProblemAttempt";
+import { UserProblemAttemptCell } from "./UserProblemAttemptCell";
 
 interface ScoreboardTableRowProps {
   problems: Problem[];
@@ -35,7 +35,7 @@ export const ScoreboardTableRow: FC<ScoreboardTableRowProps> = ({
       </TableCell>
       {problems.map((problem) => (
         <TableCell>
-          <UserProblemAttemptCellContent
+          <UserProblemAttemptCell
             userProblemAttempt={userProblemAttemptsMap.get(problem.id)}
           />
         </TableCell>
