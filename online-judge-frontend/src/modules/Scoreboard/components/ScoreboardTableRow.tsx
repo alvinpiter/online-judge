@@ -1,6 +1,7 @@
-import { TableCell, TableRow } from "@mui/material";
+import { Link, TableCell, TableRow } from "@mui/material";
 import moment from "moment";
 import { FC } from "react";
+import { ROUTES } from "../../../constants/Routes";
 import { Problem, UserProblemAttempt } from "../../Problem/interfaces";
 import { ScoreboardRow } from "../interfaces";
 import { UserProblemAttemptCell } from "./UserProblemAttemptCell";
@@ -24,7 +25,15 @@ export const ScoreboardTableRow: FC<ScoreboardTableRowProps> = ({
   return (
     <TableRow>
       <TableCell> {row.rank === null ? "Unranked" : row.rank + 1} </TableCell>
-      <TableCell> {row.user.username} </TableCell>
+      <TableCell>
+        <Link
+          href={ROUTES.USER_PROFILE_ROUTE.generatePath({
+            userId: row.user.id.toString(),
+          })}
+        >
+          {row.user.username}
+        </Link>
+      </TableCell>
       <TableCell>
         {row.schematicScore === null ? 0 : row.schematicScore.solveCount}
       </TableCell>
