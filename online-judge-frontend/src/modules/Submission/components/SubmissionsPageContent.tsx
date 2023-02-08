@@ -1,4 +1,4 @@
-import { Pagination } from "@mui/material";
+import { Box, Pagination, Paper } from "@mui/material";
 import { ChangeEvent, FC } from "react";
 import { useSubmissionsContext } from "../contexts/SubmissionsContext/context";
 import { SubmissionsFilterForm } from "./SubmissionsTable/SubmissionsFilterForm";
@@ -22,19 +22,34 @@ export const SubmissionsPageContent: FC = () => {
   };
 
   return (
-    <>
-      <SubmissionsFilterForm
-        initialFilter={filter}
-        onSubmit={handleFilterChange}
-      />
+    <Box sx={{ display: "flex", mt: 2 }}>
+      <Box sx={{ flexGrow: 2 }}>
+        <Paper elevation={2}>
+          <SubmissionsTable submissions={submissions} />
+        </Paper>
 
-      <SubmissionsTable submissions={submissions} />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Pagination
+            page={currentPage}
+            count={numberOfPages}
+            onChange={handlePaginationChange}
+          />
+        </Box>
+      </Box>
 
-      <Pagination
-        page={currentPage}
-        count={numberOfPages}
-        onChange={handlePaginationChange}
-      />
-    </>
+      <Box sx={{ flexGrow: 1, ml: 2 }}>
+        <Paper elevation={2}>
+          <SubmissionsFilterForm
+            initialFilter={filter}
+            onSubmit={handleFilterChange}
+          />
+        </Paper>
+      </Box>
+    </Box>
   );
 };

@@ -1,4 +1,4 @@
-import { Button, MenuItem } from "@mui/material";
+import { Box, Button, MenuItem, Typography } from "@mui/material";
 import { Form, Formik } from "formik";
 import { FC } from "react";
 import { SelectField } from "../../../../forms/fields/SelectField";
@@ -8,6 +8,8 @@ import {
   SupportedProgrammingLanguages,
 } from "../../../Problem/interfaces";
 import { SubmissionsFilter, SubmissionVerdict } from "../../interfaces";
+import { FormattedProgrammingLanguage } from "../FormattedProgrammingLanguage/FormattedProgrammingLanguage";
+import { FormattedSubmissionVerdict } from "../FormattedSubmissionVerdict/FormattedSubmissionVerdict";
 
 interface SubmissionsFilterFormProps {
   initialFilter: SubmissionsFilter;
@@ -44,7 +46,8 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
   };
 
   return (
-    <>
+    <Box sx={{ padding: 2 }}>
+      <Typography variant="h5"> Filters </Typography>
       <Formik<SubmissionsFilterFormData>
         initialValues={{
           userId: initialFilter.userId,
@@ -59,40 +62,64 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
         {() => (
           <Form>
             {!hideProblemFilter && (
-              <TextField type="number" name="problemId" label="Problem ID" />
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="body1">Problem</Typography>
+                <TextField
+                  type="number"
+                  name="problemId"
+                  label="Problem"
+                  fullWidth
+                />
+              </Box>
             )}
 
             {!hideUserFilter && (
-              <TextField type="number" name="userId" label="User ID" />
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="body1"> User </Typography>
+                <TextField type="number" name="userId" label="User" fullWidth />
+              </Box>
             )}
 
-            <SelectField
-              name="programmingLanguage"
-              label="Programming Language"
-            >
-              <MenuItem value="ALL"> All </MenuItem>
-              {SupportedProgrammingLanguages.map((programmingLanguage, idx) => (
-                <MenuItem key={idx} value={programmingLanguage}>
-                  {programmingLanguage}
-                </MenuItem>
-              ))}
-            </SelectField>
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="body1"> Programming Language </Typography>
+              <SelectField
+                name="programmingLanguage"
+                label="Programming Language"
+                fullWidth
+              >
+                <MenuItem value="ALL"> All </MenuItem>
+                {SupportedProgrammingLanguages.map(
+                  (programmingLanguage, idx) => (
+                    <MenuItem key={idx} value={programmingLanguage}>
+                      <FormattedProgrammingLanguage
+                        programmingLanguage={programmingLanguage}
+                      />
+                    </MenuItem>
+                  )
+                )}
+              </SelectField>
+            </Box>
 
-            <SelectField name="verdict" label="Verdict">
-              <MenuItem value="ALL"> All </MenuItem>
-              {Object.keys(SubmissionVerdict).map((verdict, idx) => (
-                <MenuItem key={idx} value={verdict}>
-                  {verdict}
-                </MenuItem>
-              ))}
-            </SelectField>
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="body1"> Verdict </Typography>
+              <SelectField name="verdict" label="Verdict" fullWidth>
+                <MenuItem value="ALL"> All </MenuItem>
+                {Object.keys(SubmissionVerdict).map((verdict, idx) => (
+                  <MenuItem key={idx} value={verdict}>
+                    <FormattedSubmissionVerdict
+                      verdict={verdict as SubmissionVerdict}
+                    />
+                  </MenuItem>
+                ))}
+              </SelectField>
+            </Box>
 
-            <Button type="submit" variant="contained" sx={{ ml: 2 }}>
+            <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
               Filter
             </Button>
           </Form>
         )}
       </Formik>
-    </>
+    </Box>
   );
 };

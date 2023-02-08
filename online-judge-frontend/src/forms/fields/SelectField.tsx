@@ -1,16 +1,17 @@
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { SelectProps } from "@mui/material/Select";
 import { useField } from "formik";
 import React, { FC } from "react";
 
-interface SelectFieldProps {
+interface SelectFieldProps extends SelectProps {
   name: string;
-  label?: string;
   children?: React.ReactNode;
 }
 
 export const SelectField: FC<SelectFieldProps> = ({
   name,
   label,
+  fullWidth,
   children,
 }) => {
   const [field, , helper] = useField<string>(name);
@@ -20,7 +21,13 @@ export const SelectField: FC<SelectFieldProps> = ({
   };
 
   return (
-    <Select label={label} value={field.value} onChange={handleChange}>
+    <Select
+      label={label}
+      value={field.value}
+      fullWidth={fullWidth}
+      onChange={handleChange}
+      size="small"
+    >
       {children}
     </Select>
   );
