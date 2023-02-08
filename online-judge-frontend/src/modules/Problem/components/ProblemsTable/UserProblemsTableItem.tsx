@@ -1,6 +1,7 @@
 import { Link, TableCell, TableRow } from "@mui/material";
 import { FC } from "react";
 import { ROUTES } from "../../../../constants/Routes";
+import { SubmissionVerdict } from "../../../Submission/interfaces";
 import { ProblemWithDetail } from "../../interfaces";
 
 interface UserProblemsTableItemProps {
@@ -28,7 +29,10 @@ export const UserProblemsTableItem: FC<UserProblemsTableItemProps> = ({
         <Link
           href={ROUTES.SUBMISSIONS_ROUTE.generatePath(
             {},
-            { problemId: problem.id.toString() }
+            {
+              problemId: problem.id.toString(),
+              verdict: SubmissionVerdict.ACCEPTED,
+            }
           )}
         >
           {problem.problemStatistics?.solverCount || 0}
