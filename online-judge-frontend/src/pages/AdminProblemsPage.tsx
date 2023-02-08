@@ -6,7 +6,7 @@ import { AdminProblemsContextProvider } from "../modules/Problem/contexts/AdminP
 export const AdminProblemsPage: FC = () => {
   return (
     <>
-      <Typography variant="h4">Admin Problems</Typography>
+      <Typography variant="h4">Manage Problems</Typography>
 
       <AdminProblemsContextProvider>
         <AdminProblemsPageContent />
