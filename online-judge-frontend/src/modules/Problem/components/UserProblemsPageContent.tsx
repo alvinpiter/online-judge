@@ -1,7 +1,6 @@
-import { Box, Button, Pagination, Paper, Typography } from "@mui/material";
+import { Box, Pagination, Paper } from "@mui/material";
 import { ChangeEvent, FC } from "react";
 import { useUserProblemsContext } from "../contexts/UserProblemsContext/context";
-import { ProblemsOrderOption } from "../interfaces";
 import { ProblemsFilterForm } from "./ProblemsTable/ProblemsFilterForm";
 import { UserProblemsTable } from "./ProblemsTable/UserProblemsTable";
 
@@ -11,6 +10,7 @@ export const UserProblemsPageContent: FC = () => {
     entities: problems,
     currentPage,
     filter,
+    order,
     numberOfPages,
     handlePageChange,
     handleFilterChange,
@@ -28,7 +28,11 @@ export const UserProblemsPageContent: FC = () => {
     <Box sx={{ display: "flex", mt: 2, mb: 4 }}>
       <Box sx={{ flexGrow: 2 }}>
         <Paper elevation={2}>
-          <UserProblemsTable problems={problems} />
+          <UserProblemsTable
+            problems={problems}
+            order={order}
+            onOrderChange={handleOrderChange}
+          />
         </Paper>
 
         <Box
@@ -53,19 +57,6 @@ export const UserProblemsPageContent: FC = () => {
             onSubmit={handleFilterChange}
           />
         </Paper>
-      </Box>
-
-      <Box sx={{ display: "none" }}>
-        <Typography variant="body1"> Order by </Typography>
-        {Object.keys(ProblemsOrderOption).map((order) => (
-          <Button
-            variant="contained"
-            onClick={() => handleOrderChange(order as ProblemsOrderOption)}
-            sx={{ mr: 2 }}
-          >
-            {order}
-          </Button>
-        ))}
       </Box>
     </Box>
   );
