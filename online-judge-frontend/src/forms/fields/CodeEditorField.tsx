@@ -6,18 +6,20 @@ import { CODE_EDITOR_PROGRAMMING_LANGUAGE_MAPPER } from "../../constants/CodeEdi
 
 interface CodeEditorFieldProps {
   name: string;
+  height?: string; // in vh
   programmingLanguage?: ProgrammingLanguage;
 }
 
 export const CodeEditorField: FC<CodeEditorFieldProps> = ({
   name,
+  height,
   programmingLanguage,
 }) => {
   const [field, , helper] = useField(name);
 
   return (
     <Editor
-      height="20vh"
+      height={height || "20vh"}
       theme="vs-dark"
       defaultLanguage="javascript"
       language={

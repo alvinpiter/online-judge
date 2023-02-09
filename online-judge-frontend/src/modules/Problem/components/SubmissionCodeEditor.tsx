@@ -1,22 +1,23 @@
-import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { Box, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { FC, useEffect, useState } from "react";
-import { useSnackbarContext } from "../../../../core/Snackbar";
-import { useCreateSubmissionRequest } from "../../../Submission/hooks/useCreateSubmissionRequest";
-import { useGetSolutionTemplatesRequest } from "../../hooks/useGetSolutionTemplatesRequest";
-import { useSolutionTemplatesMap } from "../../hooks/useSolutionTemplatesMap";
+import { useSnackbarContext } from "../../../core/Snackbar";
+import { FormattedProgrammingLanguage } from "../../Submission/components/FormattedProgrammingLanguage/FormattedProgrammingLanguage";
+import { useCreateSubmissionRequest } from "../../Submission/hooks/useCreateSubmissionRequest";
+import { useGetSolutionTemplatesRequest } from "../hooks/useGetSolutionTemplatesRequest";
+import { useSolutionTemplatesMap } from "../hooks/useSolutionTemplatesMap";
 import {
   ProgrammingLanguage,
   SupportedProgrammingLanguages,
-} from "../../interfaces";
-import { SolutionTemplateForm } from "../EditSolutionTemplates/SolutionTemplateForm";
+} from "../interfaces";
+import { SolutionTemplateForm } from "./EditSolutionTemplates/SolutionTemplateForm";
 
-interface ProblemDescriptionTabCodeEditorProps {
+interface SubmissionCodeEditorProps {
   problemId: string;
 }
 
-export const ProblemDescriptionTabCodeEditor: FC<
-  ProblemDescriptionTabCodeEditorProps
-> = ({ problemId }) => {
+export const SubmissionCodeEditor: FC<SubmissionCodeEditorProps> = ({
+  problemId,
+}) => {
   const [activeProgrammingLanguage, setActiveProgrammingLanguage] = useState(
     ProgrammingLanguage.JAVASCRIPT
   );
@@ -71,18 +72,22 @@ export const ProblemDescriptionTabCodeEditor: FC<
         label="Programming Language"
         value={activeProgrammingLanguage}
         onChange={handleProgrammingLanguageChange}
+        size="small"
       >
         {SupportedProgrammingLanguages.map((language, idx) => (
           <MenuItem key={idx} value={language}>
-            {language}
+            <FormattedProgrammingLanguage programmingLanguage={language} />
           </MenuItem>
         ))}
       </Select>
-      <SolutionTemplateForm
-        programmingLanguage={activeProgrammingLanguage}
-        initialTemplate={activeSolutionTemplate}
-        onSubmit={handleSubmit}
-      />
+
+      <Box sx={{ mt: 1 }}>
+        <SolutionTemplateForm
+          programmingLanguage={activeProgrammingLanguage}
+          initialTemplate={activeSolutionTemplate}
+          onSubmit={handleSubmit}
+        />
+      </Box>
     </>
   );
 };
