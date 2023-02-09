@@ -46,7 +46,7 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
   };
 
   return (
-    <Box sx={{ padding: 2 }}>
+    <Box>
       <Typography variant="h5"> Filters </Typography>
       <Formik<SubmissionsFilterFormData>
         initialValues={{

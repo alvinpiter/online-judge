@@ -6,7 +6,7 @@ import { ScoreboardContextProvider } from "../modules/Scoreboard/contexts/Scoreb
 export const ScoreboardPage: FC = () => {
   return (
     <>
-      <Typography variant="h4"> Scoreboard Page</Typography>
+      <Typography variant="h4"> Scoreboard </Typography>
       <ScoreboardContextProvider>
         <ScoreboardPageContent />
       </ScoreboardContextProvider>

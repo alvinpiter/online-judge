@@ -25,7 +25,7 @@ export const ScoreboardTable: FC<ScoreboardTableProps> = ({
 }) => {
   return (
     <TableContainer component={Paper}>
-      <Table>
+      <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell> Rank </TableCell>
@@ -33,7 +33,7 @@ export const ScoreboardTable: FC<ScoreboardTableProps> = ({
             <TableCell> Solve count </TableCell>
             <TableCell> Last solve at </TableCell>
             {problems.map((problem) => (
-              <TableCell>
+              <TableCell align="center">
                 <Link
                   href={ROUTES.USER_PROBLEM_ROUTE.generatePath({
                     problemId: problem.id.toString(),

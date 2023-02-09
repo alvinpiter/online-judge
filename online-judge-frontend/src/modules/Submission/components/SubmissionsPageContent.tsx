@@ -44,7 +44,7 @@ export const SubmissionsPageContent: FC = () => {
       </Box>
 
       <Box sx={{ flexGrow: 1, ml: 2 }}>
-        <Paper elevation={2}>
+        <Paper elevation={2} sx={{ padding: 2 }}>
           <SubmissionsFilterForm
             initialFilter={filter}
             onSubmit={handleFilterChange}
