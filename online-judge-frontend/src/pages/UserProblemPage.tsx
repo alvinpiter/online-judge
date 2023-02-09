@@ -18,10 +18,12 @@ export const UserProblemPage: FC = () => {
 
   return (
     <>
-      <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
-        <Typography variant="h4">{problem.name}</Typography>
+      <Typography variant="h4">{problem.name}</Typography>
+
+      <Stack direction="column">
+        <Typography variant="subtitle1"> Time limit: 1s </Typography>
+        <Typography variant="subtitle1"> Memory limit: 512MB </Typography>
         <Typography variant="subtitle1">
-          [
           <Link
             href={ROUTES.PROBLEM_SUBMISSIONS_ROUTE.generatePath({
               problemId,
@@ -29,7 +31,6 @@ export const UserProblemPage: FC = () => {
           >
             Submissions
           </Link>
-          ]
         </Typography>
       </Stack>
 
