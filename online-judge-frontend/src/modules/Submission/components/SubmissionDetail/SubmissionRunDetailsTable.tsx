@@ -20,7 +20,7 @@ export const SubmissionRunDetailsTable: FC<SubmissionRunDetailsTableProps> = ({
 }) => {
   return (
     <TableContainer component={Paper}>
-      <Table>
+      <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell> Input </TableCell>
