@@ -42,6 +42,7 @@ export const SolutionTemplateForm: FC<SolutionTemplateFormProps> = ({
               <CodeEditorField
                 name="template"
                 programmingLanguage={programmingLanguage}
+                height="50vh"
               />
               <Button
                 type="submit"
