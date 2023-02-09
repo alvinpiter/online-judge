@@ -1,6 +1,7 @@
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Link, Paper, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 import { useParams } from "react-router-dom";
+import { ROUTES } from "../constants/Routes";
 import { SubmissionCodeEditor } from "../modules/Problem/components/SubmissionCodeEditor";
 import { useGetProblemRequest } from "../modules/Problem/hooks/useGetProblemRequest";
 
@@ -17,7 +18,20 @@ export const UserProblemPage: FC = () => {
 
   return (
     <>
-      <Typography variant="h4">Problem: {problem.name}</Typography>
+      <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+        <Typography variant="h4">{problem.name}</Typography>
+        <Typography variant="subtitle1">
+          [
+          <Link
+            href={ROUTES.PROBLEM_SUBMISSIONS_ROUTE.generatePath({
+              problemId,
+            })}
+          >
+            Submissions
+          </Link>
+          ]
+        </Typography>
+      </Stack>
 
       <Box sx={{ display: "flex", mt: 2 }}>
         <Box sx={{ flex: 1, flexGrow: 1 }}>
