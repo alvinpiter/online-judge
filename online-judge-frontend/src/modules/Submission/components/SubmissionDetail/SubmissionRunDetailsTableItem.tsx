@@ -1,6 +1,7 @@
 import { Link, TableCell, TableRow } from "@mui/material";
 import { FC } from "react";
 import { SubmissionRunDetail } from "../../interfaces";
+import { FormattedSubmissionVerdict } from "../FormattedSubmissionVerdict/FormattedSubmissionVerdict";
 
 interface SubmissionRunDetailsItemProps {
   runDetail: SubmissionRunDetail;
@@ -26,7 +27,9 @@ export const SubmissionRunDetailsTableItem: FC<
       </TableCell>
       <TableCell>{runDetail.runTimeInMilliseconds} ms</TableCell>
       <TableCell>{runDetail.memoryUsageInKilobytes} KB</TableCell>
-      <TableCell>{runDetail.verdict} </TableCell>
+      <TableCell>
+        <FormattedSubmissionVerdict verdict={runDetail.verdict} />
+      </TableCell>
     </TableRow>
   );
 };

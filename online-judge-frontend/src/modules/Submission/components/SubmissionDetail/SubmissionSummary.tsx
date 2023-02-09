@@ -9,24 +9,32 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 import { ROUTES } from "../../../../constants/Routes";
-import { Submission } from "../../interfaces";
+import { SubmissionWithDetails } from "../../interfaces";
+import { FormattedProgrammingLanguage } from "../FormattedProgrammingLanguage/FormattedProgrammingLanguage";
+import { FormattedSubmissionVerdict } from "../FormattedSubmissionVerdict/FormattedSubmissionVerdict";
 
 interface SubmissionSummaryProps {
-  submission: Submission;
+  submission: SubmissionWithDetails;
 }
 
 export const SubmissionSummary: FC<SubmissionSummaryProps> = ({
   submission,
 }) => {
+  const overallRunTimeInMilliseconds = submission.runDetails
+    .map((runDetail) => runDetail.runTimeInMilliseconds)
+    .reduce((currentMax, runTime) => Math.max(currentMax, runTime), 0);
+
+  const overallMemoryUsageInKilobytes = submission.runDetails
+    .map((runDetail) => runDetail.memoryUsageInKilobytes)
+    .reduce((currentMax, memoryUsage) => Math.max(currentMax, memoryUsage), 0);
+
   return (
     <TableContainer component={Paper}>
-      <Table>
+      <Table size="small">
         <TableBody>
           <TableRow>
-            <TableCell> Submission Time </TableCell>
-            <TableCell>
-              {new Date(submission.submittedAt).toLocaleTimeString()}
-            </TableCell>
+            <TableCell> Submitted at </TableCell>
+            <TableCell>{new Date(submission.submittedAt).toString()}</TableCell>
           </TableRow>
 
           <TableRow>
@@ -57,12 +65,28 @@ export const SubmissionSummary: FC<SubmissionSummaryProps> = ({
 
           <TableRow>
             <TableCell> Programming Language </TableCell>
-            <TableCell> {submission.programmingLanguage} </TableCell>
+            <TableCell>
+              <FormattedProgrammingLanguage
+                programmingLanguage={submission.programmingLanguage}
+              />
+            </TableCell>
           </TableRow>
 
           <TableRow>
             <TableCell> Verdict </TableCell>
-            <TableCell>{submission.verdict}</TableCell>
+            <TableCell>
+              <FormattedSubmissionVerdict verdict={submission.verdict} />
+            </TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell> Run time </TableCell>
+            <TableCell>{overallRunTimeInMilliseconds} ms</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell> Memory usage </TableCell>
+            <TableCell>{overallMemoryUsageInKilobytes} KB</TableCell>
           </TableRow>
         </TableBody>
       </Table>
