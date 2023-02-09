@@ -37,5 +37,6 @@ import { ScoreboardReaderService } from './services/scoreboard-reader.service';
     ScoreboardController,
     ScoreboardScoreCalculationQueueController,
   ],
+  exports: [ScoreboardReaderService],
 })
 export class ScoreboardModule {}

@@ -40,8 +40,14 @@ export class UserProblemAttemptsService {
 
   async getAllUserProblemAttempts(
     userId: number,
+    relations = [],
   ): Promise<UserProblemAttempt[]> {
-    return this.userProblemAttemptsRepository.findBy({ userId });
+    return this.userProblemAttemptsRepository.find({
+      where: {
+        userId,
+      },
+      relations,
+    });
   }
 
   /*

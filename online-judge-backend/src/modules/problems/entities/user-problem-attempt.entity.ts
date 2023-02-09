@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Problem } from './problem.entity';
 
 const zero = 0;
 
@@ -18,6 +25,10 @@ export class UserProblemAttempt {
 
   @Column()
   problemId: number;
+
+  @ManyToOne(() => Problem)
+  @JoinColumn({ name: 'problemId' })
+  problem: Problem;
 
   @Column()
   numberOfAttempts: number = zero;

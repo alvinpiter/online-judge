@@ -1,10 +1,14 @@
-import { Link, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { FC } from "react";
-import { ROUTES } from "../constants/Routes";
-import { useCurrentUserRequest } from "../modules/User/hooks/useCurrentUserRequest";
+import { useParams } from "react-router";
+import { UserStatisticsTable } from "../modules/Statistics/components/UserStatisticsTable";
+import { useGetUserRequest } from "../modules/User/hooks/useGetUserRequest";
 
 export const UserProfilePage: FC = () => {
-  const { isLoading, result } = useCurrentUserRequest();
+  const params = useParams<{ userId: string }>();
+  const userId = params.userId!;
+
+  const { isLoading, result } = useGetUserRequest(parseInt(userId));
 
   if (isLoading || !result) {
     return <p> Loading user... </p>;
@@ -12,14 +16,11 @@ export const UserProfilePage: FC = () => {
 
   return (
     <>
-      <Typography variant="h5"> {result.username}'s profile </Typography>
-      <Link
-        href={ROUTES.USER_SUBMISSIONS_ROUTE.generatePath({
-          userId: result.id.toString(),
-        })}
-      >
-        Submissions
-      </Link>
+      <Typography variant="h4"> {result.username}'s profile </Typography>
+
+      <Box sx={{ mt: 2 }}>
+        <UserStatisticsTable userId={parseInt(userId)} />
+      </Box>
     </>
   );
 };

@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  Param,
+  ParseIntPipe,
   Post,
   Request,
   UseGuards,
@@ -24,6 +26,11 @@ export class UsersController {
   async currentUser(@Request() request) {
     const user: User = request.user;
     return this.userFormatter.format(user);
+  }
+
+  @Get('users/:userId')
+  async getUser(@Param('userId', ParseIntPipe) userId: number) {
+    return this.userFormatter.format(await this.usersService.findById(userId));
   }
 
   @Post('users')
