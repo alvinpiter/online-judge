@@ -88,6 +88,8 @@ export class SubmissionProcessorService extends Observable<SubmissionProcessorSe
             compilationMessage: e.message,
             previousAttempt: userProblemAttempt,
           });
+
+          break;
         default:
           throw e;
       }
