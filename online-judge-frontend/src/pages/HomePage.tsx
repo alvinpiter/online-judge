@@ -1,4 +1,4 @@
-import { Link, Paper, Stack, Typography } from "@mui/material";
+import { Box, Link, Paper, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 import { ROUTES } from "../constants/Routes";
 import { useGetGlobalStatisticsRequest } from "../modules/Statistics/hooks/useGetGlobalStatisticsRequest";
@@ -15,21 +15,29 @@ export const HomePage: FC = () => {
           Features:
         </Typography>
 
-        <Link href={ROUTES.USER_PROBLEMS_ROUTE.generatePath()}>
+        <Box>
           <Typography variant="body1">
-            Practice solving coding problems
+            <Link href={ROUTES.USER_PROBLEMS_ROUTE.generatePath()}>
+              Practice solving coding problems
+            </Link>
           </Typography>
-        </Link>
+        </Box>
 
-        <Link href={ROUTES.SUBMISSIONS_ROUTE.generatePath()}>
-          <Typography variant="body1"> See other users' solutions </Typography>
-        </Link>
-
-        <Link href={ROUTES.SCOREBOARD_ROUTE.generatePath()}>
+        <Box>
           <Typography variant="body1">
-            Compare your performance against other users
+            <Link href={ROUTES.SUBMISSIONS_ROUTE.generatePath()}>
+              See other users' solutions
+            </Link>
           </Typography>
-        </Link>
+        </Box>
+
+        <Box>
+          <Typography variant="body1">
+            <Link href={ROUTES.SCOREBOARD_ROUTE.generatePath()}>
+              Compare your performance against other users
+            </Link>
+          </Typography>
+        </Box>
       </Paper>
 
       {globalStatistics && (
