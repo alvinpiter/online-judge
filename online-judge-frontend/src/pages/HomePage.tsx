@@ -12,8 +12,7 @@ export const HomePage: FC = () => {
         <Typography variant="h3">Welcome to Online Judge!</Typography>
 
         <Typography variant="body1" sx={{ mt: 2 }}>
-          {" "}
-          Features:{" "}
+          Features:
         </Typography>
 
         <Link href={ROUTES.USER_PROBLEMS_ROUTE.generatePath()}>
