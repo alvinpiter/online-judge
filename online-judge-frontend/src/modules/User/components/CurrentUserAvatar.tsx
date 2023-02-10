@@ -62,7 +62,12 @@ export const CurrentUserAvatar: FC = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem component={Link} href={ROUTES.HOME.generatePath()}>
+        <MenuItem
+          component={Link}
+          href={ROUTES.USER_PROFILE_ROUTE.generatePath({
+            userId: currentUser.id.toString(),
+          })}
+        >
           My Profile
         </MenuItem>
         <Divider />
