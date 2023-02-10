@@ -14,7 +14,6 @@ import { CurrentUserContextProvider } from "./modules/User/contexts/CurrentUserC
 import { AuthenticatedAdminPages } from "./pages/AuthenticatedAdminPages";
 import { UserProblemsPage } from "./pages/UserProblemsPage";
 import { AdminProblemsPage } from "./pages/AdminProblemsPage";
-import { PlaygroundPage } from "./pages/PlaygroundPage";
 import { SnackbarContextProvider } from "./core/Snackbar";
 import { render } from "react-dom";
 import { UserProblemPage } from "./pages/UserProblemPage";
@@ -24,6 +23,7 @@ import { UserSubmissionsPage } from "./pages/UserSubmissionsPage";
 import { UserProfilePage } from "./pages/UserProfilePage";
 import { SubmissionPage } from "./pages/SubmissionPage";
 import { ScoreboardPage } from "./pages/ScoreboardPage";
+import { HomePage } from "./pages/HomePage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -75,7 +75,7 @@ const router = createBrowserRouter(
         />
       </Route>
 
-      <Route path={ROUTES.HOME.path} element={<PlaygroundPage />} />
+      <Route path={ROUTES.HOME.path} element={<HomePage />} />
     </Route>
   )
 );
