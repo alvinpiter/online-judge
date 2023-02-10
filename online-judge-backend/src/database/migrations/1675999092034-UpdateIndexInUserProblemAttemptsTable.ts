@@ -17,9 +17,6 @@ export class UpdateIndexInUserProblemAttemptsTable1675999092034
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropIndex(
-      'user_problem_attempts',
-      this.indexOnUserIdAndProblemId,
-    );
+    // Nothing
   }
 }
