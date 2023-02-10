@@ -5,6 +5,7 @@ import { ROUTES } from "./constants/Routes";
 import { useCurrentUserContext } from "./modules/User/contexts/CurrentUserContext";
 import { CurrentUserAvatar } from "./modules/User/components/CurrentUserAvatar";
 import { UserRole } from "./modules/User/interface";
+import { Gavel } from "@mui/icons-material";
 
 const UserNavigations: Array<{ text: string; path: string }> = [
   { text: "Problems", path: ROUTES.USER_PROBLEMS_ROUTE.generatePath() },
@@ -27,9 +28,16 @@ function App() {
     <Box>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ marginRight: 4 }}>
-            Online Judge
-          </Typography>
+          <Button
+            variant="contained"
+            disableElevation
+            href={ROUTES.HOME.generatePath()}
+            sx={{ color: "white", mr: 4 }}
+            endIcon={<Gavel />}
+          >
+            <Typography variant="h6">Online Judge</Typography>
+          </Button>
+
           <Box sx={{ flexGrow: 1 }}>
             <nav>
               {navigations?.map((navigation, idx) => (
