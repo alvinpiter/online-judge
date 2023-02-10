@@ -3,7 +3,7 @@ import { SelectProps } from "@mui/material/Select";
 import { useField } from "formik";
 import React, { FC } from "react";
 
-interface SelectFieldProps extends SelectProps {
+export interface SelectFieldProps extends SelectProps {
   name: string;
   children?: React.ReactNode;
 }
