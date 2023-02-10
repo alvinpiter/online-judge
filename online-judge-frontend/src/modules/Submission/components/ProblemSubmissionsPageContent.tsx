@@ -1,7 +1,7 @@
 import { Box, Pagination, Paper } from "@mui/material";
 import { ChangeEvent, FC } from "react";
 import { useSubmissionsContext } from "../contexts/SubmissionsContext/context";
-import { SubmissionsFilterForm } from "./SubmissionsTable/SubmissionsFilterForm";
+import { SubmissionsFilterForm } from "./SubmissionFilterForm/SubmissionsFilterForm";
 import { SubmissionsTable } from "./SubmissionsTable/SubmissionsTable";
 
 // TODO: Almost similar with SubmissionsPageContent

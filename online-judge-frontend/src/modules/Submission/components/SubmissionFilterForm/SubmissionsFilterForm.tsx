@@ -10,6 +10,7 @@ import {
 import { SubmissionsFilter, SubmissionVerdict } from "../../interfaces";
 import { FormattedProgrammingLanguage } from "../FormattedProgrammingLanguage/FormattedProgrammingLanguage";
 import { FormattedSubmissionVerdict } from "../FormattedSubmissionVerdict/FormattedSubmissionVerdict";
+import { ProblemFilterField } from "./ProblemFilterField";
 
 interface SubmissionsFilterFormProps {
   initialFilter: SubmissionsFilter;
@@ -64,8 +65,7 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
             {!hideProblemFilter && (
               <Box sx={{ mt: 2 }}>
                 <Typography variant="body1">Problem</Typography>
-                <TextField
-                  type="number"
+                <ProblemFilterField
                   name="problemId"
                   label="Problem"
                   fullWidth
