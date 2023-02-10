@@ -4,19 +4,21 @@ import {
   SelectField,
   SelectFieldProps,
 } from "../../../../forms/fields/SelectField";
-import { useGetScoreboardProblemsRequest } from "../../../Scoreboard/hooks/useGetScoreboardProblemsRequest";
+import { useGetProblemsRequest } from "../../../Problem/hooks/useGetProblemsRequest";
+import { ProblemsOrderOption } from "../../../Problem/interfaces";
 
 export const ProblemFilterField: FC<SelectFieldProps> = (props) => {
-  const { isLoading: isLoadingProblems, result: problems } =
-    useGetScoreboardProblemsRequest();
+  // Get all problems
+  const { isLoading: isLoadingProblems, result: getProblemsResult } =
+    useGetProblemsRequest(42, 1, {}, ProblemsOrderOption.BY_ID_ASC);
 
-  if (isLoadingProblems || !problems) {
+  if (isLoadingProblems || !getProblemsResult) {
     return <p> Loading problems... </p>;
   }
 
   return (
     <SelectField {...props}>
-      {problems.map((problem) => (
+      {getProblemsResult.data.map((problem) => (
         <MenuItem key={problem.id} value={problem.id}>
           {`${problem.id} - ${problem.name}`}
         </MenuItem>
