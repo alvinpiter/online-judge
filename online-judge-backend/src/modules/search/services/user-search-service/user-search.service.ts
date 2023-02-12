@@ -4,11 +4,16 @@ import { Redis } from 'ioredis';
 import { map, range } from 'lodash';
 import { SortedSetOrder } from 'src/modules/cache/sorted-set/sorted-set-paginated-query-builder';
 import { SortedSetService } from 'src/modules/cache/sorted-set/sorted-set.service';
+import { JobQueueItem } from 'src/modules/job/interfaces';
 import { OffsetPaginationService } from 'src/modules/pagination/offset-pagination.service';
 import { EntitySorterService } from 'src/modules/scoreboard/helpers/entity-sorter/entity-sorter.service';
 import { User } from 'src/modules/users/user.entity';
 import { UsersService } from 'src/modules/users/users.service';
 import { UserSearchScoringSchema } from '../../interfaces/user-search';
+import {
+  UserSearchScoreCalculationQueue,
+  UserSearchScoreCalculationQueueItem,
+} from '../../queues/user-search-score-calculation.queue';
 import { UserSearchEntityIdentityIdentifierMapper } from './user-search-entity-identifier-mapper';
 import { UserSearchEntityScoreCalculator } from './user-search-entity-score-calculator';
 
@@ -27,8 +32,13 @@ export class UserSearchService {
     userSearchEntityIdentifierMapper: UserSearchEntityIdentityIdentifierMapper,
     userSearchEntityScoreCalculator: UserSearchEntityScoreCalculator,
     offsetPaginationService: OffsetPaginationService,
+    userSearchScoreCalculationQueue: UserSearchScoreCalculationQueue,
     private readonly usersService: UsersService,
   ) {
+    userSearchScoreCalculationQueue.setConsumer((item) =>
+      this.consumeScoreCalculationItem(item),
+    );
+
     this.entitySorterService = new EntitySorterService(
       new SortedSetService(redisClient),
       userSearchEntityIdentifierMapper,
@@ -63,6 +73,13 @@ export class UserSearchService {
         );
       }),
     );
+  }
+
+  private async consumeScoreCalculationItem(
+    queueItem: JobQueueItem<UserSearchScoreCalculationQueueItem>,
+  ) {
+    const userId = queueItem.item.userId;
+    await this.upsertSuggestion(userId);
   }
 
   private getSortedSetKey(usernamePrefix: string): string {

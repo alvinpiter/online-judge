@@ -1,15 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Observable } from 'src/lib/Observable';
 import { orderEntitiesById } from 'src/lib/orderEntitiesById';
 import { In, Repository } from 'typeorm';
 import { UserRegistrationDto } from './data-transfer-objects/user-registration.dto';
 import { User, UserRole } from './user.entity';
 
+export interface UsersServiceEvent {
+  userRegistered: (userId: number) => Promise<void>;
+}
+
 @Injectable()
-export class UsersService {
+export class UsersService extends Observable<UsersServiceEvent> {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
-  ) {}
+  ) {
+    super();
+  }
 
   async getUsersByIds(ids: number[]) {
     const users = await this.usersRepository.find({
@@ -37,6 +44,9 @@ export class UsersService {
     user.hashedPassword = userRegistrationDto.password;
     user.role = UserRole.USER;
 
-    return this.usersRepository.save(user);
+    await this.usersRepository.save(user);
+    this.publishEvent('userRegistered', (subscriber) => subscriber(user.id));
+
+    return user;
   }
 }
