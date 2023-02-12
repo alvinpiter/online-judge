@@ -32,8 +32,7 @@ export class ScoreboardEntitySorterService {
     private readonly offsetPaginationService: OffsetPaginationService,
   ) {
     this.entitySorterService = new EntitySorterService(
-      this.SORTED_SET_ORDER,
-      new SortedSetService(redisClient, this.SORTED_SET_KEY),
+      new SortedSetService(redisClient),
       this.scoreboardEntityIdentifierMapper,
       this.scoreboardScoreCalculator,
       this.offsetPaginationService,
@@ -41,14 +40,17 @@ export class ScoreboardEntitySorterService {
   }
 
   async getPaginatedScoreboardRows(
-    parameters: SortedEntitiesPaginationParameter<User>,
+    parameters: Omit<SortedEntitiesPaginationParameter<User>, 'order'>,
   ): Promise<
     OffsetPaginationResult<SortedEntity<User, ScoreboardScoringSchema>>
   > {
-    return this.entitySorterService.getPaginatedSortedEntites(parameters);
+    return this.entitySorterService.getPaginatedSortedEntites(
+      this.SORTED_SET_KEY,
+      { ...parameters, order: this.SORTED_SET_ORDER },
+    );
   }
 
   async updateUserScore(user: User) {
-    await this.entitySorterService.updateEntityScore(user);
+    await this.entitySorterService.updateEntityScore(this.SORTED_SET_KEY, user);
   }
 }

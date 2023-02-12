@@ -13,7 +13,7 @@ import { MockedEntitiyIdentifierMapper } from './test-mocks/mocked-entity-identi
 import { MockedEntityScoreCalculator } from './test-mocks/mocked-entity-score-calculator';
 
 describe(EntitySorterService.name, () => {
-  const order = SortedSetOrder.SCORE_DESC;
+  const sortedSetKey = 'sortedSetKey';
   const sortedSetService = SortedSetService.prototype;
   const entityIdentifierMapper = new MockedEntitiyIdentifierMapper();
   const entityScoreCalculator = new MockedEntityScoreCalculator();
@@ -22,7 +22,6 @@ describe(EntitySorterService.name, () => {
 
   beforeEach(() => {
     service = new EntitySorterService<User, UserScoringSchema>(
-      order,
       sortedSetService,
       entityIdentifierMapper,
       entityScoreCalculator,
@@ -57,7 +56,14 @@ describe(EntitySorterService.name, () => {
       'rank',
     ];
 
-    const offsetLimit = { offset: 1, limit: 2 };
+    const offsetLimit = {
+      offset: 1,
+      limit: 2,
+    };
+    const offsetLimitWithOrder = {
+      ...offsetLimit,
+      order: SortedSetOrder.SCORE_DESC,
+    };
     const paginationMeta = { ...offsetLimit, total: 10 };
 
     it('returns the correct result', async () => {
@@ -83,7 +89,10 @@ describe(EntitySorterService.name, () => {
           }
         });
 
-      const result = await service.getPaginatedSortedEntites(offsetLimit);
+      const result = await service.getPaginatedSortedEntites(
+        sortedSetKey,
+        offsetLimitWithOrder,
+      );
 
       expect(offsetPaginationService.paginate).toHaveBeenCalledWith(
         expect.any(SortedSetPaginatedQueryBuilder),
@@ -119,7 +128,7 @@ describe(EntitySorterService.name, () => {
 
       jest.spyOn(sortedSetService, 'upsertMemberScore').mockImplementation();
 
-      await service.updateEntityScore(entity);
+      await service.updateEntityScore(sortedSetKey, entity);
 
       expect(entityIdentifierMapper.toIdentifiers).toHaveBeenCalledTimes(1);
       expect(entityIdentifierMapper.toIdentifiers).toHaveBeenCalledWith([
@@ -133,6 +142,7 @@ describe(EntitySorterService.name, () => {
 
       expect(sortedSetService.upsertMemberScore).toHaveBeenCalledTimes(1);
       expect(sortedSetService.upsertMemberScore).toHaveBeenCalledWith(
+        sortedSetKey,
         'user:1',
         10,
       );

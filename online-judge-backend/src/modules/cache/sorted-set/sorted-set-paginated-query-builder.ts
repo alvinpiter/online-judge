@@ -11,16 +11,21 @@ export class SortedSetPaginatedQueryBuilder
   implements OffsetPaginationQueryBuilder<SortedSetData>
 {
   private membersFilter: string[] = [];
+  private order = SortedSetOrder.SCORE_DESC;
   private _offset = 0;
   private _limit = 25;
 
   constructor(
     private readonly sortedSetService: SortedSetService,
-    private readonly order = SortedSetOrder.SCORE_DESC,
+    private readonly sortedSetKey: string,
   ) {}
 
   addMemberFilter(member: string) {
     this.membersFilter.push(member);
+  }
+
+  setOrder(order: SortedSetOrder) {
+    this.order = order;
   }
 
   offset(value: number) {
@@ -35,8 +40,14 @@ export class SortedSetPaginatedQueryBuilder
     if (this.membersFilter.length > 0) {
       const data =
         this.order === SortedSetOrder.SCORE_DESC
-          ? await this.sortedSetService.getDataWithRevRanks(this.membersFilter)
-          : await this.sortedSetService.getDataWithRanks(this.membersFilter);
+          ? await this.sortedSetService.getDataWithRevRanks(
+              this.sortedSetKey,
+              this.membersFilter,
+            )
+          : await this.sortedSetService.getDataWithRanks(
+              this.sortedSetKey,
+              this.membersFilter,
+            );
 
       const totalCount = data.length;
 
@@ -49,10 +60,18 @@ export class SortedSetPaginatedQueryBuilder
 
       const data =
         this.order === SortedSetOrder.SCORE_DESC
-          ? await this.sortedSetService.getDataByRevRanks(minRank, maxRank)
-          : await this.sortedSetService.getDataByRanks(minRank, maxRank);
+          ? await this.sortedSetService.getDataByRevRanks(
+              this.sortedSetKey,
+              minRank,
+              maxRank,
+            )
+          : await this.sortedSetService.getDataByRanks(
+              this.sortedSetKey,
+              minRank,
+              maxRank,
+            );
 
-      const totalCount = await this.sortedSetService.getSize();
+      const totalCount = await this.sortedSetService.getSize(this.sortedSetKey);
 
       return [data, totalCount] as [SortedSetData[], number];
     }
