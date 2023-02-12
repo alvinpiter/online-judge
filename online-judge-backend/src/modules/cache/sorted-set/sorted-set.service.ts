@@ -7,36 +7,44 @@ type NullableNumber = number | null;
 
 // Wraps Redis' sorted set
 export class SortedSetService {
-  constructor(
-    private readonly redisClient: Redis,
-    private readonly sortedSetKey: string,
-  ) {}
+  constructor(private readonly redisClient: Redis) {}
 
-  async upsertMemberScore(member: string, score: number): Promise<number> {
-    return this.redisClient.zadd(this.sortedSetKey, score, member);
+  async upsertMemberScore(
+    sortedSetKey: string,
+    member: string,
+    score: number,
+  ): Promise<number> {
+    return this.redisClient.zadd(sortedSetKey, score, member);
   }
 
-  async getDataWithRevRanks(members: string[]): Promise<SortedSetData[]> {
-    const scores = await this.getMembersScores(members);
-    const ranks = await this.getMembersRevRanks(members);
+  async getDataWithRevRanks(
+    sortedSetKey: string,
+    members: string[],
+  ): Promise<SortedSetData[]> {
+    const scores = await this.getMembersScores(sortedSetKey, members);
+    const ranks = await this.getMembersRevRanks(sortedSetKey, members);
 
     return this.zipMembersScoresRanksToSortedData(members, scores, ranks);
   }
 
-  async getDataWithRanks(members: string[]): Promise<SortedSetData[]> {
-    const scores = await this.getMembersScores(members);
-    const ranks = await this.getMembersRanks(members);
+  async getDataWithRanks(
+    sortedSetKey: string,
+    members: string[],
+  ): Promise<SortedSetData[]> {
+    const scores = await this.getMembersScores(sortedSetKey, members);
+    const ranks = await this.getMembersRanks(sortedSetKey, members);
 
     return this.zipMembersScoresRanksToSortedData(members, scores, ranks);
   }
 
   async getDataByRevRanks(
+    sortedSetKey: string,
     minRank: number,
     maxRank: number,
   ): Promise<SortedSetData[]> {
     // Returns the following structure: [member1, score1, member2, score2, ...]
     const membersAndScores = await this.redisClient.zrevrange(
-      this.sortedSetKey,
+      sortedSetKey,
       minRank,
       maxRank,
       'WITHSCORES',
@@ -46,12 +54,13 @@ export class SortedSetService {
   }
 
   async getDataByRanks(
+    sortedSetKey: string,
     minRank: number,
     maxRank: number,
   ): Promise<SortedSetData[]> {
     // Returns the following structure: [member1, score1, member2, score2, ...]
     const membersAndScores = await this.redisClient.zrange(
-      this.sortedSetKey,
+      sortedSetKey,
       minRank,
       maxRank,
       'WITHSCORES',
@@ -60,9 +69,12 @@ export class SortedSetService {
     return this.membersAndScoresToSortedData(membersAndScores, minRank);
   }
 
-  async getMembersScores(members: string[]): Promise<NullableNumber[]> {
+  async getMembersScores(
+    sortedSetKey: string,
+    members: string[],
+  ): Promise<NullableNumber[]> {
     const rawScores: (string | null)[] = await this.redisClient.zmscore(
-      this.sortedSetKey,
+      sortedSetKey,
       members,
     );
 
@@ -71,24 +83,26 @@ export class SortedSetService {
     );
   }
 
-  async getMembersRevRanks(members: string[]): Promise<NullableNumber[]> {
+  async getMembersRevRanks(
+    sortedSetKey: string,
+    members: string[],
+  ): Promise<NullableNumber[]> {
     return Promise.all(
-      members.map((member) =>
-        this.redisClient.zrevrank(this.sortedSetKey, member),
-      ),
+      members.map((member) => this.redisClient.zrevrank(sortedSetKey, member)),
     );
   }
 
-  async getMembersRanks(members: string[]): Promise<NullableNumber[]> {
+  async getMembersRanks(
+    sortedSetKey: string,
+    members: string[],
+  ): Promise<NullableNumber[]> {
     return Promise.all(
-      members.map((member) =>
-        this.redisClient.zrank(this.sortedSetKey, member),
-      ),
+      members.map((member) => this.redisClient.zrank(sortedSetKey, member)),
     );
   }
 
-  async getSize(): Promise<number> {
-    return this.redisClient.zcard(this.sortedSetKey);
+  async getSize(sortedSetKey: string): Promise<number> {
+    return this.redisClient.zcard(sortedSetKey);
   }
 
   private membersAndScoresToSortedData(

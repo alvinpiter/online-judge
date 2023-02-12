@@ -1,3 +1,4 @@
+import { SortedSetOrder } from 'src/modules/cache/sorted-set/sorted-set-paginated-query-builder';
 import { OffsetPaginationParameter } from 'src/modules/pagination/offset-pagination.interface';
 
 export interface EntityIdentifierMapper<Entity> {
@@ -12,6 +13,7 @@ export interface EntityScoreCalculator<Entity, ScoringSchema> {
 
 export interface SortedEntitiesPaginationParameter<Entity>
   extends OffsetPaginationParameter {
+  order: SortedSetOrder;
   entities?: Entity[];
 }
 

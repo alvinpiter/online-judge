@@ -58,7 +58,7 @@ describe(SortedSetService.name, () => {
   };
 
   beforeEach(() => {
-    service = new SortedSetService(redisClient, sortedSetKey);
+    service = new SortedSetService(redisClient);
 
     jest
       .spyOn(redisClient, 'zmscore')
@@ -96,7 +96,7 @@ describe(SortedSetService.name, () => {
   describe('getDataWithRevRanks', () => {
     it('returns the correct result', async () => {
       const members = ['member1', 'unknownMember', 'member2'];
-      const result = await service.getDataWithRevRanks(members);
+      const result = await service.getDataWithRevRanks(sortedSetKey, members);
 
       expect(redisClient.zmscore).toHaveBeenCalledWith(sortedSetKey, members);
       for (const member of members) {
@@ -113,7 +113,7 @@ describe(SortedSetService.name, () => {
   describe('getDataWithRanks', () => {
     it('returns the correct result', async () => {
       const members = ['member1', 'unknownMember', 'member2'];
-      const result = await service.getDataWithRanks(members);
+      const result = await service.getDataWithRanks(sortedSetKey, members);
 
       expect(redisClient.zmscore).toHaveBeenCalledWith(sortedSetKey, members);
       for (const member of members) {
@@ -129,7 +129,7 @@ describe(SortedSetService.name, () => {
 
   describe('getDataByRevRanks', () => {
     it('returns the correct result', async () => {
-      const result = await service.getDataByRevRanks(0, 2); // Intentionally set out of range
+      const result = await service.getDataByRevRanks(sortedSetKey, 0, 2); // Intentionally set out of range
 
       expect(redisClient.zrevrange).toHaveBeenCalledWith(
         sortedSetKey,
@@ -146,7 +146,7 @@ describe(SortedSetService.name, () => {
 
   describe('getDataByRanks', () => {
     it('returns the correct result', async () => {
-      const result = await service.getDataByRanks(0, 2); // Intentionally set out of range
+      const result = await service.getDataByRanks(sortedSetKey, 0, 2); // Intentionally set out of range
 
       expect(redisClient.zrange).toHaveBeenCalledWith(
         sortedSetKey,

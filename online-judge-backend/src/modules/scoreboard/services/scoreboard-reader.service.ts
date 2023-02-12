@@ -25,20 +25,22 @@ export class ScoreboardReaderService {
   async getScoreboard(
     parameters: ScoreboardGetDto,
   ): Promise<OffsetPaginationResult<ScoreboardRow>> {
-    const sortedEntitiesPaginationParameter: SortedEntitiesPaginationParameter<User> =
-      {
-        offset: parameters.offset || DEFAULT_OFFSET,
-        limit: parameters.limit || DEFAULT_LIMIT,
-      };
+    const paginatedScoreboardParameters: Omit<
+      SortedEntitiesPaginationParameter<User>,
+      'order'
+    > = {
+      offset: parameters.offset || DEFAULT_OFFSET,
+      limit: parameters.limit || DEFAULT_LIMIT,
+    };
 
     if (parameters.userIds?.length > 0) {
       const users = await this.usersService.getUsersByIds(parameters.userIds);
-      sortedEntitiesPaginationParameter.entities = users;
+      paginatedScoreboardParameters.entities = users;
     }
 
     const { data: rawResults, meta } =
       await this.scoreboardEntitySorterService.getPaginatedScoreboardRows(
-        sortedEntitiesPaginationParameter,
+        paginatedScoreboardParameters,
       );
 
     const usersProblemAttemptsMap =

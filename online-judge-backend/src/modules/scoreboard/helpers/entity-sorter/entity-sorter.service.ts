@@ -1,8 +1,5 @@
 import { map, zip } from 'lodash';
-import {
-  SortedSetOrder,
-  SortedSetPaginatedQueryBuilder,
-} from 'src/modules/cache/sorted-set/sorted-set-paginated-query-builder';
+import { SortedSetPaginatedQueryBuilder } from 'src/modules/cache/sorted-set/sorted-set-paginated-query-builder';
 import { SortedSetService } from 'src/modules/cache/sorted-set/sorted-set.service';
 import { OffsetPaginationResult } from 'src/modules/pagination/offset-pagination.interface';
 import { OffsetPaginationService } from 'src/modules/pagination/offset-pagination.service';
@@ -15,7 +12,6 @@ import {
 
 export class EntitySorterService<Entity, ScoringSchema> {
   constructor(
-    private readonly order: SortedSetOrder,
     private readonly sortedSetService: SortedSetService,
     private readonly entityIdentifierMapper: EntityIdentifierMapper<Entity>,
     private readonly entityScoreCalculator: EntityScoreCalculator<
@@ -26,11 +22,12 @@ export class EntitySorterService<Entity, ScoringSchema> {
   ) {}
 
   async getPaginatedSortedEntites(
+    sortedSetKey: string,
     parameters: SortedEntitiesPaginationParameter<Entity>,
   ): Promise<OffsetPaginationResult<SortedEntity<Entity, ScoringSchema>>> {
     const qb = new SortedSetPaginatedQueryBuilder(
       this.sortedSetService,
-      this.order,
+      sortedSetKey,
     );
 
     // TODO: How to test this condition?
@@ -40,6 +37,9 @@ export class EntitySorterService<Entity, ScoringSchema> {
       );
       memberIdentifiers.forEach((identifier) => qb.addMemberFilter(identifier));
     }
+
+    // TODO: Test this as well
+    qb.setOrder(parameters.order);
 
     const { data: rawResults, meta } =
       await this.offsetPaginationService.paginate(qb, {
@@ -68,7 +68,7 @@ export class EntitySorterService<Entity, ScoringSchema> {
     };
   }
 
-  async updateEntityScore(entity: Entity) {
+  async updateEntityScore(sortedSetKey: string, entity: Entity) {
     const identifiers = await this.entityIdentifierMapper.toIdentifiers([
       entity,
     ]);
@@ -76,6 +76,10 @@ export class EntitySorterService<Entity, ScoringSchema> {
       entity,
     );
 
-    await this.sortedSetService.upsertMemberScore(identifiers[0], numericScore);
+    await this.sortedSetService.upsertMemberScore(
+      sortedSetKey,
+      identifiers[0],
+      numericScore,
+    );
   }
 }
