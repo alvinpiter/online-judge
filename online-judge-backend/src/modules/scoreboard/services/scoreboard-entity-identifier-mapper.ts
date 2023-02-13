@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/modules/users/user.entity';
 import { UsersService } from 'src/modules/users/users.service';
-import { EntityIdentifierMapper } from '../helpers/entity-sorter/interfaces';
+import { EntityIdentifierMapper } from '../../../lib/entity-sorter/interfaces';
 
 @Injectable()
 export class ScoreboardEntityIdentifierMapper

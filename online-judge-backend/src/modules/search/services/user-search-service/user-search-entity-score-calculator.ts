@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { EntityScoreCalculator } from 'src/modules/scoreboard/helpers/entity-sorter/interfaces';
+import { EntityScoreCalculator } from 'src/lib/entity-sorter/interfaces';
 import { User } from 'src/modules/users/user.entity';
 import { UserSearchScoringSchema } from '../../interfaces/user-search';
 

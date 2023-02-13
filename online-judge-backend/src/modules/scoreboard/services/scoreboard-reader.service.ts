@@ -6,7 +6,7 @@ import { UserProblemAttemptsService } from 'src/modules/problems/services/user-p
 import { User } from 'src/modules/users/user.entity';
 import { UsersService } from 'src/modules/users/users.service';
 import { ScoreboardGetDto } from '../data-transfer-objects/scoreboard-get.dto';
-import { SortedEntitiesPaginationParameter } from '../helpers/entity-sorter/interfaces';
+import { SortedEntitiesPaginationParameter } from '../../../lib/entity-sorter/interfaces';
 import { ScoreboardRow } from '../interfaces/scoreboard';
 import { ScoreboardEntitySorterService } from './scoreboard-entity-sorter.service';
 

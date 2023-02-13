@@ -6,11 +6,11 @@ import { SortedSetService } from 'src/modules/cache/sorted-set/sorted-set.servic
 import { OffsetPaginationResult } from 'src/modules/pagination/offset-pagination.interface';
 import { OffsetPaginationService } from 'src/modules/pagination/offset-pagination.service';
 import { User } from 'src/modules/users/user.entity';
-import { EntitySorterService } from '../helpers/entity-sorter/entity-sorter.service';
+import { EntitySorterService } from '../../../lib/entity-sorter/entity-sorter.service';
 import {
   SortedEntitiesPaginationParameter,
   SortedEntity,
-} from '../helpers/entity-sorter/interfaces';
+} from '../../../lib/entity-sorter/interfaces';
 import { ScoreboardScoringSchema } from '../interfaces/scoreboard';
 import { ScoreboardEntityIdentifierMapper } from './scoreboard-entity-identifier-mapper';
 import { ScoreboardScoreCalculator } from './scoreboard-score-calculator';
