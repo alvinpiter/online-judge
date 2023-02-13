@@ -23,6 +23,10 @@ describe(UserSearchService.name, () => {
   let service: UserSearchService;
 
   beforeEach(() => {
+    jest
+      .spyOn(userSearchScoreCalculationQueue, 'setConsumer')
+      .mockImplementation();
+
     service = new UserSearchService(
       redisClient,
       userSearchEntityIdentifierMapper,
@@ -31,6 +35,12 @@ describe(UserSearchService.name, () => {
       userSearchScoreCalculationQueue,
       usersService,
     );
+  });
+
+  describe('constructor', () => {
+    it('subscribes to UserSearchScoreCalculationQueue', () => {
+      expect(userSearchScoreCalculationQueue.setConsumer).toHaveBeenCalled();
+    });
   });
 
   describe('getSuggestions', () => {
