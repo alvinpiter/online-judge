@@ -2,11 +2,12 @@ import { Box, Button, MenuItem, Typography } from "@mui/material";
 import { Form, Formik } from "formik";
 import { FC } from "react";
 import { SelectField } from "../../../../forms/fields/SelectField";
-import { TextField } from "../../../../forms/fields/TextField";
 import {
   ProgrammingLanguage,
   SupportedProgrammingLanguages,
 } from "../../../Problem/interfaces";
+import { UserSearchField } from "../../../Search/components/UserSearchField";
+import { User } from "../../../User/interface";
 import { SubmissionsFilter, SubmissionVerdict } from "../../interfaces";
 import { FormattedProgrammingLanguage } from "../FormattedProgrammingLanguage/FormattedProgrammingLanguage";
 import { FormattedSubmissionVerdict } from "../FormattedSubmissionVerdict/FormattedSubmissionVerdict";
@@ -21,7 +22,7 @@ interface SubmissionsFilterFormProps {
 }
 
 interface SubmissionsFilterFormData {
-  userId?: number;
+  user: User | null;
   problemId?: number;
   programmingLanguage: ProgrammingLanguage | "ALL";
   verdict: SubmissionVerdict | "ALL";
@@ -36,9 +37,9 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
   const normalizeFormData = (
     values: SubmissionsFilterFormData
   ): SubmissionsFilter => {
-    const { userId, problemId, programmingLanguage, verdict } = values;
+    const { user, problemId, programmingLanguage, verdict } = values;
     return {
-      userId,
+      userId: user?.id,
       problemId,
       programmingLanguage:
         programmingLanguage === "ALL" ? undefined : programmingLanguage,
@@ -51,7 +52,7 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
       <Typography variant="h5"> Filters </Typography>
       <Formik<SubmissionsFilterFormData>
         initialValues={{
-          userId: initialFilter.userId,
+          user: null,
           problemId: initialFilter.problemId,
           programmingLanguage: initialFilter.programmingLanguage || "ALL",
           verdict: initialFilter.verdict || "ALL",
@@ -76,7 +77,7 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
             {!hideUserFilter && (
               <Box sx={{ mt: 2 }}>
                 <Typography variant="body1"> User </Typography>
-                <TextField type="number" name="userId" label="User" fullWidth />
+                <UserSearchField name="user" />
               </Box>
             )}
 
