@@ -13,9 +13,9 @@ export class UserStatisticsService {
 
   async getUserStatistics(userId: number): Promise<UserStatistics> {
     const allProblemAttempts =
-      await this.userProblemAttemptsService.getAllUserProblemAttempts(userId, [
-        'problem',
-      ]);
+      await this.userProblemAttemptsService.getAllUserAttemptsOnPublishedProblems(
+        userId,
+      );
 
     const solvedProblems = allProblemAttempts
       .filter((attempt) => attempt.alreadySolved())

@@ -17,7 +17,9 @@ export class ScoreboardScoreCalculator
 
   async getNumericScore(user: User): Promise<number> {
     const userProblemAttempts =
-      await this.userProblemAttemptsService.getAllUserProblemAttempts(user.id);
+      await this.userProblemAttemptsService.getAllUserAttemptsOnPublishedProblems(
+        user.id,
+      );
 
     let solveCount = 0;
     let lastSolveTimeInMilliseconds = 0;
