@@ -34,7 +34,7 @@ export const ScoreboardTable: FC<ScoreboardTableProps> = ({
             <TableCell> Solve count </TableCell>
             <TableCell> Last solve at </TableCell>
             {problems.map((problem) => (
-              <TableCell align="center">
+              <TableCell align="center" key={problem.id}>
                 <Link
                   href={ROUTES.USER_PROBLEM_ROUTE.generatePath({
                     problemId: problem.id.toString(),
@@ -54,7 +54,11 @@ export const ScoreboardTable: FC<ScoreboardTableProps> = ({
             />
           ) : (
             rows.map((row) => (
-              <ScoreboardTableRow problems={problems} row={row} />
+              <ScoreboardTableRow
+                key={row.rank}
+                problems={problems}
+                row={row}
+              />
             ))
           )}
         </TableBody>
