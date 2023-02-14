@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { FC } from "react";
+import { TableEmptyState } from "../../../../lib/components/TableEmptyState";
 import { ProblemWithDetail } from "../../interfaces";
 import { AdminProblemsTableItem } from "./AdminProblemsTableItem";
 
@@ -32,9 +33,13 @@ export const AdminProblemsTable: FC<AdminProblemsTableProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {problems.map((problem, idx) => (
-            <AdminProblemsTableItem key={idx} problem={problem} />
-          ))}
+          {problems.length === 0 ? (
+            <TableEmptyState colSpan={6} message="No problems found" />
+          ) : (
+            problems.map((problem, idx) => (
+              <AdminProblemsTableItem key={idx} problem={problem} />
+            ))
+          )}
         </TableBody>
       </Table>
     </TableContainer>

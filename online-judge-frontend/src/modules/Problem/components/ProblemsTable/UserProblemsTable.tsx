@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { FC } from "react";
+import { TableEmptyState } from "../../../../lib/components/TableEmptyState";
 import { humanizeProblemsOrderOption } from "../../helpers/humanizeProblemsOrderOption";
 import { ProblemsOrderOption, ProblemWithDetail } from "../../interfaces";
 import { UserProblemsTableItem } from "./UserProblemsTableItem";
@@ -73,9 +74,13 @@ export const UserProblemsTable: FC<UserProblemsTableProps> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {problems.map((problem, idx) => (
-              <UserProblemsTableItem key={idx} problem={problem} />
-            ))}
+            {problems.length === 0 ? (
+              <TableEmptyState colSpan={4} message="No problems found" />
+            ) : (
+              problems.map((problem, idx) => (
+                <UserProblemsTableItem key={idx} problem={problem} />
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
