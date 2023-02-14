@@ -93,13 +93,17 @@ export class UserProblemAttemptsService {
     return this.userProblemAttemptsRepository.save(userProblemAttempt);
   }
 
-  async setFirstSolvedAtAndSave(userId: number, problemId: number) {
+  async setFirstSolvedAtAndSave(
+    userId: number,
+    problemId: number,
+    firstSolvedAt: Date,
+  ) {
     const userProblemAttempt = await this.getOrInitializeUserProblemAttempt(
       userId,
       problemId,
     );
 
-    userProblemAttempt.firstSolvedAt = new Date();
+    userProblemAttempt.firstSolvedAt = firstSolvedAt;
 
     return this.userProblemAttemptsRepository.save(userProblemAttempt);
   }
