@@ -48,11 +48,11 @@ export const SubmissionCodeEditor: FC<SubmissionCodeEditorProps> = ({
     setActiveProgrammingLanguage(event.target.value as ProgrammingLanguage);
   };
 
-  const handleSubmit = (
+  const handleSubmit = async (
     programmingLanguage: ProgrammingLanguage,
     code: string
   ) => {
-    createSubmissionRequest({
+    await createSubmissionRequest({
       problemId: parseInt(problemId),
       programmingLanguage,
       code,

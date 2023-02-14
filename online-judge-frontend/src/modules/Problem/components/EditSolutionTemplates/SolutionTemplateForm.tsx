@@ -3,6 +3,7 @@ import { Box } from "@mui/system";
 import { Form, Formik } from "formik";
 import { FC } from "react";
 import { CodeEditorField } from "../../../../forms/fields/CodeEditorField";
+import { LoadingState } from "../../../../lib/components/LoadingState";
 import { ProgrammingLanguage } from "../../interfaces";
 
 interface SolutionTemplateFormProps {
@@ -12,7 +13,7 @@ interface SolutionTemplateFormProps {
   onSubmit: (
     programmingLanguage: ProgrammingLanguage,
     template: string
-  ) => void;
+  ) => Promise<void>;
 }
 
 interface SolutionTemplateFormData {
@@ -31,8 +32,8 @@ export const SolutionTemplateForm: FC<SolutionTemplateFormProps> = ({
         initialValues={{
           template: initialTemplate,
         }}
-        onSubmit={(values, { setSubmitting }) => {
-          onSubmit(programmingLanguage, values.template);
+        onSubmit={async (values, { setSubmitting }) => {
+          await onSubmit(programmingLanguage, values.template);
           setSubmitting(false);
         }}
       >
@@ -44,14 +45,21 @@ export const SolutionTemplateForm: FC<SolutionTemplateFormProps> = ({
                 programmingLanguage={programmingLanguage}
                 height="50vh"
               />
-              <Button
-                type="submit"
-                variant="contained"
-                disabled={isSubmitting}
-                sx={{ mt: 2 }}
-              >
-                Submit
-              </Button>
+
+              {isSubmitting ? (
+                <Box sx={{ mt: 2 }}>
+                  <LoadingState />
+                </Box>
+              ) : (
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={isSubmitting}
+                  sx={{ mt: 2 }}
+                >
+                  Submit
+                </Button>
+              )}
             </Box>
           </Form>
         )}

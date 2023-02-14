@@ -1,8 +1,9 @@
-import { Alert, Button } from "@mui/material";
+import { Alert, Box, Button } from "@mui/material";
 import { Form, Formik } from "formik";
 import { FC, useEffect } from "react";
 
 import { TextField } from "../../../forms/fields/TextField";
+import { LoadingState } from "../../../lib/components/LoadingState";
 import { useSignInRequest } from "../hooks/useSignInRequest";
 
 interface SignInFormProps {
@@ -54,15 +55,22 @@ export const SignInForm: FC<SignInFormProps> = ({ onSuccessfulSignIn }) => {
             fullWidth
             margin="normal"
           />
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            disabled={isSubmitting}
-            sx={{ mt: 2 }}
-          >
-            Sign In
-          </Button>
+
+          {isSubmitting ? (
+            <Box sx={{ mt: 2 }}>
+              <LoadingState />
+            </Box>
+          ) : (
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              disabled={isSubmitting}
+              sx={{ mt: 2 }}
+            >
+              Sign In
+            </Button>
+          )}
         </Form>
       )}
     </Formik>
