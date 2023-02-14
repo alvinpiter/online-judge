@@ -16,7 +16,7 @@ export interface Submission {
   programmingLanguage: ProgrammingLanguage;
   code: string;
   submittedAt: string;
-  verdict: SubmissionVerdict;
+  verdict: SubmissionVerdict | null;
 }
 
 export interface SubmissionWithDetails extends Submission {

@@ -50,5 +50,5 @@ export class Submission {
   submittedAt = new Date();
 
   @Column({ nullable: true })
-  verdict: SubmissionVerdict;
+  verdict: SubmissionVerdict | null;
 }
