@@ -44,11 +44,7 @@ export const HomePage: FC = () => {
         </Box>
       </Paper>
 
-      {isLoadingGlobalStatistics && (
-        <Box sx={{ mt: 2 }}>
-          <LoadingState />
-        </Box>
-      )}
+      {isLoadingGlobalStatistics && <LoadingState />}
 
       {globalStatistics && (
         <Stack direction="row" spacing={2} sx={{ mt: 2 }}>

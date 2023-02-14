@@ -1,4 +1,4 @@
-import { Alert, Box, Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { Form, Formik } from "formik";
 import { FC, useEffect } from "react";
 
@@ -57,9 +57,7 @@ export const SignInForm: FC<SignInFormProps> = ({ onSuccessfulSignIn }) => {
           />
 
           {isSubmitting ? (
-            <Box sx={{ mt: 2 }}>
-              <LoadingState />
-            </Box>
+            <LoadingState />
           ) : (
             <Button
               type="submit"

@@ -4,7 +4,12 @@ import { FC } from "react";
 export const LoadingState: FC = () => {
   return (
     <Box
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 2,
+      }}
     >
       <CircularProgress />
     </Box>

@@ -47,9 +47,7 @@ export const SolutionTemplateForm: FC<SolutionTemplateFormProps> = ({
               />
 
               {isSubmitting ? (
-                <Box sx={{ mt: 2 }}>
-                  <LoadingState />
-                </Box>
+                <LoadingState />
               ) : (
                 <Button
                   type="submit"
