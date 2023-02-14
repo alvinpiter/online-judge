@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getNumberOfPages } from "../../../modules/Pagination/helpers";
 import { OffsetPaginationRequestHook } from "../../../modules/Pagination/interfaces";
 import { OffsetPaginationQueryStringObjectBuilder } from "../../../modules/Pagination/OffsetPaginationQueryStringObjectBuilder/OffsetPaginationQueryStringObjectBuilder";
+import { LoadingState } from "../../components/LoadingState";
 import { OffsetPaginationContextValue } from "./interfaces";
 
 /*
@@ -40,12 +41,13 @@ export const OffsetPaginationContextProvider = <Entity, Filter, Order>(
 
   const [entities, setEntities] = useState<Entity[]>([]);
 
-  const { result: getEntitiesRequestResult } = getEntitiesRequestHook(
-    numberOfEntitiesPerPage,
-    currentPage,
-    qsObjectBuilder.getFilter(),
-    qsObjectBuilder.getOrder()
-  );
+  const { isLoading: isLoadingEntities, result: getEntitiesRequestResult } =
+    getEntitiesRequestHook(
+      numberOfEntitiesPerPage,
+      currentPage,
+      qsObjectBuilder.getFilter(),
+      qsObjectBuilder.getOrder()
+    );
 
   const handlePageChange = (newPage: number) => {
     const qsObject = qsObjectBuilder.setPage(newPage).build();
@@ -68,6 +70,10 @@ export const OffsetPaginationContextProvider = <Entity, Filter, Order>(
       setNumberOfPages(getNumberOfPages(getEntitiesRequestResult.meta));
     }
   }, [getEntitiesRequestResult]);
+
+  if (isLoadingEntities) {
+    return <LoadingState />;
+  }
 
   return (
     <Context.Provider

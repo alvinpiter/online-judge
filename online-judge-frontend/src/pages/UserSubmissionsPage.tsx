@@ -2,6 +2,7 @@ import { Link, Typography } from "@mui/material";
 import { FC } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ROUTES } from "../constants/Routes";
+import { LoadingState } from "../lib/components/LoadingState";
 import { useCurrentQueryString } from "../lib/general/useCurrentQueryString";
 import { SEOTitle } from "../modules/SEO/components/SEOTitle";
 import { UserSubmissionsPageContent } from "../modules/Submission/components/UserSubmissionsPageContent";
@@ -21,21 +22,28 @@ export const UserSubmissionsPage: FC = () => {
     userId
   );
 
-  const { isLoading, result } = useGetUserRequest(parseInt(userId));
-  if (isLoading || !result) {
-    return <p> Loading user... </p>;
+  const { isLoading: isLoadingUser, result: user } = useGetUserRequest(
+    parseInt(userId)
+  );
+
+  if (isLoadingUser) {
+    return <LoadingState />;
+  }
+
+  if (!user) {
+    return null;
   }
 
   return (
     <>
-      <SEOTitle title={`${result.username}'s submissions`} />
+      <SEOTitle title={`${user.username}'s submissions`} />
       <Typography variant="h5">
         <Link
           href={ROUTES.USER_PROFILE_ROUTE.generatePath({
             userId,
           })}
         >
-          {result.username}
+          {user.username}
         </Link>
         's submissions
       </Typography>

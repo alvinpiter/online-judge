@@ -1,11 +1,13 @@
 import { Box, Link, Paper, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 import { ROUTES } from "../constants/Routes";
+import { LoadingState } from "../lib/components/LoadingState";
 import { SEOTitle } from "../modules/SEO/components/SEOTitle";
 import { useGetGlobalStatisticsRequest } from "../modules/Statistics/hooks/useGetGlobalStatisticsRequest";
 
 export const HomePage: FC = () => {
-  const { result: globalStatistics } = useGetGlobalStatisticsRequest();
+  const { isLoading: isLoadingGlobalStatistics, result: globalStatistics } =
+    useGetGlobalStatisticsRequest();
 
   return (
     <>
@@ -41,6 +43,12 @@ export const HomePage: FC = () => {
           </Typography>
         </Box>
       </Paper>
+
+      {isLoadingGlobalStatistics && (
+        <Box sx={{ mt: 2 }}>
+          <LoadingState />
+        </Box>
+      )}
 
       {globalStatistics && (
         <Stack direction="row" spacing={2} sx={{ mt: 2 }}>

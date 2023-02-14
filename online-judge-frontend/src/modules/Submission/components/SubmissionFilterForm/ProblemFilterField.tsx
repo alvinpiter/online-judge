@@ -4,6 +4,7 @@ import {
   SelectField,
   SelectFieldProps,
 } from "../../../../forms/fields/SelectField";
+import { LoadingState } from "../../../../lib/components/LoadingState";
 import { useGetProblemsRequest } from "../../../Problem/hooks/useGetProblemsRequest";
 import { ProblemsOrderOption } from "../../../Problem/interfaces";
 
@@ -12,8 +13,12 @@ export const ProblemFilterField: FC<SelectFieldProps> = (props) => {
   const { isLoading: isLoadingProblems, result: getProblemsResult } =
     useGetProblemsRequest(42, 1, {}, ProblemsOrderOption.BY_ID_ASC);
 
-  if (isLoadingProblems || !getProblemsResult) {
-    return <p> Loading problems... </p>;
+  if (isLoadingProblems) {
+    return <LoadingState />;
+  }
+
+  if (!getProblemsResult) {
+    return null;
   }
 
   return (

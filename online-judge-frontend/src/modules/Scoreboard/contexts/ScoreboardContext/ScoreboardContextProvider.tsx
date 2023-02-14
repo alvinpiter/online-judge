@@ -1,4 +1,5 @@
 import { FC, ReactNode } from "react";
+import { LoadingState } from "../../../../lib/components/LoadingState";
 import { useGetScoreboardProblemsRequest } from "../../hooks/useGetScoreboardProblemsRequest";
 import { ScoreboardRowsPaginationContextProvider } from "../ScoreboardRowsPaginationContext";
 import { ScoreboardContext } from "./context";
@@ -10,10 +11,15 @@ interface ScoreboardContextProviderProps {
 export const ScoreboardContextProvider: FC<ScoreboardContextProviderProps> = ({
   children,
 }) => {
-  const { isLoading, result: problems } = useGetScoreboardProblemsRequest();
+  const { isLoading: isLoadingScoreboardProblems, result: problems } =
+    useGetScoreboardProblemsRequest();
 
-  if (isLoading || !problems) {
-    return <p> Loading scoreboard... </p>;
+  if (isLoadingScoreboardProblems) {
+    return <LoadingState />;
+  }
+
+  if (!problems) {
+    return null;
   }
 
   return (
