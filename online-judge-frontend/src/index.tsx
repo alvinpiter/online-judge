@@ -24,6 +24,7 @@ import { UserProfilePage } from "./pages/UserProfilePage";
 import { SubmissionPage } from "./pages/SubmissionPage";
 import { ScoreboardPage } from "./pages/ScoreboardPage";
 import { HomePage } from "./pages/HomePage";
+import { HelmetProvider } from "react-helmet-async";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -88,11 +89,13 @@ Source: https://stackoverflow.com/a/71893128
 */
 render(
   <React.StrictMode>
-    <SnackbarContextProvider>
-      <CurrentUserContextProvider>
-        <RouterProvider router={router} />
-      </CurrentUserContextProvider>
-    </SnackbarContextProvider>
+    <HelmetProvider>
+      <SnackbarContextProvider>
+        <CurrentUserContextProvider>
+          <RouterProvider router={router} />
+        </CurrentUserContextProvider>
+      </SnackbarContextProvider>
+    </HelmetProvider>
   </React.StrictMode>,
   document.getElementById("root") as HTMLElement
 );

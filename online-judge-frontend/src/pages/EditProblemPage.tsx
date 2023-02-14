@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { EditDescriptionTab } from "../modules/Problem/components/EditDescription/EditDescriptionTab";
 import { EditSolutionTemplatesTab } from "../modules/Problem/components/EditSolutionTemplates/EditSolutionTemplatesTab";
 import { EditTestCasesTab } from "../modules/Problem/components/EditTestCases/EditTestCasesTab";
+import { SEOTitle } from "../modules/SEO/components/SEOTitle";
 
 export const EditProblemPage: FC = () => {
   const params = useParams<{ problemId: string }>();
@@ -20,6 +21,7 @@ export const EditProblemPage: FC = () => {
 
   return (
     <>
+      <SEOTitle title="Edit Problem" />
       <Tabs value={tabIndex} onChange={handleTabChange}>
         <Tab label="Description" />
         <Tab label="Test Cases" />

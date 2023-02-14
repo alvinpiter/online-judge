@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { ROUTES } from "../constants/Routes";
 import { SubmissionCodeEditor } from "../modules/Problem/components/SubmissionCodeEditor";
 import { useGetProblemRequest } from "../modules/Problem/hooks/useGetProblemRequest";
+import { SEOTitle } from "../modules/SEO/components/SEOTitle";
 
 export const UserProblemPage: FC = () => {
   const params = useParams<{ problemId: string }>();
@@ -18,6 +19,7 @@ export const UserProblemPage: FC = () => {
 
   return (
     <>
+      <SEOTitle title={problem.name} />
       <Typography variant="h4">{problem.name}</Typography>
 
       <Stack direction="column">

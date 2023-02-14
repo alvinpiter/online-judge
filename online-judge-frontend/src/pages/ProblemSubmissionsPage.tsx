@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ROUTES } from "../constants/Routes";
 import { useCurrentQueryString } from "../lib/general/useCurrentQueryString";
 import { useGetProblemRequest } from "../modules/Problem/hooks/useGetProblemRequest";
+import { SEOTitle } from "../modules/SEO/components/SEOTitle";
 import { ProblemSubmissionsPageContent } from "../modules/Submission/components/ProblemSubmissionsPageContent";
 import { SubmissionsContextProvider } from "../modules/Submission/contexts/SubmissionsContext";
 import { ProblemSubmissionsPageQueryStringObjectBuilder } from "../modules/Submission/helpers/ProblemSubmissionsPageQueryStringObjectBuilder";
@@ -27,6 +28,7 @@ export const ProblemSubmissionsPage: FC = () => {
 
   return (
     <>
+      <SEOTitle title={`Submissions to ${result.name}`} />
       <Typography variant="h5">
         Submissions to{" "}
         <Link href={ROUTES.USER_PROBLEM_ROUTE.generatePath({ problemId })}>

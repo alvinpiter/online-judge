@@ -1,6 +1,7 @@
 import { Box, Link, Paper, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 import { ROUTES } from "../constants/Routes";
+import { SEOTitle } from "../modules/SEO/components/SEOTitle";
 import { useGetGlobalStatisticsRequest } from "../modules/Statistics/hooks/useGetGlobalStatisticsRequest";
 
 export const HomePage: FC = () => {
@@ -8,6 +9,7 @@ export const HomePage: FC = () => {
 
   return (
     <>
+      <SEOTitle title="Online Judge" />
       <Paper elevation={2} sx={{ flex: 1, padding: 2 }}>
         <Typography variant="h3">Welcome to Online Judge!</Typography>
 

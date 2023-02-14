@@ -3,6 +3,7 @@ import { FC } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ROUTES } from "../constants/Routes";
 import { useCurrentQueryString } from "../lib/general/useCurrentQueryString";
+import { SEOTitle } from "../modules/SEO/components/SEOTitle";
 import { UserSubmissionsPageContent } from "../modules/Submission/components/UserSubmissionsPageContent";
 import { SubmissionsContextProvider } from "../modules/Submission/contexts/SubmissionsContext";
 import { UserSubmissionsPageQueryStringObjectBuilder } from "../modules/Submission/helpers/UserSubmissionsPageQueryStringObjectBuilder";
@@ -27,6 +28,7 @@ export const UserSubmissionsPage: FC = () => {
 
   return (
     <>
+      <SEOTitle title={`${result.username}'s submissions`} />
       <Typography variant="h5">
         <Link
           href={ROUTES.USER_PROFILE_ROUTE.generatePath({

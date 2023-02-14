@@ -3,6 +3,7 @@ import { Paper, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 import { useParams } from "react-router-dom";
 import { CODE_EDITOR_PROGRAMMING_LANGUAGE_MAPPER } from "../constants/CodeEditorProgrammingLanguageMapper";
+import { SEOTitle } from "../modules/SEO/components/SEOTitle";
 import { SubmissionCompilationMessage } from "../modules/Submission/components/SubmissionDetail/SubmissionCompilationMessage";
 import { SubmissionRunDetailsTable } from "../modules/Submission/components/SubmissionDetail/SubmissionRunDetailsTable";
 import { SubmissionSummary } from "../modules/Submission/components/SubmissionDetail/SubmissionSummary";
@@ -21,6 +22,7 @@ export const SubmissionPage: FC = () => {
 
   return (
     <>
+      <SEOTitle title={`Submission #${submissionId}`} />
       <Typography variant="h4">Submission #{submissionId}</Typography>
 
       <Stack direction="column" sx={{ mt: 2 }} spacing={2}>
