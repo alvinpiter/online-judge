@@ -16,6 +16,8 @@ interface UserProblemsContextProviderProps {
   children?: ReactNode;
 }
 
+const NUMBER_OF_PROBLEMS_PER_PAGE = 20;
+
 export const UserProblemsContextProvider: FC<
   UserProblemsContextProviderProps
 > = ({ children }) => {
@@ -33,6 +35,7 @@ export const UserProblemsContextProvider: FC<
       ProblemsOrderOption
     >
       Context={UserProblemsContext}
+      numberOfEntitiesPerPage={NUMBER_OF_PROBLEMS_PER_PAGE}
       qsObjectBuilder={qsObjectBuilder}
       getEntitiesRequestHook={useGetProblemsRequest}
       onQsObjectChange={(qsObject) =>

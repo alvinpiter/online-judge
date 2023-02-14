@@ -12,6 +12,8 @@ interface ScoreboardRowsContextProviderProps {
   children?: ReactNode;
 }
 
+const NUMBER_OF_ROWS_PER_PAGE = 50;
+
 export const ScoreboardRowsPaginationContextProvider: FC<
   ScoreboardRowsContextProviderProps
 > = ({ children }) => {
@@ -25,6 +27,7 @@ export const ScoreboardRowsPaginationContextProvider: FC<
   return (
     <OffsetPaginationContextProvider<ScoreboardRow, ScoreboardFilter, any>
       Context={ScoreboardRowsPaginationContext}
+      numberOfEntitiesPerPage={NUMBER_OF_ROWS_PER_PAGE}
       qsObjectBuilder={qsObjectBuilder}
       getEntitiesRequestHook={useGetScoreboardRowsRequest}
       onQsObjectChange={(qsObject) =>
