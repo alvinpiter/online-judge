@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 import { ROUTES } from "../../../constants/Routes";
+import { LoadingState } from "../../../lib/components/LoadingState";
+import { Problem } from "../../Problem/interfaces";
 import { useGetUserStatisticsRequest } from "../hooks/useGetUserStatisticsRequest";
 
 interface UserStatisticsTableProps {
@@ -19,10 +21,15 @@ interface UserStatisticsTableProps {
 export const UserStatisticsTable: FC<UserStatisticsTableProps> = ({
   userId,
 }) => {
-  const { isLoading, result } = useGetUserStatisticsRequest(userId);
+  const { isLoading: isLoadingUserStatistics, result: userStatistics } =
+    useGetUserStatisticsRequest(userId);
 
-  if (isLoading || !result) {
-    return <p> Loading user statistics... </p>;
+  if (isLoadingUserStatistics) {
+    return <LoadingState />;
+  }
+
+  if (!userStatistics) {
+    return null;
   }
 
   return (
@@ -36,7 +43,9 @@ export const UserStatisticsTable: FC<UserStatisticsTableProps> = ({
 
             <TableCell>
               <Typography variant="body1">
-                {result.rank === null ? "Unranked" : result.rank + 1}
+                {userStatistics.rank === null
+                  ? "Unranked"
+                  : userStatistics.rank + 1}
               </Typography>
             </TableCell>
           </TableRow>
@@ -47,16 +56,9 @@ export const UserStatisticsTable: FC<UserStatisticsTableProps> = ({
             </TableCell>
 
             <TableCell>
-              {result.solvedProblems.map((problem, idx) => (
-                <Link
-                  sx={{ ml: idx === 0 ? 0 : 2 }}
-                  href={ROUTES.USER_PROBLEM_ROUTE.generatePath({
-                    problemId: problem.id.toString(),
-                  })}
-                >
-                  {problem.name},
-                </Link>
-              ))}
+              <CommaSeparatedProblems
+                problems={userStatistics.solvedProblems}
+              />
             </TableCell>
           </TableRow>
 
@@ -66,16 +68,9 @@ export const UserStatisticsTable: FC<UserStatisticsTableProps> = ({
             </TableCell>
 
             <TableCell>
-              {result.attemptedProblems.map((problem, idx) => (
-                <Link
-                  sx={{ ml: idx === 0 ? 0 : 2 }}
-                  href={ROUTES.USER_PROBLEM_ROUTE.generatePath({
-                    problemId: problem.id.toString(),
-                  })}
-                >
-                  {problem.name},
-                </Link>
-              ))}
+              <CommaSeparatedProblems
+                problems={userStatistics.attemptedProblems}
+              />
             </TableCell>
           </TableRow>
 
@@ -97,5 +92,26 @@ export const UserStatisticsTable: FC<UserStatisticsTableProps> = ({
         </TableBody>
       </Table>
     </TableContainer>
+  );
+};
+
+const CommaSeparatedProblems: FC<{
+  problems: Pick<Problem, "id" | "name">[];
+}> = ({ problems }) => {
+  return (
+    <>
+      {problems.map((problem, idx) => (
+        <Link
+          key={problem.id}
+          sx={{ ml: idx === 0 ? 0 : 2 }}
+          href={ROUTES.USER_PROBLEM_ROUTE.generatePath({
+            problemId: problem.id.toString(),
+          })}
+        >
+          {problem.name}
+          {idx < problems.length - 1 ? "," : ""}
+        </Link>
+      ))}
+    </>
   );
 };

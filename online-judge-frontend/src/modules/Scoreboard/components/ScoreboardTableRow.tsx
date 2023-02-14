@@ -43,7 +43,7 @@ export const ScoreboardTableRow: FC<ScoreboardTableRowProps> = ({
           : moment(row.schematicScore.lastSolveTimeInMilliseconds).fromNow()}
       </TableCell>
       {problems.map((problem) => (
-        <TableCell>
+        <TableCell key={problem.id}>
           <UserProblemAttemptCell
             userProblemAttempt={userProblemAttemptsMap.get(problem.id)}
           />

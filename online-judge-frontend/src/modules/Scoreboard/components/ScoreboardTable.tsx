@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 import { ROUTES } from "../../../constants/Routes";
+import { TableEmptyState } from "../../../lib/components/TableEmptyState";
 import { Problem } from "../../Problem/interfaces";
 import { ScoreboardRow } from "../interfaces";
 import { ScoreboardTableRow } from "./ScoreboardTableRow";
@@ -33,7 +34,7 @@ export const ScoreboardTable: FC<ScoreboardTableProps> = ({
             <TableCell> Solve count </TableCell>
             <TableCell> Last solve at </TableCell>
             {problems.map((problem) => (
-              <TableCell align="center">
+              <TableCell align="center" key={problem.id}>
                 <Link
                   href={ROUTES.USER_PROBLEM_ROUTE.generatePath({
                     problemId: problem.id.toString(),
@@ -46,9 +47,20 @@ export const ScoreboardTable: FC<ScoreboardTableProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <ScoreboardTableRow problems={problems} row={row} />
-          ))}
+          {rows.length === 0 ? (
+            <TableEmptyState
+              colSpan={4 + problems.length}
+              message="No users found"
+            />
+          ) : (
+            rows.map((row) => (
+              <ScoreboardTableRow
+                key={row.rank}
+                problems={problems}
+                row={row}
+              />
+            ))
+          )}
         </TableBody>
       </Table>
     </TableContainer>

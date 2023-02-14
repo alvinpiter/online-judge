@@ -2,8 +2,10 @@ import { Box, Link, Paper, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 import { useParams } from "react-router-dom";
 import { ROUTES } from "../constants/Routes";
+import { LoadingState } from "../lib/components/LoadingState";
 import { SubmissionCodeEditor } from "../modules/Problem/components/SubmissionCodeEditor";
 import { useGetProblemRequest } from "../modules/Problem/hooks/useGetProblemRequest";
+import { SEOTitle } from "../modules/SEO/components/SEOTitle";
 
 export const UserProblemPage: FC = () => {
   const params = useParams<{ problemId: string }>();
@@ -12,12 +14,17 @@ export const UserProblemPage: FC = () => {
   const { isLoading: isLoadingProblem, result: problem } =
     useGetProblemRequest(problemId);
 
-  if (isLoadingProblem || !problem) {
-    return <p> Loading problem... </p>;
+  if (isLoadingProblem) {
+    return <LoadingState />;
+  }
+
+  if (!problem) {
+    return null;
   }
 
   return (
     <>
+      <SEOTitle title={problem.name} />
       <Typography variant="h4">{problem.name}</Typography>
 
       <Stack direction="column">

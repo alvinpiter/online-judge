@@ -18,6 +18,8 @@ interface SubmissionsContextProviderProps extends PropsWithChildren {
   onQsObjectChange?: (qsObject: QueryString.ParsedQs) => void;
 }
 
+const NUMBER_OF_SUBMISSIONS_PER_PAGE = 20;
+
 export const SubmissionsContextProvider: FC<
   SubmissionsContextProviderProps
 > = ({ qsObjectBuilder, onQsObjectChange, children }) => {
@@ -28,6 +30,7 @@ export const SubmissionsContextProvider: FC<
       SubmissionsOrderOption
     >
       Context={SubmissionsContext}
+      numberOfEntitiesPerPage={NUMBER_OF_SUBMISSIONS_PER_PAGE}
       qsObjectBuilder={qsObjectBuilder}
       getEntitiesRequestHook={useGetSubmissionsRequest}
       onQsObjectChange={onQsObjectChange}

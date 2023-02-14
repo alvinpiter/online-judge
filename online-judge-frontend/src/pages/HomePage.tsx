@@ -1,13 +1,17 @@
 import { Box, Link, Paper, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 import { ROUTES } from "../constants/Routes";
+import { LoadingState } from "../lib/components/LoadingState";
+import { SEOTitle } from "../modules/SEO/components/SEOTitle";
 import { useGetGlobalStatisticsRequest } from "../modules/Statistics/hooks/useGetGlobalStatisticsRequest";
 
 export const HomePage: FC = () => {
-  const { result: globalStatistics } = useGetGlobalStatisticsRequest();
+  const { isLoading: isLoadingGlobalStatistics, result: globalStatistics } =
+    useGetGlobalStatisticsRequest();
 
   return (
     <>
+      <SEOTitle title="Online Judge" />
       <Paper elevation={2} sx={{ flex: 1, padding: 2 }}>
         <Typography variant="h3">Welcome to Online Judge!</Typography>
 
@@ -39,6 +43,8 @@ export const HomePage: FC = () => {
           </Typography>
         </Box>
       </Paper>
+
+      {isLoadingGlobalStatistics && <LoadingState />}
 
       {globalStatistics && (
         <Stack direction="row" spacing={2} sx={{ mt: 2 }}>

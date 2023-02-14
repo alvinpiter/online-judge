@@ -1,6 +1,7 @@
 import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../constants/Routes";
+import { LoadingState } from "../lib/components/LoadingState";
 import { useCurrentUserContext } from "../modules/User/contexts/CurrentUserContext";
 import { UserRole } from "../modules/User/interface";
 
@@ -32,7 +33,7 @@ export const ProtectedPage: FC<ProtectedPageProps> = ({
   }, [isLoadingCurrentUser, currentUser, allowedRoles, navigate]);
 
   if (isLoadingCurrentUser) {
-    return <p> Loading current user... </p>;
+    return <LoadingState />;
   }
 
   return <>{children}</>;

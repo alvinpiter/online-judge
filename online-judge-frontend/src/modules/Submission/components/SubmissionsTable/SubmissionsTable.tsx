@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { FC } from "react";
+import { TableEmptyState } from "../../../../lib/components/TableEmptyState";
 import { Submission } from "../../interfaces";
 import { SubmissionsTableItem } from "./SubmissionsTableItem";
 
@@ -33,9 +34,13 @@ export const SubmissionsTable: FC<SubmissionsTableProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {submissions.map((submission, idx) => (
-            <SubmissionsTableItem key={idx} submission={submission} />
-          ))}
+          {submissions.length === 0 ? (
+            <TableEmptyState colSpan={7} message="No submissions found" />
+          ) : (
+            submissions.map((submission, idx) => (
+              <SubmissionsTableItem key={idx} submission={submission} />
+            ))
+          )}
         </TableBody>
       </Table>
     </TableContainer>

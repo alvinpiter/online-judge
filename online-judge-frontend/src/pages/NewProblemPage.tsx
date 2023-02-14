@@ -3,6 +3,7 @@ import { FC, useEffect } from "react";
 import { useSnackbarContext } from "../core/Snackbar";
 import { ProblemDescriptionForm } from "../modules/Problem/components/EditDescription/ProblemDescriptionForm";
 import { useCreateProblemRequest } from "../modules/Problem/hooks/useCreateProblemRequest";
+import { SEOTitle } from "../modules/SEO/components/SEOTitle";
 
 export const NewProblemPage: FC = () => {
   const { openSnackbar } = useSnackbarContext();
@@ -31,6 +32,7 @@ export const NewProblemPage: FC = () => {
 
   return (
     <>
+      <SEOTitle title="New Problem" />
       <Typography variant="h5"> New Problem </Typography>
       <ProblemDescriptionForm onSubmit={handleSubmit} />
     </>

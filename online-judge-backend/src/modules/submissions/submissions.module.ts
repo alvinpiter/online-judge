@@ -26,7 +26,6 @@ import { SubmissionProcessorService } from './services/submission-processor/subm
 import { SubmissionRunDetailsService } from './services/submission-run-details.service';
 import { SubmissionEventsController } from './submission-events.controller';
 import { SubmissionJobsService } from './submission-jobs.service';
-import { SubmissionsEventSubscriber } from './submissions-event.subscriber';
 import { SubmissionsController } from './submissions.controller';
 import { SubmissionsService } from './submissions.service';
 
@@ -60,7 +59,6 @@ import { SubmissionsService } from './submissions.service';
     UserSubmissionsStatisticsUpdateQueue,
     GlobalSubmissionsStatisticsUpdateQueue,
     SubmissionFormatter,
-    SubmissionsEventSubscriber,
     SubmissionRunDetailsService,
     SubmissionCompilationDetailsService,
   ],

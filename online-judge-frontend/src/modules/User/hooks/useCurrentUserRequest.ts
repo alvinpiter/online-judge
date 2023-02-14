@@ -4,5 +4,5 @@ import { User } from "../interface";
 
 export function useCurrentUserRequest() {
   const apiUrl = `${config.backendAPIURL}/current-user`;
-  return useHTTPGetRequest<User>(apiUrl);
+  return useHTTPGetRequest<User>(apiUrl, false);
 }

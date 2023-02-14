@@ -41,4 +41,8 @@ export class Problem {
     (problemStatistics) => problemStatistics.problem,
   )
   problemStatistics: ProblemStatistics;
+
+  isPublished() {
+    return this.state === ProblemState.PUBLISHED;
+  }
 }

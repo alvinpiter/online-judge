@@ -3,11 +3,16 @@ import { useCallback, useEffect, useState } from "react";
 import { AppError } from "../../AppError";
 import { axiosErrorToAppError } from "./axiosErrorToAppError";
 import { useToggle } from "../general/useToggle";
+import { useSnackbarContext } from "../../core/Snackbar";
 
-export function useHTTPGetRequest<Result>(url: string) {
+export function useHTTPGetRequest<Result>(
+  url: string,
+  openSnackbarOnError = true
+) {
   const [isLoading, startLoading, stopLoading] = useToggle(true);
   const [result, setResult] = useState<Result | undefined>(undefined);
   const [error, setError] = useState<AppError | undefined>(undefined);
+  const { openSnackbar } = useSnackbarContext();
 
   const doRequest = useCallback(async () => {
     startLoading();
@@ -17,11 +22,22 @@ export function useHTTPGetRequest<Result>(url: string) {
     try {
       setResult((await axios.get<Result>(url)).data);
     } catch (e) {
-      setError(axiosErrorToAppError(e as AxiosError));
+      const appError = axiosErrorToAppError(e as AxiosError);
+
+      setError(appError);
+      openSnackbarOnError && openSnackbar("error", appError.message);
     } finally {
       stopLoading();
     }
-  }, [startLoading, stopLoading, setResult, setError, url]);
+  }, [
+    startLoading,
+    stopLoading,
+    setResult,
+    setError,
+    openSnackbarOnError,
+    openSnackbar,
+    url,
+  ]);
 
   useEffect(() => {
     doRequest();

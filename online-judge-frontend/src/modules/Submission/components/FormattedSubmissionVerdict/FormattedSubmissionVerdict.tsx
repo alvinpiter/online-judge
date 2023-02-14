@@ -19,13 +19,17 @@ const HUMANIZED_VERDICT_MAP: Record<SubmissionVerdict, string> = {
 };
 
 interface FormattedSubmissionVerdictProps {
-  verdict: SubmissionVerdict;
+  verdict: SubmissionVerdict | null;
 }
 
 export const FormattedSubmissionVerdict: FC<
   FormattedSubmissionVerdictProps
 > = ({ verdict }) => {
-  return (
+  return verdict === null ? (
+    <Typography variant="body2" color="text.secondary">
+      Waiting judgment...
+    </Typography>
+  ) : (
     <Typography
       variant="body2"
       fontWeight="bold"

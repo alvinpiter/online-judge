@@ -42,6 +42,7 @@ export class FirstTimeAcceptedSubmissionProcessingStrategy
     await this.userProblemAttemptsService.setFirstSolvedAtAndSave(
       context.submission.userId,
       context.submission.problemId,
+      context.submission.submittedAt,
     );
 
     await this.problemStatisticsService.increaseSolverCount(

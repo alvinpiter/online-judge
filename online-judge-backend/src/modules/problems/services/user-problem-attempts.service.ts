@@ -38,31 +38,40 @@ export class UserProblemAttemptsService {
     });
   }
 
-  async getAllUserProblemAttempts(
+  async getAllUserAttemptsOnPublishedProblems(
     userId: number,
-    relations = [],
   ): Promise<UserProblemAttempt[]> {
-    return this.userProblemAttemptsRepository.find({
-      where: {
-        userId,
-      },
-      relations,
-    });
+    const allUserProblemAttempts =
+      await this.userProblemAttemptsRepository.find({
+        where: {
+          userId,
+        },
+        relations: ['problem'],
+      });
+
+    return allUserProblemAttempts.filter((attempt) =>
+      attempt.problem.isPublished(),
+    );
   }
 
   /*
   Return a map of userId -> UserProblemAttempt[]
    */
-  async getAllUsersProblemAttempts(
+  async getAllUsersAttemptsOnPublishedProblems(
     userIds: number[],
   ): Promise<Map<number, UserProblemAttempt[]>> {
     const allUserProblemAttempts =
-      await this.userProblemAttemptsRepository.findBy({
-        userId: In(userIds),
+      await this.userProblemAttemptsRepository.find({
+        where: { userId: In(userIds) },
+        relations: ['problem'],
       });
 
+    const filteredUserProblemAttempts = allUserProblemAttempts.filter(
+      (attempt) => attempt.problem.isPublished(),
+    );
+
     const result = new Map<number, UserProblemAttempt[]>();
-    for (const userProblemAttempt of allUserProblemAttempts) {
+    for (const userProblemAttempt of filteredUserProblemAttempts) {
       if (result.has(userProblemAttempt.userId)) {
         result.get(userProblemAttempt.userId).push(userProblemAttempt);
       } else {
@@ -84,13 +93,17 @@ export class UserProblemAttemptsService {
     return this.userProblemAttemptsRepository.save(userProblemAttempt);
   }
 
-  async setFirstSolvedAtAndSave(userId: number, problemId: number) {
+  async setFirstSolvedAtAndSave(
+    userId: number,
+    problemId: number,
+    firstSolvedAt: Date,
+  ) {
     const userProblemAttempt = await this.getOrInitializeUserProblemAttempt(
       userId,
       problemId,
     );
 
-    userProblemAttempt.firstSolvedAt = new Date();
+    userProblemAttempt.firstSolvedAt = firstSolvedAt;
 
     return this.userProblemAttemptsRepository.save(userProblemAttempt);
   }

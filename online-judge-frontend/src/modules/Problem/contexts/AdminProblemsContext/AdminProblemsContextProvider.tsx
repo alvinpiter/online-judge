@@ -16,6 +16,8 @@ interface AdminProblemsContextProviderProps {
   children?: ReactNode;
 }
 
+const NUMBER_OF_PROBLEMS_PER_PAGE = 20;
+
 export const AdminProblemsContextProvider: FC<
   AdminProblemsContextProviderProps
 > = ({ children }) => {
@@ -33,6 +35,7 @@ export const AdminProblemsContextProvider: FC<
       ProblemsOrderOption
     >
       Context={AdminProblemsContext}
+      numberOfEntitiesPerPage={NUMBER_OF_PROBLEMS_PER_PAGE}
       qsObjectBuilder={qsObjectBuilder}
       getEntitiesRequestHook={useGetAdminProblemsRequest}
       onQsObjectChange={(qsObject) =>

@@ -29,11 +29,11 @@ export const EditSolutionTemplatesContextProvider: FC<
   const [activeProgrammingLanguage, setActiveProgrammingLanguage] =
     useState<ProgrammingLanguage>(ProgrammingLanguage.JAVASCRIPT);
 
-  const upsertTemplate = (
+  const upsertTemplate = async (
     programmingLanguage: ProgrammingLanguage,
     template: string
   ) => {
-    upsertSolutionTemplateRequest({ programmingLanguage, template });
+    await upsertSolutionTemplateRequest({ programmingLanguage, template });
   };
 
   useEffect(() => {

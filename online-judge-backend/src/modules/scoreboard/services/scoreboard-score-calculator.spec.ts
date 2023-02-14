@@ -24,7 +24,10 @@ describe(ScoreboardScoreCalculator.name, () => {
 
     it('returns the correct result', async () => {
       jest
-        .spyOn(userProblemAttemptsService, 'getAllUserProblemAttempts')
+        .spyOn(
+          userProblemAttemptsService,
+          'getAllUserAttemptsOnPublishedProblems',
+        )
         .mockResolvedValue(userProblemAttempts);
 
       const result = await service.getNumericScore(user);
@@ -34,7 +37,7 @@ describe(ScoreboardScoreCalculator.name, () => {
         new Date('2023-01-30 17:20').getTime();
 
       expect(
-        userProblemAttemptsService.getAllUserProblemAttempts,
+        userProblemAttemptsService.getAllUserAttemptsOnPublishedProblems,
       ).toHaveBeenCalledWith(user.id);
       expect(result).toEqual(expectedResult);
     });

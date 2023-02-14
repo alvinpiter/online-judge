@@ -44,7 +44,7 @@ export class ScoreboardReaderService {
       );
 
     const usersProblemAttemptsMap =
-      await this.userProblemAttemptsService.getAllUsersProblemAttempts(
+      await this.userProblemAttemptsService.getAllUsersAttemptsOnPublishedProblems(
         map(rawResults, 'entity.id'),
       );
 

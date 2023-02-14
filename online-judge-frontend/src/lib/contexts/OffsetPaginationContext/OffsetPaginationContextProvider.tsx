@@ -3,10 +3,8 @@ import { useEffect, useState } from "react";
 import { getNumberOfPages } from "../../../modules/Pagination/helpers";
 import { OffsetPaginationRequestHook } from "../../../modules/Pagination/interfaces";
 import { OffsetPaginationQueryStringObjectBuilder } from "../../../modules/Pagination/OffsetPaginationQueryStringObjectBuilder/OffsetPaginationQueryStringObjectBuilder";
-import {
-  DEFAULT_NUMBER_OF_ENTITIES_PER_PAGE,
-  OffsetPaginationContextValue,
-} from "./interfaces";
+import { LoadingState } from "../../components/LoadingState";
+import { OffsetPaginationContextValue } from "./interfaces";
 
 /*
 TODO:
@@ -18,6 +16,7 @@ interface OffsetPaginationContextProvideProps<Entity, Filter, Order> {
     OffsetPaginationContextValue<Entity, Filter, Order> | undefined
   >;
 
+  numberOfEntitiesPerPage: number;
   qsObjectBuilder: OffsetPaginationQueryStringObjectBuilder<Filter, Order>;
   getEntitiesRequestHook: OffsetPaginationRequestHook<Entity, Filter, Order>;
 
@@ -30,6 +29,7 @@ export const OffsetPaginationContextProvider = <Entity, Filter, Order>(
 ) => {
   const {
     Context,
+    numberOfEntitiesPerPage,
     qsObjectBuilder,
     getEntitiesRequestHook,
     onQsObjectChange,
@@ -41,12 +41,13 @@ export const OffsetPaginationContextProvider = <Entity, Filter, Order>(
 
   const [entities, setEntities] = useState<Entity[]>([]);
 
-  const { result: getEntitiesRequestResult } = getEntitiesRequestHook(
-    DEFAULT_NUMBER_OF_ENTITIES_PER_PAGE,
-    currentPage,
-    qsObjectBuilder.getFilter(),
-    qsObjectBuilder.getOrder()
-  );
+  const { isLoading: isLoadingEntities, result: getEntitiesRequestResult } =
+    getEntitiesRequestHook(
+      numberOfEntitiesPerPage,
+      currentPage,
+      qsObjectBuilder.getFilter(),
+      qsObjectBuilder.getOrder()
+    );
 
   const handlePageChange = (newPage: number) => {
     const qsObject = qsObjectBuilder.setPage(newPage).build();
@@ -69,6 +70,10 @@ export const OffsetPaginationContextProvider = <Entity, Filter, Order>(
       setNumberOfPages(getNumberOfPages(getEntitiesRequestResult.meta));
     }
   }, [getEntitiesRequestResult]);
+
+  if (isLoadingEntities) {
+    return <LoadingState />;
+  }
 
   return (
     <Context.Provider
