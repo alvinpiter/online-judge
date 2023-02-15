@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: online-judge-frontend
+spec:
+  type: NodePort
+  selector:
+    app: online-judge-frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: online-judge-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: online-judge-frontend
+  template:
+    metadata:
+      labels:
+        app: online-judge-frontend
+    spec:
+      containers:
+        - name: online-judge-frontend
+          image: alvinpiter/online-judge-frontend
+          ports:
+            - containerPort: 80
