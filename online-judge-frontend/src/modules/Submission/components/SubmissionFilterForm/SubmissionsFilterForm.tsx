@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import { Form, Formik } from "formik";
 import { FC } from "react";
-import { ProgrammingLanguage } from "../../../Problem/interfaces";
+import { Problem, ProgrammingLanguage } from "../../../Problem/interfaces";
 import { UserSearchField } from "../../../Search/components/UserSearchField";
 import { User } from "../../../User/interface";
 import { SubmissionsFilter, SubmissionVerdict } from "../../interfaces";
@@ -19,7 +19,7 @@ interface SubmissionsFilterFormProps {
 
 interface SubmissionsFilterFormData {
   user: User | null;
-  problemId?: number;
+  problem: Problem | null;
   programmingLanguage: ProgrammingLanguage | null;
   verdict: SubmissionVerdict | null;
 }
@@ -33,10 +33,10 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
   const normalizeFormData = (
     values: SubmissionsFilterFormData
   ): SubmissionsFilter => {
-    const { user, problemId, programmingLanguage, verdict } = values;
+    const { user, problem, programmingLanguage, verdict } = values;
     return {
       userId: user?.id,
-      problemId,
+      problemId: problem?.id,
       programmingLanguage: programmingLanguage || undefined,
       verdict: verdict || undefined,
     };
@@ -48,7 +48,7 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
       <Formik<SubmissionsFilterFormData>
         initialValues={{
           user: null,
-          problemId: initialFilter.problemId,
+          problem: null,
           programmingLanguage: initialFilter.programmingLanguage || null,
           verdict: initialFilter.verdict || null,
         }}
@@ -60,18 +60,12 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
           <Form>
             {!hideProblemFilter && (
               <Box sx={{ mt: 2 }}>
-                <Typography variant="body1">Problem</Typography>
-                <ProblemFilterField
-                  name="problemId"
-                  label="Problem"
-                  fullWidth
-                />
+                <ProblemFilterField name="problem" />
               </Box>
             )}
 
             {!hideUserFilter && (
               <Box sx={{ mt: 2 }}>
-                <Typography variant="body1"> User </Typography>
                 <UserSearchField name="user" />
               </Box>
             )}
