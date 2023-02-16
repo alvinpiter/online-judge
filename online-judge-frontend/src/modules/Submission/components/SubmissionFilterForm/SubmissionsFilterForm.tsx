@@ -10,8 +10,8 @@ import { UserSearchField } from "../../../Search/components/UserSearchField";
 import { User } from "../../../User/interface";
 import { SubmissionsFilter, SubmissionVerdict } from "../../interfaces";
 import { FormattedProgrammingLanguage } from "../FormattedProgrammingLanguage/FormattedProgrammingLanguage";
-import { FormattedSubmissionVerdict } from "../FormattedSubmissionVerdict/FormattedSubmissionVerdict";
 import { ProblemFilterField } from "./ProblemFilterField";
+import { SubmissionVerdictFilterField } from "./SubmissionVerdictFilterField";
 
 interface SubmissionsFilterFormProps {
   initialFilter: SubmissionsFilter;
@@ -25,7 +25,7 @@ interface SubmissionsFilterFormData {
   user: User | null;
   problemId?: number;
   programmingLanguage: ProgrammingLanguage | "ALL";
-  verdict: SubmissionVerdict | "ALL";
+  verdict: SubmissionVerdict | null;
 }
 
 export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
@@ -43,7 +43,7 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
       problemId,
       programmingLanguage:
         programmingLanguage === "ALL" ? undefined : programmingLanguage,
-      verdict: verdict === "ALL" ? undefined : verdict,
+      verdict: verdict || undefined,
     };
   };
 
@@ -55,9 +55,10 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
           user: null,
           problemId: initialFilter.problemId,
           programmingLanguage: initialFilter.programmingLanguage || "ALL",
-          verdict: initialFilter.verdict || "ALL",
+          verdict: initialFilter.verdict || null,
         }}
         onSubmit={(values) => {
+          alert(JSON.stringify(values));
           onSubmit(normalizeFormData(values));
         }}
       >
@@ -102,17 +103,7 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
             </Box>
 
             <Box sx={{ mt: 2 }}>
-              <Typography variant="body1"> Verdict </Typography>
-              <SelectField name="verdict" label="Verdict" fullWidth>
-                <MenuItem value="ALL"> All </MenuItem>
-                {Object.keys(SubmissionVerdict).map((verdict, idx) => (
-                  <MenuItem key={idx} value={verdict}>
-                    <FormattedSubmissionVerdict
-                      verdict={verdict as SubmissionVerdict}
-                    />
-                  </MenuItem>
-                ))}
-              </SelectField>
+              <SubmissionVerdictFilterField name="verdict" />
             </Box>
 
             <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
