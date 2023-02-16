@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { SubmissionVerdict } from '../../submissions/entities/submission.entity';
 import { SubmissionProcessorService } from '../../submissions/services/submission-processor/submission-processor.service';
 import { SubmissionsService } from '../../submissions/submissions.service';
 import { ScoreboardScoreCalculationQueue } from '../queues/scoreboard-score-calculation.queue';
@@ -22,10 +21,8 @@ export class SubmissionJudgedEventSubscriber {
       submissionId,
     );
 
-    if (submission.verdict === SubmissionVerdict.ACCEPTED) {
-      await this.scoreboardScoreCalculationQueue.enqueue({
-        userId: submission.userId,
-      });
-    }
+    await this.scoreboardScoreCalculationQueue.enqueue({
+      userId: submission.userId,
+    });
   }
 }
