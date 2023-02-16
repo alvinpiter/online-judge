@@ -1,16 +1,12 @@
-import { Box, Button, MenuItem, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { Form, Formik } from "formik";
 import { FC } from "react";
-import { SelectField } from "../../../../forms/fields/SelectField";
-import {
-  ProgrammingLanguage,
-  SupportedProgrammingLanguages,
-} from "../../../Problem/interfaces";
+import { ProgrammingLanguage } from "../../../Problem/interfaces";
 import { UserSearchField } from "../../../Search/components/UserSearchField";
 import { User } from "../../../User/interface";
 import { SubmissionsFilter, SubmissionVerdict } from "../../interfaces";
-import { FormattedProgrammingLanguage } from "../FormattedProgrammingLanguage/FormattedProgrammingLanguage";
 import { ProblemFilterField } from "./ProblemFilterField";
+import { SubmissionProgrammingLanguageFilterField } from "./SubmissionProgrammingLanguageFilterField";
 import { SubmissionVerdictFilterField } from "./SubmissionVerdictFilterField";
 
 interface SubmissionsFilterFormProps {
@@ -24,7 +20,7 @@ interface SubmissionsFilterFormProps {
 interface SubmissionsFilterFormData {
   user: User | null;
   problemId?: number;
-  programmingLanguage: ProgrammingLanguage | "ALL";
+  programmingLanguage: ProgrammingLanguage | null;
   verdict: SubmissionVerdict | null;
 }
 
@@ -41,8 +37,7 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
     return {
       userId: user?.id,
       problemId,
-      programmingLanguage:
-        programmingLanguage === "ALL" ? undefined : programmingLanguage,
+      programmingLanguage: programmingLanguage || undefined,
       verdict: verdict || undefined,
     };
   };
@@ -54,11 +49,10 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
         initialValues={{
           user: null,
           problemId: initialFilter.problemId,
-          programmingLanguage: initialFilter.programmingLanguage || "ALL",
+          programmingLanguage: initialFilter.programmingLanguage || null,
           verdict: initialFilter.verdict || null,
         }}
         onSubmit={(values) => {
-          alert(JSON.stringify(values));
           onSubmit(normalizeFormData(values));
         }}
       >
@@ -83,23 +77,7 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
             )}
 
             <Box sx={{ mt: 2 }}>
-              <Typography variant="body1"> Programming Language </Typography>
-              <SelectField
-                name="programmingLanguage"
-                label="Programming Language"
-                fullWidth
-              >
-                <MenuItem value="ALL"> All </MenuItem>
-                {SupportedProgrammingLanguages.map(
-                  (programmingLanguage, idx) => (
-                    <MenuItem key={idx} value={programmingLanguage}>
-                      <FormattedProgrammingLanguage
-                        programmingLanguage={programmingLanguage}
-                      />
-                    </MenuItem>
-                  )
-                )}
-              </SelectField>
+              <SubmissionProgrammingLanguageFilterField name="programmingLanguage" />
             </Box>
 
             <Box sx={{ mt: 2 }}>
