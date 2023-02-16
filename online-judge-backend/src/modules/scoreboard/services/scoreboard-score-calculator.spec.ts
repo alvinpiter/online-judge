@@ -15,48 +15,90 @@ describe(ScoreboardScoreCalculator.name, () => {
   });
 
   describe('calculateScore', () => {
-    const user = createUser(1);
-    const userProblemAttempts: UserProblemAttempt[] = [
-      createUserProblemAttempt(1, user.id, 1, 0, new Date('2023-01-30 17:20')),
-      createUserProblemAttempt(1, user.id, 2, 1, new Date('2023-01-30 17:15')),
-      createUserProblemAttempt(1, user.id, 3, 3, null),
-    ];
+    describe('when there is solved problem', () => {
+      const user = createUser(1);
+      const userProblemAttempts: UserProblemAttempt[] = [
+        createUserProblemAttempt(
+          1,
+          user.id,
+          1,
+          0,
+          new Date('2023-01-30 17:20'),
+        ),
+        createUserProblemAttempt(
+          2,
+          user.id,
+          2,
+          1,
+          new Date('2023-01-30 17:15'),
+        ),
+        createUserProblemAttempt(3, user.id, 3, 3, null),
+      ];
 
-    it('returns the correct result', async () => {
-      jest
-        .spyOn(
-          userProblemAttemptsService,
-          'getAllUserAttemptsOnPublishedProblems',
-        )
-        .mockResolvedValue(userProblemAttempts);
+      it('returns the correct result', async () => {
+        jest
+          .spyOn(
+            userProblemAttemptsService,
+            'getAllUserAttemptsOnPublishedProblems',
+          )
+          .mockResolvedValue(userProblemAttempts);
 
-      const result = await service.getNumericScore(user);
-      const expectedResult =
-        leftShift(2, 42) +
-        (leftShift(1, 42) - 1) -
-        new Date('2023-01-30 17:20').getTime();
+        const result = await service.getNumericScore(user);
+        const expectedResult =
+          leftShift(2, 42) +
+          (leftShift(1, 42) - 1) -
+          new Date('2023-01-30 17:20').getTime();
 
-      expect(
-        userProblemAttemptsService.getAllUserAttemptsOnPublishedProblems,
-      ).toHaveBeenCalledWith(user.id);
-      expect(result).toEqual(expectedResult);
+        expect(
+          userProblemAttemptsService.getAllUserAttemptsOnPublishedProblems,
+        ).toHaveBeenCalledWith(user.id);
+        expect(result).toEqual(expectedResult);
+      });
+    });
+
+    describe('when there is no solved problem', () => {
+      const user = createUser(1);
+      const userProblemAttempts: UserProblemAttempt[] = [
+        createUserProblemAttempt(1, user.id, 1, 3, null),
+      ];
+
+      it('returns the correct result', async () => {
+        jest
+          .spyOn(
+            userProblemAttemptsService,
+            'getAllUserAttemptsOnPublishedProblems',
+          )
+          .mockResolvedValue(userProblemAttempts);
+
+        const result = await service.getNumericScore(user);
+        const expectedResult = 0;
+
+        expect(
+          userProblemAttemptsService.getAllUserAttemptsOnPublishedProblems,
+        ).toHaveBeenCalledWith(user.id);
+        expect(result).toEqual(expectedResult);
+      });
     });
   });
 
   describe('decodeScore', () => {
-    const score =
-      leftShift(12, 42) +
-      (leftShift(1, 42) - 1) -
-      new Date('2023-01-30 17:20').getTime();
-
-    it('returns the correct result', async () => {
-      const result = await service.getSchematicScore(score);
-      const expectedResult: ScoreboardScoringSchema = {
-        solveCount: 12,
-        lastSolveTimeInMilliseconds: new Date('2023-01-30 17:20').getTime(),
-      };
-
-      expect(result).toEqual(expectedResult);
-    });
+    it.each([
+      [
+        leftShift(12, 42) +
+          (leftShift(1, 42) - 1) -
+          new Date('2023-01-30 17:20').getTime(),
+        {
+          solveCount: 12,
+          lastSolveTimeInMilliseconds: new Date('2023-01-30 17:20').getTime(),
+        },
+      ],
+      [0, { solveCount: 0, lastSolveTimeInMilliseconds: leftShift(1, 42) - 1 }],
+    ])(
+      '%s',
+      async (numericScore: number, expectedResult: ScoreboardScoringSchema) => {
+        const result = await service.getSchematicScore(numericScore);
+        expect(result).toEqual(expectedResult);
+      },
+    );
   });
 });
