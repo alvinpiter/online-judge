@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { getNumberOfPages } from "../../../modules/Pagination/helpers";
 import { OffsetPaginationRequestHook } from "../../../modules/Pagination/interfaces";
 import { OffsetPaginationQueryStringObjectBuilder } from "../../../modules/Pagination/OffsetPaginationQueryStringObjectBuilder/OffsetPaginationQueryStringObjectBuilder";
-import { LoadingState } from "../../components/LoadingState";
 import { OffsetPaginationContextValue } from "./interfaces";
 
 /*
@@ -71,10 +70,6 @@ export const OffsetPaginationContextProvider = <Entity, Filter, Order>(
     }
   }, [getEntitiesRequestResult]);
 
-  if (isLoadingEntities) {
-    return <LoadingState />;
-  }
-
   return (
     <Context.Provider
       value={{
@@ -82,6 +77,7 @@ export const OffsetPaginationContextProvider = <Entity, Filter, Order>(
         numberOfPages,
         filter: qsObjectBuilder.getFilter(),
         order: qsObjectBuilder.getOrder(),
+        isLoadingEntities,
         entities,
         handlePageChange,
         handleFilterChange,
