@@ -66,7 +66,7 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
 
             {!hideUserFilter && (
               <Box sx={{ mt: 2 }}>
-                <UserSearchField name="user" />
+                <UserSearchField name="user" label="User" />
               </Box>
             )}
 
