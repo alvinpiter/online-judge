@@ -4,6 +4,7 @@ export interface OffsetPaginationContextValue<Entity, Filter, Order> {
   filter: Filter;
   order: Order;
 
+  isLoadingEntities: boolean;
   entities: Entity[];
 
   handlePageChange: (newPage: number) => void;
