@@ -6,7 +6,7 @@ import { LoadingState } from "../lib/components/LoadingState";
 import { useCurrentQueryString } from "../lib/general/useCurrentQueryString";
 import { useGetProblemRequest } from "../modules/Problem/hooks/useGetProblemRequest";
 import { SEOTitle } from "../modules/SEO/components/SEOTitle";
-import { ProblemSubmissionsPageContent } from "../modules/Submission/components/ProblemSubmissionsPageContent";
+import { SubmissionsPageContent } from "../modules/Submission/components/SubmissionsPageContent";
 import { SubmissionsContextProvider } from "../modules/Submission/contexts/SubmissionsContext";
 import { ProblemSubmissionsPageQueryStringObjectBuilder } from "../modules/Submission/helpers/ProblemSubmissionsPageQueryStringObjectBuilder";
 
@@ -54,7 +54,7 @@ export const ProblemSubmissionsPage: FC = () => {
           )
         }
       >
-        <ProblemSubmissionsPageContent />
+        <SubmissionsPageContent hideProblemFilter />
       </SubmissionsContextProvider>
     </>
   );

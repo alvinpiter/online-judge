@@ -5,7 +5,15 @@ import { useSubmissionsContext } from "../contexts/SubmissionsContext/context";
 import { SubmissionsFilterForm } from "./SubmissionFilterForm/SubmissionsFilterForm";
 import { SubmissionsTable } from "./SubmissionsTable/SubmissionsTable";
 
-export const SubmissionsPageContent: FC = () => {
+export interface SubmissionsPageContentProps {
+  hideProblemFilter?: boolean;
+  hideUserFilter?: boolean;
+}
+
+export const SubmissionsPageContent: FC<SubmissionsPageContentProps> = ({
+  hideProblemFilter,
+  hideUserFilter,
+}) => {
   const {
     isLoadingEntities: isLoadingSubmissions,
     entities: submissions,
@@ -56,6 +64,8 @@ export const SubmissionsPageContent: FC = () => {
           <SubmissionsFilterForm
             initialFilter={filter}
             onSubmit={handleFilterChange}
+            hideProblemFilter={hideProblemFilter}
+            hideUserFilter={hideUserFilter}
           />
         </Paper>
       </Box>

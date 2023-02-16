@@ -5,7 +5,7 @@ import { ROUTES } from "../constants/Routes";
 import { LoadingState } from "../lib/components/LoadingState";
 import { useCurrentQueryString } from "../lib/general/useCurrentQueryString";
 import { SEOTitle } from "../modules/SEO/components/SEOTitle";
-import { UserSubmissionsPageContent } from "../modules/Submission/components/UserSubmissionsPageContent";
+import { SubmissionsPageContent } from "../modules/Submission/components/SubmissionsPageContent";
 import { SubmissionsContextProvider } from "../modules/Submission/contexts/SubmissionsContext";
 import { UserSubmissionsPageQueryStringObjectBuilder } from "../modules/Submission/helpers/UserSubmissionsPageQueryStringObjectBuilder";
 import { useGetUserRequest } from "../modules/User/hooks/useGetUserRequest";
@@ -55,7 +55,7 @@ export const UserSubmissionsPage: FC = () => {
           )
         }
       >
-        <UserSubmissionsPageContent />
+        <SubmissionsPageContent hideUserFilter />
       </SubmissionsContextProvider>
     </>
   );
