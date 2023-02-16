@@ -10,13 +10,18 @@ export const AutocompleteField: FC<AutocompleteFieldProps> = ({
   name,
   ...props
 }) => {
-  const [, , helper] = useField(name);
+  const [field, , helper] = useField(name);
 
   const handleAutocompleteChange = (event: any, value: any) => {
     helper.setValue(value);
   };
 
   return (
-    <Autocomplete {...props} size="small" onChange={handleAutocompleteChange} />
+    <Autocomplete
+      {...props}
+      size="small"
+      value={field.value}
+      onChange={handleAutocompleteChange}
+    />
   );
 };
