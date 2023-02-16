@@ -37,8 +37,7 @@ export const ScoreboardFilterForm: FC<ScoreboardFilterFormProps> = ({
         {() => (
           <Form>
             <Box sx={{ mt: 2 }}>
-              <Typography variant="body1"> Users </Typography>
-              <UserSearchField name="users" multiple />
+              <UserSearchField name="users" label="Users" multiple />
             </Box>
 
             <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>

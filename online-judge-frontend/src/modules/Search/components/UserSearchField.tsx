@@ -11,11 +11,13 @@ If `multiple` is set false, the corresponding formik field should be typed as Us
 */
 interface UserSearchFieldProps {
   name: string;
+  label: string;
   multiple?: boolean;
 }
 
 export const UserSearchField: FC<UserSearchFieldProps> = ({
   name,
+  label,
   multiple,
 }) => {
   const [singleField, , singleFieldHelper] = useField<User | null>(name);
@@ -62,7 +64,9 @@ export const UserSearchField: FC<UserSearchFieldProps> = ({
       onInputChange={(event: any, newInputValue: string) => {
         setInputValue(newInputValue);
       }}
-      renderInput={(params) => <TextField {...params} label="User" fullWidth />}
+      renderInput={(params) => (
+        <TextField {...params} label={label} fullWidth />
+      )}
       renderOption={(props, option) => {
         const prefix = option.username.substring(0, inputValue.length);
         const suffix = option.username.substring(inputValue.length);
