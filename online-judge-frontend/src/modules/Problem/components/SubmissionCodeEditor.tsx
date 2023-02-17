@@ -35,7 +35,6 @@ export const SubmissionCodeEditor: FC<SubmissionCodeEditorProps> = ({
 
   const {
     result: createSubmissionResult,
-    error: createSubmissionError,
     requestFunction: createSubmissionRequest,
   } = useCreateSubmissionRequest();
 
@@ -74,12 +73,6 @@ export const SubmissionCodeEditor: FC<SubmissionCodeEditorProps> = ({
       );
     }
   }, [createSubmissionResult, openSnackbar, navigate, currentUser, problemId]);
-
-  useEffect(() => {
-    if (createSubmissionError) {
-      openSnackbar("error", createSubmissionError.message);
-    }
-  }, [createSubmissionError, openSnackbar]);
 
   // TODO: This is quite similar with EditSolutionTemplatesTabContent
   return (
