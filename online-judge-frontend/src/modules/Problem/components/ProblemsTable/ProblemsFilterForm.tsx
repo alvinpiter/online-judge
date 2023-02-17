@@ -38,7 +38,6 @@ export const ProblemsFilterForm: FC<ProblemsFilterFormProps> = ({
           ratingLte: initialFilter.ratingLte || MAX_PROBLEM_RATING,
         }}
         onSubmit={(values) => {
-          alert(JSON.stringify(initialFilter));
           onSubmit({
             state: values.state || undefined,
             ratingGte: values.ratingGte,
