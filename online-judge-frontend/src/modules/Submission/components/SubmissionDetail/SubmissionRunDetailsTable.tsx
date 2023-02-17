@@ -26,8 +26,8 @@ export const SubmissionRunDetailsTable: FC<SubmissionRunDetailsTableProps> = ({
             <TableCell> Input </TableCell>
             <TableCell> Expected output </TableCell>
             <TableCell> Actual output </TableCell>
-            <TableCell> Run time </TableCell>
-            <TableCell> Memory usage </TableCell>
+            {/* <TableCell> Run time </TableCell>
+            <TableCell> Memory usage </TableCell> */}
             <TableCell> Verdict </TableCell>
           </TableRow>
         </TableHead>

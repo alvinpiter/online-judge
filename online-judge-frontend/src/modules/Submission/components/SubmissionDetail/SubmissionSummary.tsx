@@ -79,12 +79,12 @@ export const SubmissionSummary: FC<SubmissionSummaryProps> = ({
             </TableCell>
           </TableRow>
 
-          <TableRow>
+          <TableRow sx={{ display: "none" }}>
             <TableCell> Run time </TableCell>
             <TableCell>{overallRunTimeInMilliseconds} ms</TableCell>
           </TableRow>
 
-          <TableRow>
+          <TableRow sx={{ display: "none" }}>
             <TableCell> Memory usage </TableCell>
             <TableCell>{overallMemoryUsageInKilobytes} KB</TableCell>
           </TableRow>
