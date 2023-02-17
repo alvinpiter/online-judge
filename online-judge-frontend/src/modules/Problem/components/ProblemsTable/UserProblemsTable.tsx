@@ -42,7 +42,7 @@ export const UserProblemsTable: FC<UserProblemsTableProps> = ({
           mb: 1,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
           <Typography variant="subtitle1" sx={{ mr: 1 }}>
             Order by
           </Typography>
