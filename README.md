@@ -21,3 +21,7 @@ kubectl apply -f mysql-secret.yml
 ### Build Migrator
 
 docker build -f database-migrator.Dockerfile -t alvinpiter/online-judge-database-migrator .
+
+### Build backend
+
+docker build -f backend.Dockerfile -t alvinpiter/online-judge-backend .
