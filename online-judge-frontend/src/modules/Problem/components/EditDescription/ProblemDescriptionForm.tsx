@@ -46,7 +46,9 @@ export const ProblemDescriptionForm: FC<ProblemDescriptionFormProps> = ({
             fullWidth
             margin="normal"
           />
+
           <WysiwygEditorField name="description" />
+
           <TextField
             type="number"
             name="rating"

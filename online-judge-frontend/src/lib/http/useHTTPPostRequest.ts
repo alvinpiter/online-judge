@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useState } from "react";
 import { AppError } from "../../AppError";
+import { useSnackbarContext } from "../../core/Snackbar";
 import { useToggle } from "../general/useToggle";
 import { axiosErrorToAppError } from "../http/axiosErrorToAppError";
 
@@ -8,6 +9,8 @@ export function useHTTPPostRequest<Body, Result>(url: string) {
   const [isLoading, startLoading, stopLoading] = useToggle(false);
   const [result, setResult] = useState<Result | undefined>(undefined);
   const [error, setError] = useState<AppError | undefined>(undefined);
+
+  const { openSnackbar } = useSnackbarContext();
 
   const doRequest = async (body: Body) => {
     startLoading();
@@ -19,7 +22,10 @@ export function useHTTPPostRequest<Body, Result>(url: string) {
         (await axios.post<Result, AxiosResponse<Result>, Body>(url, body)).data
       );
     } catch (e) {
-      setError(axiosErrorToAppError(e as AxiosError));
+      const appError = axiosErrorToAppError(e as AxiosError);
+
+      setError(appError);
+      openSnackbar("error", appError.message);
     } finally {
       stopLoading();
     }

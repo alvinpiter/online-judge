@@ -1,12 +1,10 @@
-import { Button } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useSnackbarContext } from "../../../../core/Snackbar";
 import { ProblemDescriptionForm } from "./ProblemDescriptionForm";
-import { Problem, ProblemState } from "../../interfaces";
-import { useDraftProblemRequest } from "../../hooks/useDraftProblemRequest";
+import { Problem } from "../../interfaces";
 import { useGetAdminProblemRequest } from "../../hooks/useGetAdminProblemRequest";
-import { usePublishProblemRequest } from "../../hooks/usePublishProblemRequest";
 import { useUpdateProblemRequest } from "../../hooks/useUpdateProblemRequest";
+import { Box } from "@mui/material";
 
 export const EditDescriptionTab: FC<{ problemId: string }> = ({
   problemId,
@@ -19,12 +17,6 @@ export const EditDescriptionTab: FC<{ problemId: string }> = ({
 
   const { result: getProblemRequestResult } =
     useGetAdminProblemRequest(problemId);
-  const {
-    result: publishProblemResult,
-    requestFunction: publishProblemRequest,
-  } = usePublishProblemRequest(problemId);
-  const { result: draftProblemResult, requestFunction: draftProblemRequest } =
-    useDraftProblemRequest(problemId);
 
   const {
     result: updateProblemRequestResult,
@@ -54,41 +46,15 @@ export const EditDescriptionTab: FC<{ problemId: string }> = ({
     }
   }, [getProblemRequestResult]);
 
-  useEffect(() => {
-    if (publishProblemResult) {
-      setCurrentProblem(publishProblemResult);
-      openSnackbar("success", "Problem is published!");
-    }
-  }, [publishProblemResult, openSnackbar]);
-
-  useEffect(() => {
-    if (draftProblemResult) {
-      setCurrentProblem(draftProblemResult);
-      openSnackbar("success", "Problem is drafted!");
-    }
-  }, [draftProblemResult, openSnackbar]);
-
   return (
     <>
-      {currentProblem &&
-        (currentProblem.state === ProblemState.DRAFT ? (
-          <Button variant="contained" onClick={() => publishProblemRequest({})}>
-            Publish
-          </Button>
-        ) : (
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => draftProblemRequest({})}
-          >
-            Draft
-          </Button>
-        ))}
       {currentProblem && (
-        <ProblemDescriptionForm
-          problem={currentProblem}
-          onSubmit={updateProblem}
-        />
+        <Box sx={{ mt: 2 }}>
+          <ProblemDescriptionForm
+            problem={currentProblem}
+            onSubmit={updateProblem}
+          />
+        </Box>
       )}
     </>
   );

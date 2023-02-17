@@ -1,4 +1,5 @@
-import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { Box, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { FormattedProgrammingLanguage } from "../../../Submission/components/FormattedProgrammingLanguage/FormattedProgrammingLanguage";
 import { useEditSolutionTemplatesContext } from "../../contexts/EditSolutionTemplatesContext/context";
 import {
   ProgrammingLanguage,
@@ -19,23 +20,27 @@ export const EditSolutionTemplatesTabContent = () => {
   };
 
   return (
-    <>
+    <Box sx={{ mt: 2 }}>
       <Select
         label="Programming Language"
         value={activeProgrammingLanguage}
         onChange={handleProgrammingLanguageChange}
+        size="small"
       >
         {SupportedProgrammingLanguages.map((language, idx) => (
           <MenuItem key={idx} value={language}>
-            {language}
+            <FormattedProgrammingLanguage programmingLanguage={language} />
           </MenuItem>
         ))}
       </Select>
-      <SolutionTemplateForm
-        programmingLanguage={activeProgrammingLanguage}
-        initialTemplate={activeTemplate}
-        onSubmit={upsertTemplate}
-      />
-    </>
+
+      <Box sx={{ mt: 1 }}>
+        <SolutionTemplateForm
+          programmingLanguage={activeProgrammingLanguage}
+          initialTemplate={activeTemplate}
+          onSubmit={upsertTemplate}
+        />
+      </Box>
+    </Box>
   );
 };

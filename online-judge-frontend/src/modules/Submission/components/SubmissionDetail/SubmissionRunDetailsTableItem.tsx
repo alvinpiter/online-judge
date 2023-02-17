@@ -25,8 +25,8 @@ export const SubmissionRunDetailsTableItem: FC<
       <TableCell>
         <textarea value={runDetail.output} readOnly />
       </TableCell>
-      <TableCell>{runDetail.runTimeInMilliseconds} ms</TableCell>
-      <TableCell>{runDetail.memoryUsageInKilobytes} KB</TableCell>
+      {/* <TableCell>{runDetail.runTimeInMilliseconds} ms</TableCell>
+      <TableCell>{runDetail.memoryUsageInKilobytes} KB</TableCell> */}
       <TableCell>
         <FormattedSubmissionVerdict verdict={runDetail.verdict} />
       </TableCell>

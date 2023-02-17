@@ -1,5 +1,4 @@
 import {
-  Chip,
   MenuItem,
   Paper,
   Select,
@@ -39,18 +38,11 @@ export const UserProblemsTable: FC<UserProblemsTableProps> = ({
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           mb: 1,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Chip sx={{ backgroundColor: "#d4edc9", ml: 1 }} />
-          <Typography sx={{ ml: 1 }}> Solved </Typography>
-          <Chip sx={{ backgroundColor: "#ffe3e3", ml: 1 }} />
-          <Typography sx={{ ml: 1 }}> Attempted </Typography>
-        </Box>
-
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
           <Typography variant="subtitle1" sx={{ mr: 1 }}>
             Order by
           </Typography>
@@ -71,6 +63,7 @@ export const UserProblemsTable: FC<UserProblemsTableProps> = ({
               <TableCell> Name </TableCell>
               <TableCell> Rating </TableCell>
               <TableCell> Solver count </TableCell>
+              <TableCell> State </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
