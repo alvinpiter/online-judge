@@ -23,14 +23,12 @@ export const EditTestCasesContextProvider: FC<
   const {
     isLoading: isAddingTestCase,
     result: addTestCaseRequestResult,
-    error: addTestCaseRequestError,
     requestFunction: addTestCaseRequest,
   } = useAddTestCaseRequest(problemId);
 
   const {
     isLoading: isDeletingTestCase,
     result: deleteTestCaseRequestResult,
-    error: deleteTestCaseRequestError,
     requestFunction: deleteTestCaseRequest,
   } = useDeleteTestCaseRequest();
 
@@ -60,12 +58,6 @@ export const EditTestCasesContextProvider: FC<
   }, [isAddingTestCase, addTestCaseRequestResult, openSnackbar]);
 
   useEffect(() => {
-    if (!isAddingTestCase && addTestCaseRequestError) {
-      openSnackbar("error", addTestCaseRequestError.message);
-    }
-  }, [isAddingTestCase, addTestCaseRequestError, openSnackbar]);
-
-  useEffect(() => {
     if (!isDeletingTestCase && deleteTestCaseRequestResult) {
       setTestCases((prevTestCases) =>
         prevTestCases.filter(
@@ -76,12 +68,6 @@ export const EditTestCasesContextProvider: FC<
       openSnackbar("success", "Test case deleted!");
     }
   }, [isDeletingTestCase, deleteTestCaseRequestResult, openSnackbar]);
-
-  useEffect(() => {
-    if (!isDeletingTestCase && deleteTestCaseRequestError) {
-      openSnackbar("error", deleteTestCaseRequestError.message);
-    }
-  }, [isDeletingTestCase, deleteTestCaseRequestError, openSnackbar]);
 
   return (
     <EditTestCasesContext.Provider

@@ -4,6 +4,7 @@ import { ProblemDescriptionForm } from "./ProblemDescriptionForm";
 import { Problem } from "../../interfaces";
 import { useGetAdminProblemRequest } from "../../hooks/useGetAdminProblemRequest";
 import { useUpdateProblemRequest } from "../../hooks/useUpdateProblemRequest";
+import { Box } from "@mui/material";
 
 export const EditDescriptionTab: FC<{ problemId: string }> = ({
   problemId,
@@ -48,10 +49,12 @@ export const EditDescriptionTab: FC<{ problemId: string }> = ({
   return (
     <>
       {currentProblem && (
-        <ProblemDescriptionForm
-          problem={currentProblem}
-          onSubmit={updateProblem}
-        />
+        <Box sx={{ mt: 2 }}>
+          <ProblemDescriptionForm
+            problem={currentProblem}
+            onSubmit={updateProblem}
+          />
+        </Box>
       )}
     </>
   );
