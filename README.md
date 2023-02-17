@@ -17,3 +17,7 @@ kubectl apply -f mysql-secret.yml
   - REACT_APP_BACKEND_API_URL
   - REACT_APP_CONTEST_START_TIME_IN_MILLISECONDS
 - Build `docker build . -t online-judge-frontend`
+
+### Build Migrator
+
+docker build -f database-migrator.Dockerfile -t alvinpiter/online-judge-database-migrator .

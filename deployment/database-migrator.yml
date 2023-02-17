@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: online-judge-database-migrator
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: online-judge-database-migrator
+          image: alvinpiter/online-judge-database-migrator
+          env:
+            - name: DATABASE_HOST
+              value: mysql
+            - name: DATABASE_PORT
+              value: "3306"
+            - name: DATABASE_NAME
+              value: online_judge
+            - name: DATABASE_USERNAME
+              value: root
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_ROOT_PASSWORD
+  backoffLimit: 2
