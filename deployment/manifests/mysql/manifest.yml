@@ -1,4 +1,21 @@
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-configmap
+data:
+  MYSQL_DATABASE: ${MYSQL_DATABASE}
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+type: Opaque
+data:
+  MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: mysql
@@ -31,14 +48,11 @@ spec:
           ports:
             - name: mysql
               containerPort: 3306
-          env:
-            - name: MYSQL_DATABASE
-              value: online_judge
-            - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_ROOT_PASSWORD
+          envFrom:
+            - configMapRef:
+                name: mysql-configmap
+            - secretRef:
+                name: mysql-secret
           volumeMounts:
             - name: mysql-data
               mountPath: /var/lib/mysql

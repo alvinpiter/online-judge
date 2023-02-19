@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: database-migrator-configmap
+data:
+  DATABASE_HOST: ${DATABASE_HOST}
+  DATABASE_PORT: ${DATABASE_PORT}
+  DATABASE_NAME: ${DATABASE_NAME}
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: database-migrator-secret
+type: Opaque
+data:
+  DATABASE_USERNAME: ${DATABASE_USERNAME}
+  DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: online-judge-database-migrator
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: online-judge-database-migrator
+          image: alvinpiter/online-judge-database-migrator
+          envFrom:
+            - configMapRef:
+                name: database-migrator-configmap
+            - secretRef:
+                name: database-migrator-secret
+  backoffLimit: 2

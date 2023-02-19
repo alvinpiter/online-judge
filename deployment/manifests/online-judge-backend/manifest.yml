@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: online-judge-backend-configmap
+data:
+  DATABASE_HOST: ${DATABASE_HOST}
+  DATABASE_PORT: ${DATABASE_PORT}
+  DATABASE_NAME: ${DATABASE_NAME}
+  REDIS_HOST: ${REDIS_HOST}
+  REDIS_PORT: ${REDIS_PORT}
+  AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME}
+  AWS_S3_BUCKET_REGION: ${AWS_S3_BUCKET_REGION}
+  RABBITMQ_HOST: ${RABBITMQ_HOST}
+  CONSUMED_QUEUES: ${RABBITMQ_QUEUES}
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: online-judge-backend-secret
+type: Opaque
+data:
+  JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+  DATABASE_USERNAME: ${DATABASE_USERNAME}
+  DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+  AWS_S3_ACCESS_KEY_ID: ${AWS_S3_ACCESS_KEY_ID}
+  AWS_S3_SECRET_ACCESS_KEY: ${AWS_S3_SECRET_ACCESS_KEY}
+  RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+  RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: online-judge-backend
+spec:
+  type: NodePort
+  selector:
+    app: online-judge-backend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: online-judge-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: online-judge-backend
+  template:
+    metadata:
+      labels:
+        app: online-judge-backend
+    spec:
+      containers:
+        - name: online-judge-backend
+          image: alvinpiter/online-judge-backend
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: online-judge-backend-configmap
+            - secretRef:
+                name: online-judge-backend-secret
