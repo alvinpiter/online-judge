@@ -67,3 +67,9 @@ spec:
                 name: online-judge-backend-configmap
             - secretRef:
                 name: online-judge-backend-secret
+          readinessProbe:
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            httpGet:
+              path: /api/health-check
+              port: 5000
