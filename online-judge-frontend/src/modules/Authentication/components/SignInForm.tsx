@@ -1,5 +1,6 @@
 import { Alert, Button } from "@mui/material";
 import { Form, Formik } from "formik";
+import { sha256 } from "js-sha256";
 import { FC, useEffect } from "react";
 
 import { TextField } from "../../../forms/fields/TextField";
@@ -32,7 +33,11 @@ export const SignInForm: FC<SignInFormProps> = ({ onSuccessfulSignIn }) => {
     <Formik<SignInFormData>
       initialValues={{ username: "", password: "" }}
       onSubmit={async (values, { setSubmitting }) => {
-        await signInRequest(values);
+        await signInRequest({
+          username: values.username,
+          password: sha256(values.password),
+        });
+
         setSubmitting(false);
       }}
     >
