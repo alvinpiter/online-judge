@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { hashSync } from 'bcrypt';
 import { Observable } from 'src/lib/Observable';
 import { orderEntitiesById } from 'src/lib/orderEntitiesById';
 import { In, Repository } from 'typeorm';
@@ -41,8 +42,8 @@ export class UsersService extends Observable<UsersServiceEvent> {
   async registerUser(userRegistrationDto: UserRegistrationDto): Promise<User> {
     const user = new User();
     user.username = userRegistrationDto.username;
-    user.hashedPassword = userRegistrationDto.password;
     user.role = UserRole.USER;
+    user.hashedPassword = hashSync(userRegistrationDto.password, 10);
 
     await this.usersRepository.save(user);
     this.publishEvent('userRegistered', (subscriber) => subscriber(user.id));

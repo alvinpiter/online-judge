@@ -1,3 +1,4 @@
+import { compareSync } from 'bcrypt';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum UserRole {
@@ -19,7 +20,7 @@ export class User {
   @Column()
   role: UserRole;
 
-  isCorrectHashedPassword(hashedPassword: string) {
-    return this.hashedPassword === hashedPassword;
+  isCorrectPassword(password: string) {
+    return compareSync(password, this.hashedPassword);
   }
 }
