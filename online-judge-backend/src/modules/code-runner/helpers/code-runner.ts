@@ -3,7 +3,7 @@ import { CodeRunOptions, CodeRunResult, CodeRunVerdict } from '../interfaces';
 import { RunnableCode } from '../runnable-code';
 import { createCodeRunResult } from './create-code-run-result';
 
-const DEFAULT_TIME_LIMIT_IN_MILLISECONDS = 10 * 1000; // 10 seconds;
+const DEFAULT_TIME_LIMIT_IN_MILLISECONDS = 2 * 1000; // 2 seconds;
 
 export class CodeRunner {
   static async run(

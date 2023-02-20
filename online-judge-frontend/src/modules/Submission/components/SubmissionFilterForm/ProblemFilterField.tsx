@@ -1,14 +1,15 @@
-import { MenuItem } from "@mui/material";
+import { TextField } from "@mui/material";
 import { FC } from "react";
-import {
-  SelectField,
-  SelectFieldProps,
-} from "../../../../forms/fields/SelectField";
+import { AutocompleteField } from "../../../../forms/fields/AutocompleteField";
 import { LoadingState } from "../../../../lib/components/LoadingState";
 import { useGetProblemsRequest } from "../../../Problem/hooks/useGetProblemsRequest";
-import { ProblemsOrderOption } from "../../../Problem/interfaces";
+import { Problem, ProblemsOrderOption } from "../../../Problem/interfaces";
 
-export const ProblemFilterField: FC<SelectFieldProps> = (props) => {
+interface ProblemFilterFieldProps {
+  name: string;
+}
+
+export const ProblemFilterField: FC<ProblemFilterFieldProps> = ({ name }) => {
   // Get all problems
   const { isLoading: isLoadingProblems, result: getProblemsResult } =
     useGetProblemsRequest(42, 1, {}, ProblemsOrderOption.BY_ID_ASC);
@@ -22,12 +23,11 @@ export const ProblemFilterField: FC<SelectFieldProps> = (props) => {
   }
 
   return (
-    <SelectField {...props}>
-      {getProblemsResult.data.map((problem) => (
-        <MenuItem key={problem.id} value={problem.id}>
-          {`${problem.id} - ${problem.name}`}
-        </MenuItem>
-      ))}
-    </SelectField>
+    <AutocompleteField
+      name={name}
+      options={getProblemsResult.data}
+      getOptionLabel={(option: Problem) => option.name}
+      renderInput={(params) => <TextField {...params} label="Problem" />}
+    />
   );
 };

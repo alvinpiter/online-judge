@@ -1,17 +1,13 @@
-import { Box, Button, MenuItem, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { Form, Formik } from "formik";
 import { FC } from "react";
-import { SelectField } from "../../../../forms/fields/SelectField";
-import {
-  ProgrammingLanguage,
-  SupportedProgrammingLanguages,
-} from "../../../Problem/interfaces";
+import { Problem, ProgrammingLanguage } from "../../../Problem/interfaces";
 import { UserSearchField } from "../../../Search/components/UserSearchField";
 import { User } from "../../../User/interface";
 import { SubmissionsFilter, SubmissionVerdict } from "../../interfaces";
-import { FormattedProgrammingLanguage } from "../FormattedProgrammingLanguage/FormattedProgrammingLanguage";
-import { FormattedSubmissionVerdict } from "../FormattedSubmissionVerdict/FormattedSubmissionVerdict";
 import { ProblemFilterField } from "./ProblemFilterField";
+import { SubmissionProgrammingLanguageFilterField } from "./SubmissionProgrammingLanguageFilterField";
+import { SubmissionVerdictFilterField } from "./SubmissionVerdictFilterField";
 
 interface SubmissionsFilterFormProps {
   initialFilter: SubmissionsFilter;
@@ -23,9 +19,9 @@ interface SubmissionsFilterFormProps {
 
 interface SubmissionsFilterFormData {
   user: User | null;
-  problemId?: number;
-  programmingLanguage: ProgrammingLanguage | "ALL";
-  verdict: SubmissionVerdict | "ALL";
+  problem: Problem | null;
+  programmingLanguage: ProgrammingLanguage | null;
+  verdict: SubmissionVerdict | null;
 }
 
 export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
@@ -37,13 +33,12 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
   const normalizeFormData = (
     values: SubmissionsFilterFormData
   ): SubmissionsFilter => {
-    const { user, problemId, programmingLanguage, verdict } = values;
+    const { user, problem, programmingLanguage, verdict } = values;
     return {
       userId: user?.id,
-      problemId,
-      programmingLanguage:
-        programmingLanguage === "ALL" ? undefined : programmingLanguage,
-      verdict: verdict === "ALL" ? undefined : verdict,
+      problemId: problem?.id,
+      programmingLanguage: programmingLanguage || undefined,
+      verdict: verdict || undefined,
     };
   };
 
@@ -53,9 +48,9 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
       <Formik<SubmissionsFilterFormData>
         initialValues={{
           user: null,
-          problemId: initialFilter.problemId,
-          programmingLanguage: initialFilter.programmingLanguage || "ALL",
-          verdict: initialFilter.verdict || "ALL",
+          problem: null,
+          programmingLanguage: initialFilter.programmingLanguage || null,
+          verdict: initialFilter.verdict || null,
         }}
         onSubmit={(values) => {
           onSubmit(normalizeFormData(values));
@@ -65,54 +60,22 @@ export const SubmissionsFilterForm: FC<SubmissionsFilterFormProps> = ({
           <Form>
             {!hideProblemFilter && (
               <Box sx={{ mt: 2 }}>
-                <Typography variant="body1">Problem</Typography>
-                <ProblemFilterField
-                  name="problemId"
-                  label="Problem"
-                  fullWidth
-                />
+                <ProblemFilterField name="problem" />
               </Box>
             )}
 
             {!hideUserFilter && (
               <Box sx={{ mt: 2 }}>
-                <Typography variant="body1"> User </Typography>
-                <UserSearchField name="user" />
+                <UserSearchField name="user" label="User" />
               </Box>
             )}
 
             <Box sx={{ mt: 2 }}>
-              <Typography variant="body1"> Programming Language </Typography>
-              <SelectField
-                name="programmingLanguage"
-                label="Programming Language"
-                fullWidth
-              >
-                <MenuItem value="ALL"> All </MenuItem>
-                {SupportedProgrammingLanguages.map(
-                  (programmingLanguage, idx) => (
-                    <MenuItem key={idx} value={programmingLanguage}>
-                      <FormattedProgrammingLanguage
-                        programmingLanguage={programmingLanguage}
-                      />
-                    </MenuItem>
-                  )
-                )}
-              </SelectField>
+              <SubmissionProgrammingLanguageFilterField name="programmingLanguage" />
             </Box>
 
             <Box sx={{ mt: 2 }}>
-              <Typography variant="body1"> Verdict </Typography>
-              <SelectField name="verdict" label="Verdict" fullWidth>
-                <MenuItem value="ALL"> All </MenuItem>
-                {Object.keys(SubmissionVerdict).map((verdict, idx) => (
-                  <MenuItem key={idx} value={verdict}>
-                    <FormattedSubmissionVerdict
-                      verdict={verdict as SubmissionVerdict}
-                    />
-                  </MenuItem>
-                ))}
-              </SelectField>
+              <SubmissionVerdictFilterField name="verdict" />
             </Box>
 
             <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>

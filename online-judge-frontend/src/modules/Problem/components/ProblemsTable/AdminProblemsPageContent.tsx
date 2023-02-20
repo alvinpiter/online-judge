@@ -1,20 +1,20 @@
-import { Box, Button, Pagination, Paper, Typography } from "@mui/material";
+import { Box, Button, Pagination, Paper } from "@mui/material";
 import { ChangeEvent, FC } from "react";
 import { useAdminProblemsContext } from "../../contexts/AdminProblemsContext";
-import { ProblemsOrderOption } from "../../interfaces";
 import { ProblemsFilterForm } from "./ProblemsFilterForm";
 import { AdminProblemsTable } from "./AdminProblemsTable";
 import { ROUTES } from "../../../../constants/Routes";
+import { LoadingState } from "../../../../lib/components/LoadingState";
 
 export const AdminProblemsPageContent: FC = () => {
   const {
+    isLoadingEntities: isLoadingProblems,
     entities: problems,
     currentPage,
     filter,
     numberOfPages,
     handlePageChange,
     handleFilterChange,
-    handleOrderChange,
   } = useAdminProblemsContext();
 
   const handlePaginationChange = (
@@ -26,7 +26,7 @@ export const AdminProblemsPageContent: FC = () => {
 
   return (
     <Box sx={{ display: "flex", mt: 2, mb: 4 }}>
-      <Box sx={{ flexGrow: 2 }}>
+      <Box sx={{ flex: 9 }}>
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
             variant="contained"
@@ -37,26 +37,32 @@ export const AdminProblemsPageContent: FC = () => {
           </Button>
         </Box>
 
-        <Paper elevation={2} sx={{ mt: 2 }}>
-          <AdminProblemsTable problems={problems} />
-        </Paper>
+        {isLoadingProblems ? (
+          <LoadingState />
+        ) : (
+          <>
+            <Paper elevation={2} sx={{ mt: 2 }}>
+              <AdminProblemsTable problems={problems} />
+            </Paper>
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            mt: 1,
-          }}
-        >
-          <Pagination
-            page={currentPage}
-            count={numberOfPages}
-            onChange={handlePaginationChange}
-          />
-        </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                mt: 1,
+              }}
+            >
+              <Pagination
+                page={currentPage}
+                count={numberOfPages}
+                onChange={handlePaginationChange}
+              />
+            </Box>
+          </>
+        )}
       </Box>
 
-      <Box sx={{ flexGrow: 1, ml: 2 }}>
+      <Box sx={{ flex: 3, ml: 2 }}>
         <Paper elevation={2}>
           <ProblemsFilterForm
             showStateField
@@ -64,19 +70,6 @@ export const AdminProblemsPageContent: FC = () => {
             onSubmit={handleFilterChange}
           />
         </Paper>
-      </Box>
-
-      <Box sx={{ display: "none" }}>
-        <Typography variant="body1"> Order by </Typography>
-        {Object.keys(ProblemsOrderOption).map((order) => (
-          <Button
-            variant="contained"
-            onClick={() => handleOrderChange(order as ProblemsOrderOption)}
-            sx={{ mr: 2 }}
-          >
-            {order}
-          </Button>
-        ))}
       </Box>
     </Box>
   );

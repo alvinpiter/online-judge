@@ -33,10 +33,15 @@ export class ScoreboardScoreCalculator
       }
     }
 
+    // Special case: solveCount is 0, lastSolveTimeInMilliseconds should be set to max value.
+    if (solveCount === 0) {
+      lastSolveTimeInMilliseconds = leftShift(1, NUMBER_OF_SHIFTS) - 1;
+    }
+
     /*
     At the time this app is build, lastSolveTimeInMilliseconds's value is around 1.6 trillion (< 2^42).
     We will encode the score as the following:
-    (solveCount << 37) + ((1 << 37) - 1) - lastSolveTimeInMilliseconds
+    (solveCount << 42) + ((1 << 42) - 1) - lastSolveTimeInMilliseconds
 
     This way, we can ensure that:
     * If the solveCount are different, the larger one will have larger score

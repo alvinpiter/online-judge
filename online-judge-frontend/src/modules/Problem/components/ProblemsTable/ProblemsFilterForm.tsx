@@ -1,7 +1,7 @@
-import { Box, Button, MenuItem, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { Form, Formik } from "formik";
 import { FC } from "react";
-import { SelectField } from "../../../../forms/fields/SelectField";
+import { AutocompleteField } from "../../../../forms/fields/AutocompleteField";
 import { TextField } from "../../../../forms/fields/TextField";
 import {
   MAX_PROBLEM_RATING,
@@ -18,7 +18,7 @@ interface ProblemsFilterFormProps {
 }
 
 interface ProblemsFilterFormData {
-  state: ProblemState | "ALL";
+  state: ProblemState | null;
   ratingGte: number;
   ratingLte: number;
 }
@@ -28,26 +28,18 @@ export const ProblemsFilterForm: FC<ProblemsFilterFormProps> = ({
   onSubmit,
   showStateField,
 }) => {
-  const normalizeStateValue = (state: ProblemState | "ALL") => {
-    if (state === "ALL") {
-      return undefined;
-    } else {
-      return state;
-    }
-  };
-
   return (
     <Box sx={{ padding: 2 }}>
       <Typography variant="h5"> Filters </Typography>
       <Formik<ProblemsFilterFormData>
         initialValues={{
-          state: initialFilter.state || "ALL",
+          state: initialFilter.state || null,
           ratingGte: initialFilter.ratingGte || MIN_PROBLEM_RATING,
           ratingLte: initialFilter.ratingLte || MAX_PROBLEM_RATING,
         }}
         onSubmit={(values) => {
           onSubmit({
-            state: normalizeStateValue(values.state),
+            state: values.state || undefined,
             ratingGte: values.ratingGte,
             ratingLte: values.ratingLte,
           });
@@ -57,21 +49,18 @@ export const ProblemsFilterForm: FC<ProblemsFilterFormProps> = ({
           <Form>
             {showStateField && (
               <Box sx={{ mt: 2 }}>
-                <Typography variant="body1"> Problem state </Typography>
-                <SelectField label="State" name="state" fullWidth>
-                  <MenuItem value="ALL"> All </MenuItem>
-                  <MenuItem value={ProblemState.PUBLISHED}>
-                    {ProblemState.PUBLISHED}
-                  </MenuItem>
-                  <MenuItem value={ProblemState.DRAFT}>
-                    {ProblemState.DRAFT}
-                  </MenuItem>
-                </SelectField>
+                <AutocompleteField
+                  name="state"
+                  options={Object.keys(ProblemState)}
+                  getOptionLabel={(option) => option}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Problem state" />
+                  )}
+                />
               </Box>
             )}
 
             <Box sx={{ mt: 2 }}>
-              <Typography variant="body1"> Minimum rating </Typography>
               <TextField
                 type="number"
                 name="ratingGte"
@@ -81,7 +70,6 @@ export const ProblemsFilterForm: FC<ProblemsFilterFormProps> = ({
             </Box>
 
             <Box sx={{ mt: 2 }}>
-              <Typography variant="body1"> Maximum rating </Typography>
               <TextField
                 type="number"
                 name="ratingLte"

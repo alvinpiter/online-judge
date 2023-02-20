@@ -22,7 +22,7 @@ export const TestCasesTable: FC<TestCasesTableProps> = ({
 }) => {
   return (
     <TableContainer component={Paper}>
-      <Table>
+      <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell> # </TableCell>

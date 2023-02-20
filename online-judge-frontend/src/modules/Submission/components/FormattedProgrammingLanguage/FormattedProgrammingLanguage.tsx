@@ -2,12 +2,14 @@ import { Typography } from "@mui/material";
 import { FC } from "react";
 import { ProgrammingLanguage } from "../../../Problem/interfaces";
 
-const HUMANIZED_PROGRAMMING_LANGUAGE_MAP: Record<ProgrammingLanguage, string> =
-  {
-    JAVASCRIPT: "Javascript",
-    PYTHON_3: "Python 3",
-    CPP_11: "C++ 11",
-  };
+export const HUMANIZED_PROGRAMMING_LANGUAGE_MAP: Record<
+  ProgrammingLanguage,
+  string
+> = {
+  JAVASCRIPT: "Javascript",
+  PYTHON_3: "Python 3",
+  CPP_11: "C++ 11",
+};
 
 interface FormattedProgrammingLanguageProps {
   programmingLanguage: ProgrammingLanguage;

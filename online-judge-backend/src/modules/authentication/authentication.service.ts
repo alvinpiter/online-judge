@@ -15,14 +15,14 @@ export class AuthenticationService {
 
   async validateUserCredential(
     username: string,
-    hashedPassword: string,
+    password: string,
   ): Promise<User> {
     const user = await this.usersService.findByUsername(username);
     if (!user) {
       throw new UsernameNotFoundError();
     }
 
-    if (!user.isCorrectHashedPassword(hashedPassword)) {
+    if (!user.isCorrectPassword(password)) {
       throw new UsernameAndPasswordDoNotMatchError();
     }
 

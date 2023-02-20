@@ -1,8 +1,9 @@
 import { Link, TableCell, TableRow } from "@mui/material";
-import moment from "moment";
 import { FC } from "react";
+import { config } from "../../../config";
 import { ROUTES } from "../../../constants/Routes";
 import { Problem, UserProblemAttempt } from "../../Problem/interfaces";
+import { formatLastSolveAt } from "../helpers/formatLastSolveAt";
 import { ScoreboardRow } from "../interfaces";
 import { UserProblemAttemptCell } from "./UserProblemAttemptCell";
 
@@ -15,6 +16,7 @@ export const ScoreboardTableRow: FC<ScoreboardTableRowProps> = ({
   problems,
   row,
 }) => {
+  const contestStartTimeInMilliseconds = config.contestStartTimeInMilliseconds;
   const userProblemAttemptsMap = new Map<number, UserProblemAttempt>(
     row.userProblemAttempts.map((userProblemAttempt) => [
       userProblemAttempt.problemId,
@@ -38,9 +40,12 @@ export const ScoreboardTableRow: FC<ScoreboardTableRowProps> = ({
         {row.schematicScore === null ? 0 : row.schematicScore.solveCount}
       </TableCell>
       <TableCell>
-        {row.schematicScore === null
+        {row.schematicScore === null || row.schematicScore.solveCount === 0
           ? ""
-          : moment(row.schematicScore.lastSolveTimeInMilliseconds).fromNow()}
+          : formatLastSolveAt(
+              row.schematicScore.lastSolveTimeInMilliseconds,
+              contestStartTimeInMilliseconds
+            )}
       </TableCell>
       {problems.map((problem) => (
         <TableCell key={problem.id}>

@@ -10,7 +10,7 @@ const VERDICT_COLOR_MAP: Record<SubmissionVerdict, string> = {
   ACCEPTED: "#0f9960",
 };
 
-const HUMANIZED_VERDICT_MAP: Record<SubmissionVerdict, string> = {
+export const HUMANIZED_VERDICT_MAP: Record<SubmissionVerdict, string> = {
   COMPILE_ERROR: "Compile Error",
   RUN_TIME_ERROR: "Run Time Error",
   TIME_LIMIT_EXCEEDED: "Time Limit Exceeded",

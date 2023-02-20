@@ -14,6 +14,7 @@ import { ScoreboardScoreCalculationQueueController } from './controllers/scorebo
 import { ScoreboardEntitySorterService } from './services/scoreboard-entity-sorter.service';
 import { ScoreboardWriterService } from './services/scoreboard-writer.service';
 import { ScoreboardReaderService } from './services/scoreboard-reader.service';
+import { UserRegisteredEventSubscriber } from './services/user-registered-event.subscriber';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ScoreboardReaderService } from './services/scoreboard-reader.service';
     ScoreboardWriterService,
     ScoreboardReaderService,
     SubmissionJudgedEventSubscriber,
+    UserRegisteredEventSubscriber,
     ScoreboardRowFormatter,
   ],
   controllers: [

@@ -1,7 +1,8 @@
-import { Button, TableCell, TableRow } from "@mui/material";
+import { Button, Stack, TableCell, TableRow } from "@mui/material";
 import { FC } from "react";
 import { ROUTES } from "../../../../constants/Routes";
 import { ProblemWithDetail } from "../../interfaces";
+import { ProblemStateActionButton } from "./ProblemStateActionButton";
 
 interface AdminProblemsTableItemProps {
   problem: ProblemWithDetail;
@@ -18,14 +19,17 @@ export const AdminProblemsTableItem: FC<AdminProblemsTableItemProps> = ({
       <TableCell> {problem.problemStatistics?.solverCount || 0} </TableCell>
       <TableCell> {problem.state} </TableCell>
       <TableCell>
-        <Button
-          variant="contained"
-          href={ROUTES.EDIT_PROBLEM_ROUTE.generatePath({
-            problemId: problem.id.toString(),
-          })}
-        >
-          Edit
-        </Button>
+        <Stack direction="row" spacing={1}>
+          <Button
+            variant="contained"
+            href={ROUTES.EDIT_PROBLEM_ROUTE.generatePath({
+              problemId: problem.id.toString(),
+            })}
+          >
+            Edit
+          </Button>
+          <ProblemStateActionButton problem={problem} />
+        </Stack>
       </TableCell>
     </TableRow>
   );

@@ -1,4 +1,5 @@
-import { Link, TableCell, TableRow } from "@mui/material";
+import { CancelRounded, CheckCircle } from "@mui/icons-material";
+import { Link, TableCell, TableRow, Tooltip } from "@mui/material";
 import { FC } from "react";
 import { ROUTES } from "../../../../constants/Routes";
 import { SubmissionVerdict } from "../../../Submission/interfaces";
@@ -11,20 +12,8 @@ interface UserProblemsTableItemProps {
 export const UserProblemsTableItem: FC<UserProblemsTableItemProps> = ({
   problem,
 }) => {
-  let backgroundColor;
-  switch (problem.userAttemptType) {
-    case UserProblemAttemptType.SOLVED:
-      backgroundColor = "#d4edc9";
-      break;
-    case UserProblemAttemptType.ATTEMPTED:
-      backgroundColor = "#ffe3e3";
-      break;
-    default:
-      backgroundColor = undefined;
-  }
-
   return (
-    <TableRow sx={{ backgroundColor }}>
+    <TableRow>
       <TableCell> {problem.id} </TableCell>
       <TableCell>
         <Link
@@ -49,6 +38,19 @@ export const UserProblemsTableItem: FC<UserProblemsTableItemProps> = ({
         >
           {problem.problemStatistics?.solverCount || 0}
         </Link>
+      </TableCell>
+      <TableCell>
+        {problem.userAttemptType === UserProblemAttemptType.SOLVED && (
+          <Tooltip title="Solved">
+            <CheckCircle color="success" />
+          </Tooltip>
+        )}
+
+        {problem.userAttemptType === UserProblemAttemptType.ATTEMPTED && (
+          <Tooltip title="Attempted">
+            <CancelRounded color="error" />
+          </Tooltip>
+        )}
       </TableCell>
     </TableRow>
   );

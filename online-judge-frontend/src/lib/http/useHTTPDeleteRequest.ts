@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useState } from "react";
 import { AppError } from "../../AppError";
+import { useSnackbarContext } from "../../core/Snackbar";
 import { useToggle } from "../general/useToggle";
 import { axiosErrorToAppError } from "../http/axiosErrorToAppError";
 
@@ -16,6 +17,8 @@ export function useHTTPDeleteRequest<UrlParameters, Result>(
   const [result, setResult] = useState<Result | undefined>(undefined);
   const [error, setError] = useState<AppError | undefined>(undefined);
 
+  const { openSnackbar } = useSnackbarContext();
+
   const doRequest = async (urlParameters: UrlParameters) => {
     const url = urlConstructor(urlParameters);
 
@@ -26,7 +29,10 @@ export function useHTTPDeleteRequest<UrlParameters, Result>(
     try {
       setResult((await axios.delete<Result, AxiosResponse<Result>>(url)).data);
     } catch (e) {
+      const appError = axiosErrorToAppError(e as AxiosError);
+
       setError(axiosErrorToAppError(e as AxiosError));
+      openSnackbar("error", appError.message);
     } finally {
       stopLoading();
     }

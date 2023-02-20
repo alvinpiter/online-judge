@@ -11,7 +11,7 @@ export interface FailedHTTPResponse {
 export function axiosErrorToAppError(axiosError: AxiosError) {
   const { code, message } = axiosError.response
     ? (axiosError.response.data as FailedHTTPResponse).error
-    : { code: "UNKNOWN_ERROR", message: "UNKNOWN_ERROR" };
+    : { code: "UNKNOWN_ERROR", message: "Internal Server Error" };
 
   return new AppError(code, message);
 }
