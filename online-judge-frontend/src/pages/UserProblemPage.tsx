@@ -44,19 +44,20 @@ export const UserProblemPage: FC = () => {
       </Stack>
 
       <Box sx={{ display: "flex", mt: 2 }}>
-        <Box sx={{ flex: 1, flexGrow: 1 }}>
+        <Box sx={{ flex: 1, maxWidth: "50%" }}>
           <Paper elevation={2} sx={{ padding: 2 }}>
             <div
               style={{
                 backgroundColor: "#F1F1F1",
                 padding: 8,
+                overflow: "scroll",
               }}
               dangerouslySetInnerHTML={{ __html: problem.description }}
             />
           </Paper>
         </Box>
 
-        <Box sx={{ flex: 1, flexGrow: 1, ml: 2 }}>
+        <Box sx={{ flex: 1, ml: 2 }}>
           <Paper elevation={2} sx={{ padding: 2 }}>
             {!currentUser && (
               <Alert severity="info" sx={{ mb: 2 }}>
