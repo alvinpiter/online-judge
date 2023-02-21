@@ -18,7 +18,7 @@ A LeetCode clone. See it live at [http://34.149.185.114/](http://34.149.185.114/
 
 ### Home
 
-![](https://github.com/alvinpiter/online-judge/screenshots/home.png)
+![Home](https://github.com/alvinpiter/online-judge/blob/main/screenshots/home.png)
 
 ### Problems management
 
