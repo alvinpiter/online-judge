@@ -26,6 +26,9 @@ export class SubmissionRunDetail {
   @Column()
   output: string;
 
+  @Column({ nullable: true })
+  outputFileKey: string | null;
+
   @Column()
   runTimeInMilliseconds: number;
 
