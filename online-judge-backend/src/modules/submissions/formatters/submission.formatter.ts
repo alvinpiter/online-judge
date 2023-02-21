@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { hasValue } from 'src/lib/hasValue';
 import { ObjectStorageService } from 'src/modules/object-storage/object-storage.service';
 import { ProblemTestCasesFormatter } from 'src/modules/problems/formatters/problem-test-cases.formatter';
 import { UserFormatter } from 'src/modules/users/formatters/user.formatter';
@@ -47,7 +48,7 @@ export class SubmissionFormatter {
   }
 
   private async formatOutputFile(detail: SubmissionRunDetail) {
-    if (detail.output.length > 0) {
+    if (detail.output.length > 0 || !hasValue(detail.outputFileKey)) {
       return null;
     } else {
       return {
