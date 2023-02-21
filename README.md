@@ -18,35 +18,35 @@ A LeetCode clone. See it live at [http://34.149.185.114/](http://34.149.185.114/
 
 ### Home
 
-![](https://github.com/alvinpiter/online-judge/screenshots/home.png)
+![Home](https://github.com/alvinpiter/online-judge/blob/main/screenshots/home.png)
 
 ### Problems management
 
-![](https://github.com/alvinpiter/online-judge/screenshots/problems-management.png)
+![](https://github.com/alvinpiter/online-judge/blob/main/screenshots/problems-management.png)
 
 ### Problems
 
-![](https://github.com/alvinpiter/online-judge/screenshots/problems.png)
+![](https://github.com/alvinpiter/online-judge/blob/main/screenshots/problems.png)
 
 ### Problem
 
-![](https://github.com/alvinpiter/online-judge/screenshots/problem.png)
+![](https://github.com/alvinpiter/online-judge/blob/main/screenshots/problem.png)
 
 ### Submissions
 
-![](https://github.com/alvinpiter/online-judge/screenshots/submissions.png)
+![](https://github.com/alvinpiter/online-judge/blob/main/screenshots/submissions.png)
 
 ### Submission
 
-![](https://github.com/alvinpiter/online-judge/screenshots/submission.png)
+![](https://github.com/alvinpiter/online-judge/blob/main/screenshots/submission.png)
 
 ### Scoreboard
 
-![](https://github.com/alvinpiter/online-judge/screenshots/scoreboard.png)
+![](https://github.com/alvinpiter/online-judge/blob/main/screenshots/scoreboard.png)
 
 ### User profile
 
-![](https://github.com/alvinpiter/online-judge/screenshots/profile.png)
+![](https://github.com/alvinpiter/online-judge/blob/main/screenshots/profile.png)
 
 ## Deployment
 
