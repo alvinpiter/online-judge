@@ -31,12 +31,16 @@ export class ObjectStorageService {
   }
 
   async putObject(key: string, body: Readable) {
+    return this.putObjectBuffer(key, await streamToBuffer(body));
+  }
+
+  async putObjectBuffer(key: string, body: Buffer) {
     try {
       await this.client.send(
         new PutObjectCommand({
           Bucket: this.bucketName,
           Key: key,
-          Body: await streamToBuffer(body),
+          Body: body,
         }),
       );
 
