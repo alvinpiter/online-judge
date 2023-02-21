@@ -10,9 +10,43 @@ A LeetCode clone. See it live at [http://34.149.185.114/](http://34.149.185.114/
 
 ## Features
 
-- [Online judge system](http://34.149.185.114/problems) that supports 3 programming languages (Javascript, Python 3, and C++ 11).
+- [Judging system](http://34.149.185.114/problems) that supports 3 programming languages (Javascript, Python 3, and C++ 11).
 - [Ranking system](http://34.149.185.114/scoreboard), see how you perform against others.
 - [Submissions filtering](http://34.149.185.114/submissions), learn from other users' submissions.
+
+## Screenshots
+
+### Home
+
+![](https://github.com/alvinpiter/online-judge/screenshots/home.png)
+
+### Problems management
+
+![](https://github.com/alvinpiter/online-judge/screenshots/problems-management.png)
+
+### Problems
+
+![](https://github.com/alvinpiter/online-judge/screenshots/problems.png)
+
+### Problem
+
+![](https://github.com/alvinpiter/online-judge/screenshots/problem.png)
+
+### Submissions
+
+![](https://github.com/alvinpiter/online-judge/screenshots/submissions.png)
+
+### Submission
+
+![](https://github.com/alvinpiter/online-judge/screenshots/submission.png)
+
+### Scoreboard
+
+![](https://github.com/alvinpiter/online-judge/screenshots/scoreboard.png)
+
+### User profile
+
+![](https://github.com/alvinpiter/online-judge/screenshots/profile.png)
 
 ## Deployment
 
