@@ -1,4 +1,4 @@
-# Online Judge Backend
+# Online Judge Frontend
 
 ## Run the app
 
