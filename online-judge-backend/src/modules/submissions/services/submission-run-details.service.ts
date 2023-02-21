@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { hasValue } from 'src/lib/hasValue';
 import { ObjectStorageService } from 'src/modules/object-storage/object-storage.service';
 import { Repository } from 'typeorm';
 import {
@@ -27,7 +28,7 @@ export class SubmissionRunDetailsService {
 
         await this.objectStorageService.putObjectBuffer(
           outputFileKey,
-          Buffer.from(runDetail.output),
+          Buffer.from(runDetail.output || ''),
         );
 
         await this.submissionRunDetailsRepository.save({
