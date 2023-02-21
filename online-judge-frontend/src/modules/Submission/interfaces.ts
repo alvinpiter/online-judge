@@ -34,8 +34,14 @@ export interface SubmissionRunDetail {
   runTimeInMilliseconds: number;
   memoryUsageInKilobytes: number;
   output?: string;
+  outputFile?: SubmissionOutputFile;
   verdict: SubmissionVerdict;
   testCase: TestCase;
+}
+
+export interface SubmissionOutputFile {
+  name: string;
+  url: string;
 }
 
 export interface SubmissionsFilter {

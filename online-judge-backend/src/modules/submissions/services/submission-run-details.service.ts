@@ -44,6 +44,6 @@ export class SubmissionRunDetailsService {
   }
 
   private getOutputFileKey(submissionId: number, testCaseId: number) {
-    return `submission-outputs/${submissionId}/test-cases/${testCaseId}`;
+    return `submission-outputs/${submissionId}/test-cases/${testCaseId}.txt`;
   }
 }

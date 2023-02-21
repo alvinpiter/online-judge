@@ -23,7 +23,13 @@ export const SubmissionRunDetailsTableItem: FC<
         </Link>
       </TableCell>
       <TableCell>
-        <textarea value={runDetail.output} readOnly />
+        {runDetail.outputFile ? (
+          <Link href={runDetail.outputFile.url}>
+            {runDetail.outputFile.name}
+          </Link>
+        ) : (
+          <textarea value={runDetail.output} readOnly />
+        )}
       </TableCell>
       {/* <TableCell>{runDetail.runTimeInMilliseconds} ms</TableCell>
       <TableCell>{runDetail.memoryUsageInKilobytes} KB</TableCell> */}
