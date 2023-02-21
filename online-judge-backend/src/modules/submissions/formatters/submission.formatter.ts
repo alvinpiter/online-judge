@@ -51,7 +51,10 @@ export class SubmissionFormatter {
       return null;
     } else {
       return {
-        name: `${detail.testCase.inputFileName}_actual_output.txt`,
+        name: `${detail.testCase.inputFileName.replace(
+          '.txt',
+          '',
+        )}_actual_output.txt`,
         url: await this.objectStorageService.getSignedUrl(detail.outputFileKey),
       };
     }
