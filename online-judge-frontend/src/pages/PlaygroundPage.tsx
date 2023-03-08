@@ -1,36 +1,34 @@
-import { Box, Button, Paper, Stack, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { FC } from "react";
+import { TreeNodeContainer } from "../modules/Dynalist/components/TreeNodeContainer";
+import {
+  FlattenTreeContextProvider,
+  useTreeNodeContext,
+} from "../modules/Dynalist/contexts/TreeNodeContext";
 
 export const PlaygroundPage: FC = () => {
   return (
-    <>
+    <FlattenTreeContextProvider>
       <Typography variant="h4"> Playground </Typography>
 
       <Box sx={{ mt: 2 }}>
-        <NodeContainer />
+        <PlaygroundPageContent />
       </Box>
-    </>
+    </FlattenTreeContextProvider>
   );
 };
 
-const NodeContainer: FC = () => {
+export const PlaygroundPageContent = () => {
+  const { idToTreeNodeMap } = useTreeNodeContext();
+  const rootNodesSortedByIndex = Object.values(idToTreeNodeMap)
+    .filter((node) => node.parentId === 0)
+    .sort((node1, node2) => node1.index - node2.index);
+
   return (
-    <Paper elevation={2} sx={{ padding: 1, display: "inline-block" }}>
-      <Typography variant="body1"> ID: 1, order: 0 </Typography>
-      <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-        <Button size="small" variant="contained">
-          Add above
-        </Button>
-        <Button size="small" variant="contained">
-          Add below
-        </Button>
-        <Button size="small" variant="contained">
-          Add child
-        </Button>
-        <Button size="small" variant="contained" color="warning">
-          Delete
-        </Button>
-      </Stack>
-    </Paper>
+    <>
+      {rootNodesSortedByIndex.map((node) => (
+        <TreeNodeContainer nodeId={node.id} />
+      ))}
+    </>
   );
 };
