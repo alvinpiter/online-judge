@@ -23,8 +23,8 @@ import { UserSubmissionsPage } from "./pages/UserSubmissionsPage";
 import { UserProfilePage } from "./pages/UserProfilePage";
 import { SubmissionPage } from "./pages/SubmissionPage";
 import { ScoreboardPage } from "./pages/ScoreboardPage";
-import { HomePage } from "./pages/HomePage";
 import { HelmetProvider } from "react-helmet-async";
+import { PlaygroundPage } from "./pages/PlaygroundPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -76,7 +76,7 @@ const router = createBrowserRouter(
         />
       </Route>
 
-      <Route path={ROUTES.HOME.path} element={<HomePage />} />
+      <Route path={ROUTES.HOME.path} element={<PlaygroundPage />} />
     </Route>
   )
 );
