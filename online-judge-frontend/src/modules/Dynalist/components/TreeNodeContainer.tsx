@@ -7,7 +7,7 @@ interface TreeNodeContainerProps {
 }
 
 export const TreeNodeContainer: FC<TreeNodeContainerProps> = ({ nodeId }) => {
-  const { idToTreeNodeMap } = useTreeNodeContext();
+  const { idToTreeNodeMap, addTreeNode } = useTreeNodeContext();
   const node = idToTreeNodeMap[nodeId];
 
   return (
@@ -18,7 +18,13 @@ export const TreeNodeContainer: FC<TreeNodeContainerProps> = ({ nodeId }) => {
         </Typography>
 
         <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-          <Button size="small" variant="contained">
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() =>
+              addTreeNode({ parentId: node.parentId, index: node.index })
+            }
+          >
             Add above
           </Button>
           <Button size="small" variant="contained">
