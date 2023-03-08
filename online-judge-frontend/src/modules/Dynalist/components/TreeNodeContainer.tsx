@@ -27,10 +27,22 @@ export const TreeNodeContainer: FC<TreeNodeContainerProps> = ({ nodeId }) => {
           >
             Add above
           </Button>
-          <Button size="small" variant="contained">
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() =>
+              addTreeNode({ parentId: node.parentId, index: node.index + 1 })
+            }
+          >
             Add below
           </Button>
-          <Button size="small" variant="contained">
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() =>
+              addTreeNode({ parentId: node.id, index: node.childrenIds.length })
+            }
+          >
             Add child
           </Button>
           <Button size="small" variant="contained" color="warning">
