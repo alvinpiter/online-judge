@@ -2,19 +2,19 @@ import { Box, Typography } from "@mui/material";
 import { FC } from "react";
 import { TreeNodeContainer } from "../modules/Dynalist/components/TreeNodeContainer";
 import {
-  FlattenTreeContextProvider,
+  TreeNodeContextProvider,
   useTreeNodeContext,
 } from "../modules/Dynalist/contexts/TreeNodeContext";
 
 export const PlaygroundPage: FC = () => {
   return (
-    <FlattenTreeContextProvider>
+    <TreeNodeContextProvider>
       <Typography variant="h4"> Playground </Typography>
 
       <Box sx={{ mt: 2 }}>
         <PlaygroundPageContent />
       </Box>
-    </FlattenTreeContextProvider>
+    </TreeNodeContextProvider>
   );
 };
 

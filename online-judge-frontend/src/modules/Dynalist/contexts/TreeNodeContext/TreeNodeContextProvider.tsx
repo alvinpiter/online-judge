@@ -12,7 +12,7 @@ interface TreeNodeContextProviderProps {
   children?: ReactNode;
 }
 
-export const FlattenTreeContextProvider: FC<TreeNodeContextProviderProps> = ({
+export const TreeNodeContextProvider: FC<TreeNodeContextProviderProps> = ({
   children,
 }) => {
   const [idToTreeNodeMap, setIdToTreeNodeMap] = useState<IdToTreeNodeMap>({
