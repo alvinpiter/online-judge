@@ -45,9 +45,6 @@ export const TreeNodeContainer: FC<TreeNodeContainerProps> = ({
           >
             Add child
           </Button>
-          <Button size="small" variant="contained" color="warning">
-            Delete
-          </Button>
         </Stack>
       </Paper>
       {node.childrenIds.length > 0 && (
