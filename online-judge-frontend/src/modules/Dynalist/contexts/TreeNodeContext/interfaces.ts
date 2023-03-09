@@ -1,7 +1,6 @@
 export interface TreeNode {
   id: string;
   parentId: string;
-  index: number;
   childrenIds: string[];
 }
 

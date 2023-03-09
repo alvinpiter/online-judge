@@ -20,14 +20,12 @@ export const PlaygroundPage: FC = () => {
 
 export const PlaygroundPageContent = () => {
   const { idToTreeNodeMap } = useTreeNodeContext();
-  const rootNodesSortedByIndex = Object.values(idToTreeNodeMap)
-    .filter((node) => node.parentId === "root")
-    .sort((node1, node2) => node1.index - node2.index);
+  const rootNode = idToTreeNodeMap["root"];
 
   return (
     <>
-      {rootNodesSortedByIndex.map((node) => (
-        <TreeNodeContainer nodeId={node.id} />
+      {rootNode.childrenIds.map((childrenId, idx) => (
+        <TreeNodeContainer key={idx} nodeId={childrenId} index={idx} />
       ))}
     </>
   );
