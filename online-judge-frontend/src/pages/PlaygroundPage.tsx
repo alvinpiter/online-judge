@@ -19,14 +19,20 @@ export const PlaygroundPage: FC = () => {
 };
 
 export const PlaygroundPageContent = () => {
-  const { idToTreeNodeMap } = useTreeNodeContext();
+  const { idToTreeNodeMap, changesList } = useTreeNodeContext();
   const rootNode = idToTreeNodeMap["root"];
 
   return (
-    <>
-      {rootNode.childrenIds.map((childrenId, idx) => (
-        <TreeNodeContainer key={idx} nodeId={childrenId} index={idx} />
-      ))}
-    </>
+    <Box sx={{ display: "flex" }}>
+      <Box sx={{ flex: 2 }}>
+        {rootNode.childrenIds.map((childrenId, idx) => (
+          <TreeNodeContainer key={idx} nodeId={childrenId} index={idx} />
+        ))}
+      </Box>
+
+      <Box sx={{ flex: 1 }}>
+        <pre>{JSON.stringify({ changes: changesList }, null, 4)}</pre>
+      </Box>
+    </Box>
   );
 };

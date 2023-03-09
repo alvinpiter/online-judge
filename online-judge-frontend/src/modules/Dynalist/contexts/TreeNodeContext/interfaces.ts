@@ -24,4 +24,6 @@ export interface TreeNodeAdditionParameter {
 export interface TreeNodeContextValue {
   idToTreeNodeMap: IdToTreeNodeMap;
   addTreeNode: (parameter: TreeNodeAdditionParameter) => void;
+
+  changesList: TreeNodeChange[];
 }
