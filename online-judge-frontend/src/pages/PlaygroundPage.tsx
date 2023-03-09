@@ -21,7 +21,7 @@ export const PlaygroundPage: FC = () => {
 export const PlaygroundPageContent = () => {
   const { idToTreeNodeMap } = useTreeNodeContext();
   const rootNodesSortedByIndex = Object.values(idToTreeNodeMap)
-    .filter((node) => node.parentId === 0)
+    .filter((node) => node.parentId === "root")
     .sort((node1, node2) => node1.index - node2.index);
 
   return (

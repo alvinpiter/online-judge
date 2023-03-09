@@ -1,3 +1,4 @@
+import { getRandomId } from "../../../helpers/getRandomId";
 import {
   IdToTreeNodeMap,
   TreeNode,
@@ -14,7 +15,7 @@ export function getChangesForNodeAddition(
 
   // Create the new node
   const newNode: TreeNode = {
-    id: Math.floor(Math.random() * 100),
+    id: getRandomId(),
     parentId: additionParameter.parentId,
     index: additionParameter.index,
     childrenIds: [],

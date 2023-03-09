@@ -16,11 +16,8 @@ export const TreeNodeContextProvider: FC<TreeNodeContextProviderProps> = ({
   children,
 }) => {
   const [idToTreeNodeMap, setIdToTreeNodeMap] = useState<IdToTreeNodeMap>({
-    0: { id: 0, parentId: -1, index: 0, childrenIds: [1, 4] },
-    1: { id: 1, parentId: 0, index: 0, childrenIds: [2, 3] },
-    2: { id: 2, parentId: 1, index: 0, childrenIds: [] },
-    3: { id: 3, parentId: 1, index: 1, childrenIds: [] },
-    4: { id: 4, parentId: 0, index: 1, childrenIds: [] },
+    root: { id: "root", parentId: "", index: 0, childrenIds: [] },
+    abcde: { id: "abcde", parentId: "root", index: 0, childrenIds: [] },
   });
 
   const applyChanges = (changes: TreeNodeChange[]) => {

@@ -1,13 +1,13 @@
 export interface TreeNode {
-  id: number;
-  parentId: number;
+  id: string;
+  parentId: string;
   index: number;
-  childrenIds: number[];
+  childrenIds: string[];
 }
 
 export enum TreeNodeChangeType {
-  ADDITION = "ADDITION",
-  DELETION = "DELETION",
+  ADDITION = "addition",
+  DELETION = "deletion",
 }
 
 export interface TreeNodeChange {
@@ -15,10 +15,10 @@ export interface TreeNodeChange {
   node: TreeNode;
 }
 
-export type IdToTreeNodeMap = { [id: number]: TreeNode };
+export type IdToTreeNodeMap = { [id: string]: TreeNode };
 
 export interface TreeNodeAdditionParameter {
-  parentId: number;
+  parentId: string;
   index: number;
 }
 

@@ -3,7 +3,7 @@ import { FC } from "react";
 import { useTreeNodeContext } from "../contexts/TreeNodeContext";
 
 interface TreeNodeContainerProps {
-  nodeId: number;
+  nodeId: string;
 }
 
 export const TreeNodeContainer: FC<TreeNodeContainerProps> = ({ nodeId }) => {
