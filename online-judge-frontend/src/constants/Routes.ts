@@ -28,4 +28,6 @@ export const ROUTES = {
   USER_PROFILE_ROUTE: new Route<{ userId: string }, {}>("/users/:userId"),
 
   SCOREBOARD_ROUTE: new Route<{}, {}>("/scoreboard"),
+
+  PLAYGROUND_ROUTE: new Route<{}, {}>("/playground"),
 };
